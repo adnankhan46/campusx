@@ -1,10 +1,12 @@
 import express from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
-import authRoutes from "./route/auth.route.js"
-
+import authRoutes from "./route/auth.route.js";
 
 dotenv.config();
+
 const app = express();
+
 const port = process.env.PORT || 3000;
 
 // Middlewares
@@ -13,6 +15,12 @@ app.use(express.json());
 //Routes
 app.use("/api/auth",authRoutes);
 
+// ################################################ MongoDB Connection
+mongoose.connect(process.env.MONGO).then(()=>{
+  console.log("Connected to MONGODB")
+}).catch((err)=>{
+  console.log(err);
+});
 
 app.get('/', (req, res) => {
   res.json({message:'Hello World!'});
