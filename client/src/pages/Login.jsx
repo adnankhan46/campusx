@@ -18,18 +18,18 @@ const Login = () => {
               name="email"
               id="email"
               placeholder="Email"
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded mb-4"
+              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             />
             <input
               type="password"
               name="password"
               id="password"
               placeholder="Password"
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded mb-4"
+              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             />
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-semibold p-3 rounded mt-4"
+              className="w-full bg-blue-500 text-white font-semibold p-3 rounded-xl mt-4"
             >
               Sign In
             </button>

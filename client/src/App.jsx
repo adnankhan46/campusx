@@ -1,11 +1,23 @@
-import Home from "./pages/Home"
+import {BrowserRouter, Routes, Route} from "react-router-dom"
+import Front from "./pages/Front";
+import Home from "./pages/Home";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
 
 
 function App() {
 
   return (
     <>
-   <Home/>
+
+   <BrowserRouter>
+   <Routes>
+   <Route path='/' element={<Front/>}/>
+   <Route path='/signup' element={<Signup/>}/>
+   <Route path='/login' element={<Login/>}/>
+   <Route path='/home' element={<Home/>}/>
+   </Routes>
+   </BrowserRouter>
     </>
   )
 }
