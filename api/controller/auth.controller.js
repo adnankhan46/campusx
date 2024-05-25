@@ -1,6 +1,7 @@
 import User from "../model/user.model.js"
 import {errorHandler} from "../middlewares/error.js";
 import { allowedAdmissionNumbers } from "./allowedAdmissionNum.js";
+import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken";
 
 export const handleSignUp = async (req, res, next)=>{
@@ -30,28 +31,70 @@ export const handleSignUp = async (req, res, next)=>{
     return res.status(400).json({ message: 'Admission Number is not allowed' });
   }
 
+  const hashedPassword = bcryptjs.hashSync(password, 10);
+
   const newUser = new User({
     admissionNumber,
     email,
-    password,
+    password: hashedPassword,
     section,
     gender,
     username
   });
 
   try {
-    await newUser.save();
+    const savedUser = await newUser.save();
+
+    const {password: hashedPassword, ...rest} = savedUser._doc;
+
+// ############## JWT
     const token = jwt.sign(
-      { id: newUser._id, isAdmin: newUser.isAdmin },
+      { id: savedUser._id, isAdmin: savedUser.isAdmin},
       process.env.JWT_SECRET
     );
     res.cookie("jwt", token, { httpOnly: true, maxAge: 3*24*60*60*1000 });
-    res.status(200).json('Signup successful');
+
+    res.status(201).json(rest);
   } catch (error) {
     next(error);
   }
 }
 
-export const handleSignIn = (req, res)=>{
-    res.json({message:"Working SignIN from auth controller"});
+export const handleSignIn = async (req, res, next)=>{
+  const { admissionNumber, password } = req.body;
+
+  if (!admissionNumber ||
+      !password ||
+      admissionNumber === '' ||
+      password === '') {
+    return next(errorHandler(400, "Admission Number and Password are required"));
+  }
+
+  try {
+    const user = await User.findOne({ admissionNumber });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid Admission Number or Password' });
+    }
+
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Invalid Admission Number or Password' });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: '3d' }
+    );
+
+    res.cookie("jwt", token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
+
+    const {password: hashedPassword, ...rest} = user._doc;
+
+    res.status(200).json(rest);
+
+  }
+  catch(error) {
+    next(error);
+  }
 }
