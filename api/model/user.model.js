@@ -48,7 +48,7 @@ const userSchema  = new mongoose.Schema({
     },
     isAdmin: {
         type: Boolean,
-        dafault: false,
+        default: false,
     },
     isFreeze: {
         type: Boolean,
