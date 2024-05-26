@@ -5,7 +5,7 @@ import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken";
 
 export const handleSignUp = async (req, res, next)=>{
-    const {admissionNumber, email, password, section, gender, username} = req.body;
+    const {admissionNumber, email, password, section, gender} = req.body;
 
   if (
     !admissionNumber ||
@@ -15,8 +15,7 @@ export const handleSignUp = async (req, res, next)=>{
     email === '' ||
     password === '' ||
     section === '' ||
-    gender === '' ||
-    username === ''
+    gender === ''
   ) {
     next(errorHandler(400, "All field ae Required"));
   }
@@ -39,7 +38,7 @@ export const handleSignUp = async (req, res, next)=>{
     password: hashedPassword,
     section,
     gender,
-    username
+    username : email.toString() + admissionNumber.toString()
   });
 
   try {
