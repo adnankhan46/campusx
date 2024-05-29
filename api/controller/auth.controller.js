@@ -17,7 +17,7 @@ export const handleSignUp = async (req, res, next)=>{
     section === '' ||
     gender === ''
   ) {
-    next(errorHandler(400, "All field ae Required"));
+    return next(errorHandler(400, "All field ae Required"));
   }
 // ################## Checking for Existing user
   const existingUser = await User.findOne({ $or: [{ email }, { admissionNumber }] });

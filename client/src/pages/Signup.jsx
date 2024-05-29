@@ -1,17 +1,26 @@
 // src/components/Register.js
 import React, { useState } from 'react';
+import {Link } from "react-router-dom"
 
 const Register = () => {
-  const [section, setSection] = useState('');
-  const [gender, setGender] = useState('');
 
-  const handleSectionChange = (event) => {
-    setSection(event.target.value);
+  const [formData, setFormData] = useState({
+    admissionNumber: '',
+    email: '',
+    password: '',
+    section: '',
+    gender: '',
+  }); 
+  
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value.trim()});
   };
 
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
+  const handleOnSubmit = async () => {
+
+  }
+
+  console.log(formData)
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-200">
@@ -26,29 +35,32 @@ const Register = () => {
           <form method="post">
             <input
               type="text"
-              name="addNo"
-              id="addNo"
+              name="admissionNumber"
+              value={formData.admissionNumber}
+              onChange={handleChange}
               placeholder="Addmission Number (From Id Card)"
               className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             />
             <input
               type="email"
               name="email"
-              id="email"
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Email"
               className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             />
             <input
               type="password"
               name="password"
-              id="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="Password"
               className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             />
             <select
               name="section"
-              value={section}
-              onChange={handleSectionChange}
+              value={formData.section}
+              onChange={handleChange}
               className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             >
               <option value="" disabled>Select your section</option>
@@ -73,9 +85,9 @@ const Register = () => {
                   <input
                     type="radio"
                     name="gender"
-                    value="male"
-                    checked={gender === 'male'}
-                    onChange={handleGenderChange}
+                    value="Male"
+                    checked={formData.gender === 'Male'}
+                    onChange={handleChange}
                     className="form-radio h-5 w-5 text-blue-600 transition duration-300 ease-in-out transform hover:scale-110"
                   />
                   <span className="ml-2">Male</span>
@@ -84,9 +96,9 @@ const Register = () => {
                   <input
                     type="radio"
                     name="gender"
-                    value="female"
-                    checked={gender === 'female'}
-                    onChange={handleGenderChange}
+                    value="Female"
+                    checked={formData.gender === 'Female'}
+                    onChange={handleChange}
                     className="form-radio h-5 w-5 text-pink-600 transition duration-300 ease-in-out transform hover:scale-110"
                   />
                   <span className="ml-2">Female</span>
@@ -102,16 +114,14 @@ const Register = () => {
             </button>
           </form>
         </div>
-        <div className="flex items-center mt-4">
-          <input
-            type="checkbox"
-            id="terms"
-            className="form-checkbox h-4 w-4"
-          />
-          <span className="ml-2 text-sm">
-            I have read and agree to the{' '}
-            <a href="#" className="text-blue-500">Terms of Service</a>
-          </span>
+        <div className="flex items-center mt-4 mx-auto">
+        
+          <div className="ml-2 text-sm">
+            Help, Someone Already Signed Up with My Account?{' '}
+            <Link to="/ReportAuth">
+            <span className="text-blue-500 cursor-pointer text-sm">Tell Your Admission Number here</span>
+            </Link>
+            </div>
         </div>
       </div>
     </div>

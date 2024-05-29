@@ -24,8 +24,8 @@ mongoose.connect(process.env.MONGO).then(()=>{
   console.log(err);
 });
 
-app.get('/', (req, res) => {
-  res.json({message:'Hello World!'});
+app.get('/api/front', (req, res) => {
+  res.json('Hello World!');
 });
 
 app.listen(port, () => {
