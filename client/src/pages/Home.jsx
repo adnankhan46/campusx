@@ -1,14 +1,12 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
-
+import BottomBar from '../components/Bottombar'
 
 function Home() {
   return (
-    <>
-    <Navbar/>
-    Home. This is Private and For all posts
-
-    </>
+    <div>
+      welcome to BITD
+      <BottomBar/>
+    </div>
   )
 }
 
