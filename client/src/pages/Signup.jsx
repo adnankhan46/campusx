@@ -20,7 +20,7 @@ const Register = () => {
 
   }
 
-  console.log(formData)
+  console.log(formData);
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-200">
@@ -117,7 +117,7 @@ const Register = () => {
         <div className="flex items-center mt-4 mx-auto">
         
           <div className="ml-2 text-sm">
-            Help, Someone Already Signed Up with My Account?{' '}
+            Need Help? Someone Already Signed Up with My Account?{' '}
             <Link to="/ReportAuth">
             <span className="text-blue-500 cursor-pointer text-sm">Tell Your Admission Number here</span>
             </Link>
