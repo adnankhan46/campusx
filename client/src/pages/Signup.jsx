@@ -1,8 +1,14 @@
-// src/components/Register.js
 import React, { useState } from 'react';
-import {Link } from "react-router-dom"
+import {Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { useSignUpMutation } from '../redux/apiSlice';
+import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const [signUp, { isLoading, error }] = useSignUpMutation();
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     admissionNumber: '',
@@ -16,8 +22,20 @@ const Register = () => {
     setFormData({...formData, [e.target.name]: e.target.value.trim()});
   };
 
-  const handleOnSubmit = async () => {
-
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
+    try {
+       const user = await signUp(formData).unwrap();
+       console.log("user", user);
+       dispatch(setCurrentUser(user));
+       
+        navigate("/home");
+    } catch (err) {
+      console.log(err.data.message);
+      dispatch(setError(err.data.message));
+      dispatch(setLoading(false));
+    }
   }
 
   console.log(formData);
@@ -27,12 +45,13 @@ const Register = () => {
       <div className="bg-white rounded-lg shadow-lg p-8 w-96">
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold">Create Account</h1>
+          
           <span>
             Already have an account? <a href="login" className="text-blue-500">Sign In</a>
           </span>
         </div>
         <div>
-          <form method="post">
+          <form onSubmit={handleOnSubmit}>
             <input
               type="text"
               name="admissionNumber"
@@ -105,6 +124,7 @@ const Register = () => {
                 </label>
               </div>
             </div>
+          
 
             <button
               type="submit"

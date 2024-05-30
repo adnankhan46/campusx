@@ -6,10 +6,14 @@ import Login from "./pages/Login";
 
 import PostPage from "./pages/PostPage";
 import UpdateProfile from "./pages/UpdateProfile";
-import EditProfile from "./pages/EditProfile";
+import Profile from "./pages/Profile";
+
+import { useSelector } from "react-redux";
+import PrivateRoute from "./components/PrivateRoute";
 
 
 function App() {
+  const {currentUser} = useSelector((state)=>state.user);
 
   return (
     <>
@@ -20,16 +24,18 @@ function App() {
    <Route path='/signup' element={<Signup/>}/>
    <Route path='/login' element={<Login/>}/>
    
-   
+   <Route element={<PrivateRoute/>}>
    <Route path='/home' element={<Home/>}/>
+   <Route path='/profile' element={<Profile/>}/>
+   </Route>
    
    <Route path='/post' element={<PostPage/>}/>
-   <Route path='/update' element={<UpdateProfile/>}/>
-   <Route path='/edit' element={<EditProfile/>}/>
-
-
-     
+   <Route path='/updateprofile' element={<UpdateProfile/>}/>
    
+   
+   
+   
+   <Route path='*' element={<h1>Bhai Saahab ye kis line me aa gaye aap</h1>}/>
    </Routes>
    </BrowserRouter>
     </>
