@@ -1,32 +1,73 @@
 // src/components/Login.js
-import React from 'react';
+import React, { useState } from 'react';
+import {Link, useNavigate } from "react-router-dom";
 import Navbar from '../components/Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSignInMutation } from '../redux/apiSlice';
+import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // Error Dikhana h
+  const [signIn, { isLoading, error, isError }] = useSignInMutation();
+
+  isLoading ? console.log("Loading...") : ""
+
+  const [credentials, setCredentials] = useState({
+    admissionNumber: '',
+    password: '',
+  });
+
+
+  const handleChange = (e) => {
+    setCredentials({...credentials, [e.target.name]: e.target.value.trim()});
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(setError(true));
+    try {
+      const userCredentials = await signIn(credentials).unwrap();
+       console.log("Aane wala: ", userCredentials);
+       dispatch(setCurrentUser(userCredentials));
+       dispatch(setLoading(false));
+
+       navigate("/home");
+    } catch (err) {
+      dispatch(setError(err?.data?.message || error?.message));
+      console.log(err?.data?.message || error?.message);
+      setError(err?.data?.message);
+      dispatch(setLoading(false));
+    }
+
+  }
   return (
     <>
-      <Navbar />
-      <div className="h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-200">
-        <div className="bg-white rounded-lg shadow-lg p-8 w-96">
+      
+      <div className="h-screen flex items-center justify-center overflow-x-hidden bg-[#FAF4FE]">
+        <div className="bg-white rounded-xl shadow-lg p-8 w-96">
           <div className="text-center mb-4">
-            <h1 className="text-2xl font-bold">Sign In</h1>
+            <h1 className="text-2xl font-bold mb-6">Log In</h1>
             <span>
-              Don't have an account? <a href="register" className="text-blue-500">Create Account</a>
+              Don't have an account? <Link to="/signup" className="text-blue-500">Create Account</Link>
             </span>
           </div>
           <div>
-            <form action="/login" method="post">
+            <form onSubmit={handleSubmit}>
               <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
+                type="number"
+                name="admissionNumber"
+                value={credentials.admissionNumber}
+                onChange={handleChange}
+                placeholder="Admission Number"
                 className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
               />
               <input
                 type="password"
                 name="password"
-                id="password"
+                value={credentials.password}
+                onChange={handleChange}
                 placeholder="Password"
                 className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
               />
@@ -39,17 +80,12 @@ const Login = () => {
             </form>
           </div>
           <div className="flex items-center mt-4">
-            <input
-              type="checkbox"
-              id="remember"
-              className="form-checkbox h-4 w-4"
-            />
-            <span className="ml-2 text-sm">
-              Remember Me
-            </span>
+           
           </div>
           <div className="text-center mt-4">
-            <a href="/report" className="text-red-500">Report a Problem</a>
+            <div>{error ? error.data | "Error" : ""}</div>
+            <div>{isLoading && "Loading..."}</div>
+            <Link to="/reportAuth" className="text-red-500">Report a Problem</Link>
           </div>
         </div>
       </div>

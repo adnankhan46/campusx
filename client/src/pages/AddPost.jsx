@@ -3,7 +3,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const PostPage = () => {
+const AddPost = () => {
   const [postContent, setPostContent] = useState('');
   const [image, setImage] = useState(null);
 
@@ -71,4 +71,4 @@ const PostPage = () => {
   );
 };
 
-export default PostPage;
+export default AddPost;

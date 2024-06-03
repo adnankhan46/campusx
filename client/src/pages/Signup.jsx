@@ -29,6 +29,7 @@ const Register = () => {
        const user = await signUp(formData).unwrap();
        console.log("user", user);
        dispatch(setCurrentUser(user));
+       dispatch(setLoading(false));
        
         navigate("/home");
     } catch (err) {
@@ -41,13 +42,13 @@ const Register = () => {
   console.log(formData);
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-200">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-96">
+    <div className="h-screen flex items-center justify-center overflow-x-hidden bg-[#FAF4FE]">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-96">
         <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold">Create Account</h1>
+          <h1 className="text-2xl font-bold mb-6">Create Account</h1>
           
           <span>
-            Already have an account? <a href="login" className="text-blue-500">Sign In</a>
+            Already have an account? <Link to="/login" className="text-blue-500">Sign In</Link>
           </span>
         </div>
         <div>

@@ -1,9 +1,20 @@
 import React, { useRef, useEffect } from 'react';
 import Typed from 'typed.js';
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Front = () => {
+  const navigate = useNavigate();
+
+  const {currentUser} = useSelector((state)=> state.user);
+  useEffect(() => {
+    if (currentUser !== null){
+      navigate("/home");
+    }
+
+  }, []);
+  
   const typedTextRef = useRef(null);
   const typedInstanceRef = useRef(null);
 

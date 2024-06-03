@@ -56,7 +56,11 @@ export const handleSignUp = async (req, res, next) => {
       { id: savedUser._id, isAdmin: savedUser.isAdmin },
       process.env.JWT_SECRET
     );
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
+    res.cookie("jwt", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite : "Lax",
+    maxAge: 30 * 24 * 60 * 60 * 1000 });
 
     res.status(201).json(rest);
   } catch (error) {
@@ -88,7 +92,11 @@ export const handleSignIn = async (req, res, next) => {
       { expiresIn: "3d" }
     );
 
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: false,
+    sameSite : "Lax",
+      maxAge: 30 * 24 * 60 * 60 * 1000 });
 
     const { password: hashedPassword, ...rest } = user._doc;
 

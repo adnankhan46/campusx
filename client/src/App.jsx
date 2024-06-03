@@ -4,12 +4,12 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
-import PostPage from "./pages/PostPage";
 import UpdateProfile from "./pages/UpdateProfile";
 import Profile from "./pages/Profile";
 
 import { useSelector } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute";
+import AddPost from "./pages/AddPost";
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
    <Route path='/profile' element={<Profile/>}/>
    </Route>
    
-   <Route path='/post' element={<PostPage/>}/>
+   <Route path='/addpost' element={<AddPost/>}/>
    <Route path='/updateprofile' element={<UpdateProfile/>}/>
    
    
