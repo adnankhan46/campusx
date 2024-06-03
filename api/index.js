@@ -26,6 +26,8 @@ app.use(cors({
 // Routes
 app.use("/api/auth", authRoutes);
 
+<<<<<<< HEAD
+=======
 app.use((err, req, res, next)=>{
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internqal Server Error";
@@ -35,9 +37,11 @@ app.use((err, req, res, next)=>{
       statusCode
   })
 })
+>>>>>>> 28f04c5a77305bb544e8d574a74d42f1c401731f
 
 // ################################################ MongoDB Connection
 const dbURI = process.env.MONGO;
+console.log (process.env.PORT)
 
 if (!dbURI) {
   console.error('Error: MONGO environment variable is not defined.');
