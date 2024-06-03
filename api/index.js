@@ -22,8 +22,10 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 
+
 // ################################################ MongoDB Connection
 const dbURI = process.env.MONGO;
+console.log (process.env.PORT)
 
 if (!dbURI) {
   console.error('Error: MONGO environment variable is not defined.');
