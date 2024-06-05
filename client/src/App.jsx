@@ -4,17 +4,13 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
-import UpdateProfile from "./pages/UpdateProfile";
 import Profile from "./pages/Profile";
-
-import { useSelector } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute";
 import AddPost from "./pages/AddPost";
+import PostPage from "./pages/PostPage";
 
 
 function App() {
-  const {currentUser} = useSelector((state)=>state.user);
-
   return (
     <>
 
@@ -30,7 +26,7 @@ function App() {
    </Route>
    
    <Route path='/upload' element={<AddPost/>}/>
-   <Route path='/updateprofile' element={<UpdateProfile/>}/>
+   <Route path='/post/:postId' element={<PostPage/>}/>
    
    
    

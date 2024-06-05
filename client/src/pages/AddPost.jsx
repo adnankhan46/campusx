@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
 import BottomBar from '../components/Bottombar';
+import Navbar from '../components/Navbar';
 
 const AddPost = () => {
   const [postContent, setPostContent] = useState('');
@@ -11,9 +12,8 @@ const AddPost = () => {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // Focus on the input element when the component mounts
     inputRef.current.focus();
-  }, []); //
+  }, []);
 
   const handlePost = async () => {
     const formData = new FormData();
@@ -23,11 +23,7 @@ const AddPost = () => {
     }
     
     try {
-      await axios.post('http://localhost:5000/posts', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // POST: API Calling...
       setPostContent('');
       setImage(null);
     } catch (error) {
@@ -40,10 +36,11 @@ const AddPost = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-pink-100 p-4">
-      <h1 className="text-2xl md:text-4xl font-bold mb-4">Add a Post</h1>
+    <div className="flex flex-col items-center min-h-screen bg-[#EFEFF4] pb-[120px]">
+    <Navbar/>
+      <h1 className="text-2xl md:text-4xl font-bold my-4">Add a Post</h1>
       <textarea
-        className="w-full md:w-1/2 p-2 h-20 rounded mb-4 border focus:border-[#6a7cff]"
+        className="w-full md:w-1/2 p-2 h-20 rounded-xl mb-4 border focus:outline-none"
         placeholder="Type something..."
         value={postContent}
         onChange={(e) => setPostContent(e.target.value)}
@@ -51,8 +48,9 @@ const AddPost = () => {
       ></textarea>
 
       <div className="w-full md:w-1/2 mb-4">
-        <label className="flex items-center justify-center border-2 border-dashed border-gray-400 rounded p-4 cursor-pointer hover:bg-gray-200 outline-dashed outline-2 outline-offset-2 ">
-          <FontAwesomeIcon icon={faUpload} className="text-gray-600 mr-2" />
+      <p>{`(Optional)`}</p>
+        <label className="flex items-center justify-start p-4 cursor-pointer hover:bg-gray-200  border-2 border-gray-300 rounded-xl">
+        <FontAwesomeIcon icon={faUpload} className="text-gray-600 mr-2" />
           <span className="text-gray-600">Upload an image</span>
           <input
             type="file"
@@ -66,6 +64,11 @@ const AddPost = () => {
             <p className="text-center text-gray-600">
               Selected file: {image.name}
             </p>
+           <img
+              src={URL.createObjectURL(image)}
+              alt="Selected"
+              className="mt-2 max-w-full max-h-36 rounded"
+            />
             <button
               className="mt-2 p-2 bg-gray-500 text-white hover:text-black rounded"
               onClick={handleCancelImage}

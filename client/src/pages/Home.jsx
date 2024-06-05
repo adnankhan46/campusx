@@ -8,7 +8,7 @@ import PostCard from '../components/PostCard';
 function Home() {
   const {currentUser} = useSelector((state)=> state.user)
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white">
+    <div className="flex flex-col items-center min-h-screen bg-white mb-[120px]">
     <Navbar/>
       <div className="mt-4 flex flex-col w-full md:w-1/2 items-center">
       {/*<h1 className="text-2xl md:text-4xl font-bold mb-4">Home</h1>*/}
