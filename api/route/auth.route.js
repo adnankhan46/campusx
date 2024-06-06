@@ -1,5 +1,6 @@
 import express from "express";
 import { handleSignUp, handleSignIn } from "../controller/auth.controller.js";
+import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 
 const router = express.Router();
 

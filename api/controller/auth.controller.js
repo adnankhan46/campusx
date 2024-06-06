@@ -1,5 +1,5 @@
 import User from "../model/user.model.js";
-import Post from "../model/post.model.js"; // Import the Post model
+import Post from "../model/post.model.js";
 import { errorHandler } from "../middlewares/error.js";
 import { allowedAdmissionNumbers } from "./allowedAdmissionNum.js";
 import bcryptjs from "bcryptjs";
@@ -105,6 +105,7 @@ export const handleSignIn = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // Add a new route to handle creating a new post
 export const createPost = async (req, res, next) => {

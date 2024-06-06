@@ -14,6 +14,11 @@ const postSchema = new mongoose.Schema({
     profilePicture: {
         type: String,
         default: null,
+    },
+    postImage: {
+        type: String,
+        required: false,
+        default: null,
     }
 }, {timestamps: true});
 
