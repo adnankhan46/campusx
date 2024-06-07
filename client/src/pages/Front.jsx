@@ -30,7 +30,7 @@ const Front = () => {
       smartBackspace: true,
       backDelay: 2500,
       startDelay: 1000,
-      showCursor: true,
+      showCursor: false,
       loop: true 
       
     };

@@ -5,9 +5,12 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 
 import Profile from "./pages/Profile";
-import PrivateRoute from "./components/PrivateRoute";
+ import PrivateRoute from "./components/PrivateRoute";
 import AddPost from "./pages/AddPost";
 import PostPage from "./pages/PostPage";
+import ReportPage from "./pages/ReportPage";
+// import Comment from "./components/Comment";
+
 
 
 function App() {
@@ -21,9 +24,18 @@ function App() {
    <Route path='/login' element={<Login/>}/>
    
    <Route path='/home' element={<Home/>}/>
+  
+   
+   
+   
+   
    <Route element={<PrivateRoute/>}>
    <Route path='/profile' element={<Profile/>}/>
    </Route>
+   
+   <Route path='/ReportPage' element={<ReportPage/>}/>
+    
+   
    
    <Route path='/upload' element={<AddPost/>}/>
    <Route path='/post/:postId' element={<PostPage/>}/>
