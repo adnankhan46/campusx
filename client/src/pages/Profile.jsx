@@ -4,11 +4,19 @@ import PostCard from '../components/PostCard';
 import BottomBar from '../components/Bottombar';
 import Navbar from '../components/Navbar';
 
+import { useGetPostsQuery } from '../redux/posts/postApi';
+
 
 const EditProfile = () => {
   const [password, setPassword] = useState('');
 
-  const {currentUser} = useSelector((state)=> state.user)
+  const {currentUser} = useSelector((state)=> state.user);
+  const { data: posts, error, isLoading } = useGetPostsQuery();
+
+  console.log(currentUser._id);
+
+  const userPosts = posts ? posts.filter(post => post.user === currentUser._id) : null;
+  
 
   const handleUpdate = async () => {
   };
@@ -31,9 +39,22 @@ const EditProfile = () => {
       </div>
       <div className="mt-4 flex flex-col w-full md:w-1/2 items-center">
       <h1 className="text-2xl md:text-4xl font-bold mb-4">My Posts</h1>
-      <PostCard/>
-      <PostCard/>
-      <PostCard/>
+
+      {userPosts && userPosts.length > 0 ? (
+        userPosts.map((post, index) => (
+          <PostCard
+          key={index}
+          text={post.text}
+          section={post.section}
+          gender={post.gender}
+          profilePicture={post.profilePicture}
+          postImage={post.postImage}
+          time={new Date(post.createdAt).toLocaleString()}
+          />
+        ))
+      ) : (
+        <div>You have No Posts Yet</div>
+      )}
       </div>
       </div>
       <BottomBar/>
