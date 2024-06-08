@@ -6,15 +6,15 @@ export const checkHi = async (req, res) => {
 
 export const allPost = async (req, res) => {
     try {
-        const posts = await Post.find().populate('user', 'gender section');
+        const posts = await Post.find().populate('user', 'gender section profilePicture');
 
         const formattedPosts = posts.map(post => ({
             text: post.text,
             user: post.user._id,
-            profilePicture: post.profilePicture,
             postImage: post.postImage,
             createdAt: post.createdAt,
             updatedAt: post.updatedAt,
+            profilePicture: post.user.profilePicture,
             gender: post.user.gender,
             section: post.user.section
           }));
@@ -27,11 +27,11 @@ export const allPost = async (req, res) => {
 
 export const addPost = async (req, res) => {
     try {
-        const { text, profilePicture } = req.body;
+        const { text, postImage } = req.body;
         const newPost = new Post({
           text,
           user: req.user.id,
-          profilePicture,
+          postImage,
         });
     
         const savedPost = await newPost.save();

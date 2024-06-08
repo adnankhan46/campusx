@@ -1,4 +1,67 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+
+const Comment = ({ comment, onReply, onVote }) => {
+  const [replyText, setReplyText] = useState('');
+
+  const handleReplySubmit = () => {
+    const text = replyText.trim();
+    if (text) {
+      onReply(comment.id, text);
+      setReplyText('');
+    }
+  };
+
+  return (
+    <div className="mb-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <span className="font-bold">{comment.username}</span>
+          <span className="text-gray-600 ml-2">{comment.timestamp}</span>
+        </div>
+        <div className="flex items-center">
+          <button onClick={() => onVote(comment.id, 'up')} className="mr-2">
+            <FontAwesomeIcon icon={faThumbsUp} style={{ color: 'green' }} />
+          </button>
+          <button onClick={() => onVote(comment.id, 'down')} className="mr-2">
+            <FontAwesomeIcon icon={faThumbsDown} style={{ color: 'red' }} />
+          </button>
+          <span className="ml-2">{comment.votes} votes</span>
+        </div>
+      </div>
+      <p className="mt-2">{comment.text}</p>
+      <div className="mt-2">
+        <textarea
+          className="w-full p-2 border border-gray-300 rounded mb-2"
+          placeholder="Write a reply..."
+          value={replyText}
+          onChange={(e) => setReplyText(e.target.value)}
+        />
+        <button
+          className="px-4 py-2 bg-green-500 text-white place-items-center rounded hover:bg-green-600"
+          onClick={handleReplySubmit}
+        >
+          Reply
+        </button>
+      </div>
+      {comment.replies.map((reply) => (
+        <div key={reply.id} className="ml-6 mt-4 border-l-2 pl-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="font-bold">{reply.username}</span>
+              <span className="text-gray-600 ml-2">{reply.timestamp}</span>
+            </div>
+            <div>
+              <span className="ml-2">{reply.votes} votes</span>
+            </div>
+          </div>
+          <p className="mt-2">{reply.text}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 
 const CommentSection = () => {
@@ -77,7 +140,7 @@ const CommentSection = () => {
         </button>
       </div>
       {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} onReply={addReply} onVote={handleVote} />
+        <Comment key={comment.id} comment={comment} onReply={addReply} onVote={handleVote}/>
       ))}
     </div>
   );

@@ -11,13 +11,8 @@ const postSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    profilePicture: {
-        type: String,
-        default: null,
-    },
     postImage: {
         type: String,
-        required: false,
         default: null,
     }
 }, {timestamps: true});
