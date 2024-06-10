@@ -5,7 +5,7 @@ import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 const router = express.Router();
 
 router.get("/checkhi", isAuthenticated, checkHi);
-router.get("/allpost", allPost);
+router.get("/allpost", isAuthenticated, allPost);
 
 router.post("/addpost", isAuthenticated, addPost);
 

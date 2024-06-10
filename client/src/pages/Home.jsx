@@ -11,8 +11,6 @@ function Home() {
   const {currentUser} = useSelector((state)=> state.user);
   const { data: posts, error, isLoading } = useGetPostsQuery();
 
-  
-  if (error) return <div>Error: {error.message}</div>;
   return (
     <div className=" overflow-x-hidden flex flex-col items-center min-h-screen bg-white mb-[120px]">
     <Navbar/>
@@ -30,7 +28,7 @@ function Home() {
         time={"Loading"}
         />}
 
-      {posts && posts.length > 0 ? (
+      {posts ? (
         posts.map((post, index) => (
           <PostCard
           key={index}
@@ -43,11 +41,13 @@ function Home() {
           />
         ))
       ) : (
-        <div>No posts available</div>
+        isLoading ?
+        <div>Loading...</div>
+        : <div>No Posts</div>
       )}
 
       </div>
-
+      {error && <div className="text-red-500">Error: {error.data.message}</div>}
       <BottomBar/>
     </div>
   )
