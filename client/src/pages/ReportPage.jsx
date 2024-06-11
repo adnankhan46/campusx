@@ -1,66 +1,78 @@
-import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
+import React, { useState, useEffect } from 'react';
 
-const ReportPage = () => {
-  const [admissionNumber, setAdmissionNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [query, setQuery] = useState('');
+const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId }) => {
+  const [votes, setVotes] = useState(0);
+  const [userVote, setUserVote] = useState(null);
 
-  const handleSubmit = () => {
-    if (admissionNumber.trim() !== '' && email.trim() !== '' && query.trim() !== '') {
-      console.log({
-        admissionNumber,
-        email,
-        query
-      });
-      
-      setAdmissionNumber('');
-      setEmail('');
-      setQuery('');
+  useEffect(() => {
+    const savedVotes = JSON.parse(localStorage.getItem('userVotes')) || {};
+    if (savedVotes[postId]) {
+      setUserVote(savedVotes[postId]);
+    }
+  }, [postId]);
+
+  useEffect(() => {
+    if (userVote) {
+      const savedVotes = JSON.parse(localStorage.getItem('userVotes')) || {};
+      savedVotes[postId] = userVote;
+      localStorage.setItem('userVotes', JSON.stringify(savedVotes));
+    }
+  }, [userVote, postId]);
+
+  const handleUpvote = () => {
+    if (userVote === 'up') {
+      setVotes(votes - 1);
+      setUserVote(null);
+    } else if (userVote === 'down') {
+      setVotes(votes + 2);
+      setUserVote('up');
     } else {
-      alert('Please fill in all fields.');
+      setVotes(votes + 1);
+      setUserVote('up');
+    }
+  };
+
+  const handleDownvote = () => {
+    if (userVote === 'down') {
+      setVotes(votes + 1);
+      setUserVote(null);
+    } else if (userVote === 'up') {
+      setVotes(votes - 2);
+      setUserVote('down');
+    } else {
+      setVotes(votes - 1);
+      setUserVote('down');
     }
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white mb-32">
-      <Navbar />
-      <div className="flex flex-col w-full items-center p-4">
-        <div className="bg-[#f0f4f8] w-full p-4 mb-4 rounded-lg shadow-md">
-          <h1 className="text-2xl md:text-4xl font-bold mb-4 text-center">Report Page</h1>
-        </div>
-        <div className="w-full md:w-1/2 p-6 bg-[#eeeeee] rounded-xl shadow-lg">
-          <input
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text"
-            placeholder="Admission Number"
-            value={admissionNumber}
-            onChange={(e) => setAdmissionNumber(e.target.value)}
-          />
-          <input
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <textarea
-            className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Your Query"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            rows="4"
-          ></textarea>
-          <button
-            className="w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-            onClick={handleSubmit}
-          >
-            Submit Report
-          </button>
-        </div>
+    <div className="overflow-x-hidden bg-white border border-[#D9D9D9] p-4 rounded-lg mb-2 w-full md:w-1/2">
+      <div className="mb-4">
+        <p>{text}</p>
+        {postImage && <img src={postImage} alt="postImg" onError={(e) => e.target.style.display = 'none'} />}
+      </div>
+      <div className="flex gap-1 items-end">
+        <img src={profilePicture} className="h-6 w-6" alt="profilePicture" />
+        <p className="mt-6 text-black"><b>{gender}</b> From Section: <b>{section}</b></p>
+      </div>
+      <p>{time}</p>
+      <div className="flex items-center mt-4">
+        <button
+          className={`px-2 py-1 rounded mr-2 ${userVote === 'up' ? 'bg-blue-600' : 'bg-blue-500'} text-white hover:bg-blue-600 flex items-center`}
+          onClick={handleUpvote}
+        >
+          <i className="fas fa-thumbs-up mr-2"></i> Upvote
+        </button>
+        <button
+          className={`px-2 py-1 rounded ${userVote === 'down' ? 'bg-red-600' : 'bg-red-500'} text-white hover:bg-red-600 flex items-center`}
+          onClick={handleDownvote}
+        >
+          <i className="fas fa-thumbs-down mr-2"></i> Downvote
+        </button>
+        <p className="ml-4">{votes} votes</p>
       </div>
     </div>
   );
 };
 
-export default ReportPage;
+export default PostCard;
