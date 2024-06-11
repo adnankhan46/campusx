@@ -4,11 +4,11 @@ import Navbar from '../components/Navbar';
 import { useDispatch } from 'react-redux';
 import { useSignInMutation } from '../redux/apiSlice';
 import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
-import toast from 'react-hot-toast'; 
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   
   const [signIn, { isLoading, error }] = useSignInMutation();
   
@@ -29,14 +29,15 @@ const Login = () => {
     if (!credentials.admissionNumber) {
       errors.admissionNumber = 'Admission number is required';
     } else if (credentials.admissionNumber.length !== 10) {
-      errors.admissionNumber = 'Admission number is invalid';
+      errors.admissionNumber = 'Admission number is must be 10 digit';
     }
 
     if (!credentials.password) {
       errors.password = 'Password is required';
-    } else if (credentials.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
     }
+    // else if (credentials.password.length < 6) {
+    //   errors.password = 'Password must be at least 6 characters';
+    // }
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -55,17 +56,23 @@ const Login = () => {
       console.log("User credentials: ", userCredentials);
       dispatch(setCurrentUser(userCredentials));
       dispatch(setLoading(false));
-      
-      toast.success('Logged in successfully!'); 
-      navigate("/home");
+
+      if (userCredentials) {
+         navigate("/home");
+
+      }
+     
+     
+     
     } catch (err) {
       dispatch(setError(err?.data?.message || error?.message));
       console.log(err?.data?.message || error?.message);
       dispatch(setLoading(false));
       
-      toast.error(`Error: ${err?.data?.message || error?.message}`); 
     }
   };
+
+
 
   return (
     <>
@@ -78,6 +85,7 @@ const Login = () => {
               Don't have an account? <Link to="/signup" className="text-blue-500">Create Account</Link>
             </span>
           </div>
+           {error && <div className="text-red-500">Error: {error.data.message}</div>}
           <div>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
@@ -106,15 +114,15 @@ const Login = () => {
                 type="submit"
                 className="w-full bg-blue-500 text-white font-semibold p-3 rounded-xl mt-4"
               >
-                Sign In
+              { isLoading ? "Loading..." : "Sign In" }
               </button>
             </form>
           </div>
           <div className="flex items-center mt-4">
-            <div>{isLoading && "Loading..."}</div>
+            
           </div>
           <div className="text-center mt-4">
-            <div>{error && <div className="text-red-500">{error.data || "Error"}</div>}</div>
+          
             <Link to="/reportAuth" className="text-red-500">Report a Problem</Link>
           </div>
         </div>

@@ -9,6 +9,8 @@ import Profile from "./pages/Profile";
 import AddPost from "./pages/AddPost";
 import PostPage from "./pages/PostPage";
 import ReportPage from "./pages/ReportPage";
+import Notification from "./pages/Notification";
+import ErrorPage from "./pages/ErrorPage";
 // import Comment from "./components/Comment";
 
 
@@ -23,27 +25,19 @@ function App() {
    <Route path='/signup' element={<Signup/>}/>
    <Route path='/login' element={<Login/>}/>
    
-   <Route path='/home' element={<Home/>}/>
-  
-   
-   
-   
    
    <Route element={<PrivateRoute/>}>
    <Route path='/profile' element={<Profile/>}/>
    </Route>
-   
-   <Route path='/ReportPage' element={<ReportPage/>}/>
-    
-   
-   
+   {/** Will be Private */}
+   <Route path='/home' element={<Home/>}/>
    <Route path='/upload' element={<AddPost/>}/>
    <Route path='/post/:postId' element={<PostPage/>}/>
+   <Route path='/notification' element={<Notification/>}/>
    
-   
-   
-   
-   <Route path='*' element={<h1>Bhai Saahab ye kis line me aa gaye aap</h1>}/>
+   <Route path='/ReportPage' element={<ReportPage/>}/>
+
+   <Route path='*' element={<ErrorPage/>}/>
    </Routes>
    </BrowserRouter>
     </>

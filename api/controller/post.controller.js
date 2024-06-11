@@ -11,6 +11,7 @@ export const allPost = async (req, res) => {
         const formattedPosts = posts.map(post => ({
             text: post.text,
             user: post.user._id,
+            postId: post._id,
             postImage: post.postImage,
             createdAt: post.createdAt,
             updatedAt: post.updatedAt,

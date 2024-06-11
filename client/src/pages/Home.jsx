@@ -12,7 +12,7 @@ function Home() {
   const { data: posts, error, isLoading } = useGetPostsQuery();
 
   return (
-    <div className=" overflow-x-hidden flex flex-col items-center min-h-screen bg-white mb-[120px]">
+    <div className="overflow-x-hidden flex flex-col items-center min-h-screen bg-white mb-[120px]">
     <Navbar/>
       <div className="mt-4 flex flex-col w-full md:w-1/2 items-center">
       {/*<h1 className="text-2xl md:text-4xl font-bold mb-4">Home</h1>*/}
@@ -38,6 +38,8 @@ function Home() {
           profilePicture={post.profilePicture}
           postImage={post.postImage}
           time={new Date(post.createdAt).toLocaleString()}
+          postId={post.postId}
+          postUser={post.user}
           />
         ))
       ) : (

@@ -15,6 +15,8 @@ const BottomBar = () => {
         return 'profile';
       case '/upload':
         return 'upload';
+      case '/notification':
+        return 'notification';
       default:
         return '';
     }
@@ -44,10 +46,10 @@ const BottomBar = () => {
         <p className={`text-xl ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Upload</p>
         </div>
 
-     {/* <div onClick={() => handleTabClick('upload', '/upload')} className="flex flex-col text-black  items-center justify-center">
-        <FontAwesomeIcon icon={faBell} className={`h-8 ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
-        <p className={`text-xl ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Notification</p>
-  </div>*/}
+      <div onClick={() => handleTabClick('notification', '/notification')} className="flex flex-col text-black  items-center justify-center">
+        <FontAwesomeIcon icon={faBell} className={`h-8 ${activeTab === 'notification' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
+        <p className={`text-xl ${activeTab === 'notification' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Notification</p>
+  </div>
 
       <div onClick={() => handleTabClick('profile', '/profile')} className="flex flex-col text-black  items-center justify-center">
         <FontAwesomeIcon icon={faUser} className={`h-6  ${activeTab === 'profile' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />

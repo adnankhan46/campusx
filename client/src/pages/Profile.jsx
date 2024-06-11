@@ -50,6 +50,8 @@ const EditProfile = () => {
           profilePicture={post.profilePicture}
           postImage={post.postImage}
           time={new Date(post.createdAt).toLocaleString()}
+          postId={post.postId}
+          postUser={post.user}
           />
         ))
       ) : (
