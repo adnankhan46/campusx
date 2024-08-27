@@ -39,7 +39,7 @@ const Register = () => {
     }
   }
 
-  console.log(formData);
+
 
   return (
     <div className="h-screen flex items-center justify-center overflow-x-hidden bg-[#FAF4FE]">
@@ -124,14 +124,14 @@ const Register = () => {
                   <span className="ml-2">Female</span>
                 </label>
               </div>
-            </div>
-          
-
+              </div>
+              
+              {error && <div className="text-red-500">Error: {error.data.message}</div>}
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold p-3 rounded-xl mt-4"
             >
-              Sign Up
+            { isLoading ? "Loading..." : "Get In" }
             </button>
           </form>
         </div>
@@ -139,7 +139,7 @@ const Register = () => {
         
           <div className="ml-2 text-sm">
             Need Help? Someone Already Signed Up with My Account?{' '}
-            <Link to="/ReportAuth">
+            <Link to="/report">
             <span className="text-blue-500 cursor-pointer text-sm">Tell Your Admission Number here</span>
             </Link>
             </div>

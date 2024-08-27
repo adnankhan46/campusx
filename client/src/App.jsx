@@ -35,7 +35,7 @@ function App() {
    <Route path='/post/:postId' element={<PostPage/>}/>
    <Route path='/notification' element={<Notification/>}/>
    
-   <Route path='/ReportPage' element={<ReportPage/>}/>
+   <Route path='/report' element={<ReportPage/>}/>
 
    <Route path='*' element={<ErrorPage/>}/>
    </Routes>

@@ -123,7 +123,7 @@ const Login = () => {
           </div>
           <div className="text-center mt-4">
           
-            <Link to="/reportAuth" className="text-red-500">Report a Problem</Link>
+            <Link to="/report" className="text-red-500">Report a Problem</Link>
           </div>
         </div>
       </div>

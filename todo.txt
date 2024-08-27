@@ -1,0 +1,19 @@
+BACKEND:
+1//MyProfile: Logout and password Update API
+2//POST: DELETE: Post, GET: Single Post
+3//Comments : CREATE, READ, DELETE
+4// Admin : Users and Posts Delete
+
+FRONTEND:
+DESIGN
+1// View Post Page with comments
+2// Notification Toast
+3// Fonts, Colours
+API
+1// PostPage with Simple Comment API
+2//Post: Post Delete and getSingle Post API
+3//User: Update Pass & LogOut API
+
+EXTRA
+1// Socket io Notification
+2// Meme wali Profile Selection (Isme BACKEND Update Profile Dekhna Padega)
