@@ -8,7 +8,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
   return (
     <div className="overflow-x-hidden bg-white border border-[#D9D9D9] p-4 rounded-lg mb-2 w-full">
       <div className="mb-4">
-        <p className='text-sm'>{text}</p>
+        <p className='text-md'>{text}</p>
         {postImage && <img className='rounded-lg border border-[#D9D9D9]' src={postImage} alt="postImg" onError={(e) => e.target.style.display = 'none'} />}
       </div>
       <div className="flex gap-1 items-end relative">

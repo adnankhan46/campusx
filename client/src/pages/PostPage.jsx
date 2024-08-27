@@ -13,10 +13,12 @@ const PostPage = () => {
     <div className="flex flex-col items-center min-h-screen bg-slate-300 mb-[120px]">
     <Navbar/>
     
+    <div className='mt-4 flex flex-col w-full md:w-1/2 items-center'>
     <PostCard/>
     <h1 className="text-xl md:text-4xl font-bold my-4">Comments</h1>
     {/* <Comment/> */}
     <CommentSection/>
+    </div>
     <BottomBar/>
     </div>
     
