@@ -106,24 +106,21 @@ export const handleSignIn = async (req, res, next) => {
   }
 };
 
-
-// Add a new route to handle creating a new post
-export const createPost = async (req, res, next) => {
-  const { text, profilePicture } = req.body;
-  const userId = req.user.id; 
-  
-
+export const updatePassword = async (req, res, next) => {
+  const {newPassword} = req.body;
   try {
-    const newPost = new Post({
-      text,
-      user: userId,
-      profilePicture,
-    });
-
-    const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
+    const user = await User.findOne({});
+    const hashedNewPassword = bcryptjs.hashSync(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+    res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
     next(error);
   }
-};
 
+
+}
+
+export const logout = async (req, res) => {
+  res.clearCookie("jwt").status(200).json({message: "Signout Success"});
+}
