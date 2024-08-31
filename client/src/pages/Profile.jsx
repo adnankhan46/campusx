@@ -9,14 +9,14 @@ import { useUpdatePasswordMutation, useLogoutMutation } from '../redux/apiSlice'
 import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
 
 const Profile = () => {
-  const [logout, { isLoading: isLoggingOut, error: logoutError }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const [updatePassword, { isLoading: isUpdating, error: updateError }] = useUpdatePasswordMutation();
 
   const { currentUser } = useSelector((state) => state.user);
-  const { data: posts, error, isLoading } = useGetPostsQuery();
+  const { data: posts} = useGetPostsQuery();
 
   const userPosts = posts ? posts.filter(post => post.user === currentUser._id) : null;
 
@@ -38,7 +38,17 @@ const Profile = () => {
   };
 
   const handleLogout = async (e) => {
-   // to do
+   e.preventDefault();
+   try { 
+     await logout().unwrap();
+     dispatch(setCurrentUser(null));
+     localStorage.removeItem('persist:root'); 
+     navigate("/login");
+     console.log("LogOut Success");
+   } catch (error) {
+     console.error('Failed to logout:', error);
+     alert('Failed to logout. Please try again.');
+   }
   }
 
   return (

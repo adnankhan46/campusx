@@ -2,10 +2,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useDeletePostsMutation } from '../redux/posts/postApi';
 
 const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);
+
+  const [deletePosts] = useDeletePostsMutation();
+
+  const handleDeletePost = async (e)=>{
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this post?')) {
+    try {
+      await deletePosts(postId).unwrap();
+      console.log("Post Deletion Success");
+    } catch (error) {
+      console.log('Failed to delete:', error);
+      console.log('Failed to delete. Please try again.');
+    } }
+
+
+  }
 
   return (
     <div className="overflow-x-hidden bg-white border border-[#D9D9D9] p-4 rounded-lg mb-2 w-full
@@ -23,9 +40,9 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       
       <div className="flex items-center justify-between mt-4">
    
-      {(currentUser?._id === postUser) &&
-      <p className="text-base text-red-500 cursor-pointer" onClick={(e)=>{
-        e.stopPropagation();alert("Delete Clicked")}}>Delete</p>
+      {(currentUser?._id === postUser) ?
+      <p className="text-base text-red-500 cursor-pointer" onClick={handleDeletePost}>Delete</p>
+      : <p>{' '}</p>
         }
     
         <p className="text-base text-[#4b6cfcec]">14 Comments</p>

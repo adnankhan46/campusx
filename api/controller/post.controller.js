@@ -1,4 +1,5 @@
 import Post from "../model/post.model.js";
+import User from "../model/user.model.js";
 import mongoose from "mongoose";
 
 export const checkHi = async (req, res) => {
@@ -70,3 +71,25 @@ export const getSinglePost = async (req, res) => {
       res.status(500).json({ message: "Server error", error: error.message });
     }
     };
+
+export const deletePost = async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const post = await Post.findById(postId);
+  
+    if (!post) {
+      return res.status(404).json({message: "Post Not Found"})
+    }
+  
+    if (post.user.toString() !== req.user.id) {
+       return res.status(401).json({ message: "Unauthorized" });
+    }
+  // deleting
+     await Post.findByIdAndDelete(postId);
+  
+     res.status(200).json({ message: "Post deleted successfully" });
+    
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+}
