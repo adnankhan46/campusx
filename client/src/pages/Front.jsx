@@ -8,12 +8,12 @@ const Front = () => {
   const navigate = useNavigate();
 
   const {currentUser} = useSelector((state)=> state.user);
-  // useEffect(() => {
-  //   if (currentUser !== null){
-  //     navigate("/home");
-  //   }
+   useEffect(() => {
+     if (currentUser !== null){
+       navigate("/home");
+     }
 
-  // }, []);
+   }, []);
   
   const typedTextRef = useRef(null);
   const typedInstanceRef = useRef(null);

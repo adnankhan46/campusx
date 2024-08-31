@@ -1,14 +1,22 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import BottomBar from '../components/Bottombar';
 import Navbar from '../components/Navbar';
 import { useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useGetPostsQuery } from '../redux/posts/postApi';
 
 
 function Home() {
   const {currentUser} = useSelector((state)=> state.user);
+  const navigate = useNavigate();
+   useEffect(() => {
+     if (currentUser == null){
+       navigate("/");
+     }
+
+   }, []);
   const { data: posts, error, isLoading } = useGetPostsQuery();
 
   return (
@@ -49,7 +57,7 @@ function Home() {
       )}
 
       </div>
-      {error && <div className="text-red-500">Error: {error.data.message}</div>}
+      {error && <div className="text-red-500">Error: {error?.posts?.message}</div>}
       <BottomBar/>
     </div>
   )

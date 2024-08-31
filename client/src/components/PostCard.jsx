@@ -23,7 +23,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       
       <div className="flex items-center justify-between mt-4">
    
-      {(currentUser._id === postUser) &&
+      {(currentUser?._id === postUser) &&
       <p className="text-base text-red-500 cursor-pointer" onClick={(e)=>{
         e.stopPropagation();alert("Delete Clicked")}}>Delete</p>
         }

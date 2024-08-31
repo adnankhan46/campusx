@@ -122,5 +122,10 @@ export const updatePassword = async (req, res, next) => {
 }
 
 export const logout = async (req, res) => {
-  res.clearCookie("jwt").status(200).json({message: "Signout Success"});
+  try {
+    res.clearCookie("jwt").status(200).json({message: "Signout Success"});
+    
+  } catch (error) {
+    next(error);
+  }
 }

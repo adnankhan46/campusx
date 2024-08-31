@@ -6,21 +6,21 @@ export const postsApi = authApi.injectEndpoints({
     endpoints: (builder) => ({
       // Get All Post
       getPosts: builder.query({
-        query: () => `${BASE_URL}/post/allpost`,
+        query: () => `/post/allpost`,
         providesTags: ['Posts'],
         transformResponse: (post) => post.reverse(),
       }),
       // Posting to addpost API
       addPosts: builder.mutation ({
         query: (postBody) => ({
-          url: `${BASE_URL}/post/addpost`,
+          url: `/post/addpost`,
           method: 'POST',
           body: postBody,
         }),
         invalidatesTags: ['Posts']
       }),
       getSinglePost: builder.query({
-        query: (postId) => `${BASE_URL}/post/${postId}`
+        query: (postId) => `/post/${postId}`
       }),
     }),
   });
