@@ -24,6 +24,7 @@ function App() {
    <Route path='/' element={<Front/>}/>
    <Route path='/signup' element={<Signup/>}/>
    <Route path='/login' element={<Login/>}/>
+   <Route path='/campusai' element={<CampusAi/>}/>
    
    
    <Route element={<PrivateRoute/>}>
@@ -32,7 +33,7 @@ function App() {
    {/** Will be Private */}
    <Route path='/home' element={<Home/>}/>
    <Route path='/upload' element={<AddPost/>}/>
-   <Route path='/campusai' element={<CampusAi/>}/>
+   {/* <Route path='/campusai' element={<CampusAi/>}/> */}
    <Route path='/post/:postId' element={<PostPage/>}/>
    <Route path='/notification' element={<Notification/>}/>
    

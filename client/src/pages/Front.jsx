@@ -2,47 +2,47 @@ import React, { useRef, useEffect } from 'react';
 import Typed from 'typed.js';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
+import Chatbox from '../components/chatbox'; 
 import { useSelector } from 'react-redux';
 
 const Front = () => {
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
 
-  const {currentUser} = useSelector((state)=> state.user);
-   useEffect(() => {
-     if (currentUser !== null){
-       navigate("/home");
-     }
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate("/home");
+    }
+  }, [currentUser, navigate]);
 
-   }, []);
-  
   const typedTextRef = useRef(null);
   const typedInstanceRef = useRef(null);
 
   useEffect(() => {
     const options = {
-      strings: ["For Developers, By Developers",
-              "Say Good Bye to Clone Projects by Real World Project Collaborations",
-              "Build. Collaborate. Share Ideas",
-              "RCB players are AI Generated ?",
-              "CampusX is the best thing that happend",
+      strings: [
+        "For Developers, By Developers",
+        "Say Good bye to Clone Projects by Real World Project Collaborations",
+        "Build. Collaborate. Share Ideas",
+        "RCB players are AI Generated?",
+        "CampusX is the best thing that happened",
       ],
       typeSpeed: 50,
       smartBackspace: true,
       backDelay: 2500,
       startDelay: 1000,
       showCursor: false,
-      loop: true 
-      
+      loop: true,
     };
 
     if (typedTextRef.current) {
       typedInstanceRef.current = new Typed(typedTextRef.current, options);
     }
 
-    // Cleanup
     return () => {
       if (typedInstanceRef.current) {
         typedInstanceRef.current.destroy();
+        typedInstanceRef.current = null;
       }
     };
   }, []);
@@ -81,7 +81,7 @@ const Front = () => {
           </div>
           <div className="bg-box2-gradient flex flex-col h-[135px] w-50 rounded-[23px] p-3 relative mt-4 mx-12 right-8 transition-all duration-1000 md:hover:translate-x-10">
             <div className="font-poppins font-light text-white text-sm">
-              <p className="text-base" ref={typedTextRef}></p>
+              <span className="text-base" ref={typedTextRef}></span>
             </div>
             <div className="flex gap-2 items-center font-poppins font-light text-sm text-white absolute bottom-1.5 left-3">
               <svg
@@ -117,6 +117,7 @@ const Front = () => {
               LogIN
             </button>
           </Link>
+          <Chatbox />
         </div>
       </div>
     </div>
