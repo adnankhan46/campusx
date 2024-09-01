@@ -3,7 +3,7 @@ import Front from "./pages/Front";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-
+import CampusAi from "./pages/campusai";
 import Profile from "./pages/Profile";
  import PrivateRoute from "./components/PrivateRoute";
 import AddPost from "./pages/AddPost";
@@ -32,6 +32,7 @@ function App() {
    {/** Will be Private */}
    <Route path='/home' element={<Home/>}/>
    <Route path='/upload' element={<AddPost/>}/>
+   <Route path='/campusai' element={<CampusAi/>}/>
    <Route path='/post/:postId' element={<PostPage/>}/>
    <Route path='/notification' element={<Notification/>}/>
    
