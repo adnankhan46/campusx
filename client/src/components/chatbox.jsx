@@ -72,7 +72,7 @@ function Chatbox() {
   }, [answer]);
 
   return (
-    <div className="flex flex-col h-full border rounded-lg shadow-lg">
+    <div className="flex flex-col h-full border rounded-lg shadow-lg mb-24">
       <div className="flex-1 p-4">
         {/* Chat history */}
         <div className="overflow-y-auto">
@@ -92,11 +92,11 @@ function Chatbox() {
         </div>
       </div>
       {/* Fixed button and input section */}
-      <div className="fixed-actions bg-white p-2 border-t border-gray-200">
+      <div className="fixed bottom-20 w-full bg-white p-2 border-t border-gray-200">
         {error && <p className="text-red-500">{error}</p>}
         <input
           placeholder="Ask a question..."
-          className="border rounded-lg p-3 w-full text-gray-700 mb-2"
+          className="border rounded-lg p-3 w-full text-gray-700 mb-2 outline-none"
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}

@@ -7,7 +7,7 @@ import Chatbox from '../components/chatbox';
 
 function CampusAi() {
   return (
-    <div className='flex flex-col h-screen bg-[#FAF4FE] '>
+    <div className='flex flex-col h-screen bg-[#FAF4FE] pb-20'>
     <div className="sticky top-0 z-200">
     <Navbar />
     
@@ -19,7 +19,7 @@ function CampusAi() {
       </p>
    
       <div className='flex-1 overflow-y-auto h-5 mb-[136px]'>
-        <Chatbox />
+        <Chatbox /> 
         </div>
         
         <div className='fixed bottom-0 w-full'>
