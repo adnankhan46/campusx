@@ -47,7 +47,7 @@ function Chatbox() {
 
     try {
       const response = await axios({
-        url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=API_KEY',
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
         method: "POST",
         data: {
           contents: { parts: [{ text: question }] },
@@ -103,9 +103,9 @@ function Chatbox() {
           {history.map((item, index) => (
             <div key={index} className="flex flex-col space-y-2 mb-2">
               <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border shadow-md self-end border-blue-200">
-                <p><strong>Q:</strong> {item.question}</p>
+                <p>{item.question}</p>
               </div>
-              <div className=" bg-box1-gradient text-gray-800 p-2 rounded-lg border text-base  self-start  shadow-md border-gray-200">
+              <div className=" bg-white text-gray-800 p-2 rounded-lg border text-base  self-start  shadow-md border-gray-200">
                <p><FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
                :
                <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
