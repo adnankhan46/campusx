@@ -1,8 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDeleteCommentOfPostMutation } from '../redux/posts/postApi';
 
 const Comment = ({ comment, PersonAddedComment }) => {
+  const {postId} = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {currentUser} = useSelector((state)=> state.user);
   const [deleteComment, {error: deleteCommentError, isLoading: deleteCommentLoading}] = useDeleteCommentOfPostMutation();
   const commentId = comment._id;
@@ -12,6 +18,7 @@ const Comment = ({ comment, PersonAddedComment }) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
     try {
       await deleteComment({ commentId, commentText: { userId: currentUser?._id } }).unwrap();
+      (location.pathname === `/post/${postId}`) && navigate("/home");
       console.log("Delete Deletion Success");
     } catch (error) {
       console.log('Failed to delete:', error);
