@@ -84,7 +84,7 @@ function Chatbox() {
               <div className="bg-[#ffffff] text-gray-800 p-2 rounded-lg border text-base border-gray-200">
                <p><FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
                :
-               <div dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
+               <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
                </p>
               </div>
             </div>
@@ -92,7 +92,7 @@ function Chatbox() {
         </div>
       </div>
       {/* Fixed button and input section */}
-      <div className="fixed bottom-20 w-full bg-white p-2 border-t border-gray-200">
+      <div className="fixed bottom-24 w-full bg-white p-2 border-t border-gray-200">
         {error && <p className="text-red-500">{error}</p>}
         <input
           placeholder="Ask a question..."

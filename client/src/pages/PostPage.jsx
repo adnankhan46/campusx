@@ -6,22 +6,25 @@ import BottomBar from '../components/Bottombar';
 import CommentSection from '../components/CommentSection';
 import { useGetSinglePostQuery } from '../redux/posts/postApi';
 import { useParams } from 'react-router-dom';
+import { useGetCommentAllPostQuery } from '../redux/posts/postApi';
 
 
 const PostPage = () => {
   const {postId} = useParams();
-  // console.log(postId);
   const { data: post, error, isLoading } = useGetSinglePostQuery(postId);
+
+  const {data: comments = [], error: commentError, isLoading: commentLoading} = useGetCommentAllPostQuery(postId);
+
   // Scroll to the top of the page when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   
   return (
-    <div className="flex flex-col items-center min-h-screen bg-slate-300 mb-[120px]">
+    <div className="flex flex-col items-center min-h-screen bg-[#FAF4FE] mb-[120px]">
     <Navbar/>
     
-    <div className='mt-4 flex flex-col w-full md:w-1/2 items-center'>
+    <div className='mt-2 flex flex-col w-full md:w-1/2 items-center'>
     {(isLoading) &&
       <PostCard
       key={"Loading"}
@@ -31,6 +34,7 @@ const PostPage = () => {
       profilePicture={"Loading"}
       postImage={"Loading"}
       time={"Loading"}
+      commentCount={"Loading"}
       />}
 
     {post ? <PostCard
@@ -43,14 +47,23 @@ const PostPage = () => {
           time={new Date(post.post.createdAt).toLocaleString()}
           postId={post.post.postId}
           postUser={post.post.user}
+          commentCount={comments.length}
     /> :  (
       isLoading ?
       <div>Loading...</div>
       : <div>No Posts</div>)}
-    <h1 className="text-xl md:text-4xl font-bold my-4">Comments</h1>
-    {/* <Comment/> */}
-    <CommentSection/>
+
+      {/* Pass fetched comments to CommentSection */}
+      <CommentSection
+      comments={comments}
+      commentLoading={commentLoading}
+      commentError={commentError}
+      postId={post?.post?.postId}
+      CommentUserId={post?.post?.user}
+      />
+      {error && <div className="text-red-500">Error: {error.data.message}</div>}
     </div>
+
     {error && <div className="text-red-500">Error: {error.data.message}</div>}
     <BottomBar/>
     </div>

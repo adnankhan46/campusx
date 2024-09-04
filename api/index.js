@@ -2,8 +2,10 @@ import express from "express";
 import cors from 'cors';
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+//
 import authRoutes from "./route/auth.route.js";
 import PostRoutes from "./route/post.route.js";
+import CommentRoutes from "./route/comment.route.js"
 import cookieParser from "cookie-parser";
 
 
@@ -27,6 +29,7 @@ app.use(cors({
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/post", PostRoutes);
+app.use("/api/comment", CommentRoutes);
 
 
 app.use((err, req, res, next)=>{

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDeletePostsMutation } from '../redux/posts/postApi';
 
-const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser }) => {
+const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);
 
@@ -34,7 +34,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       <div className="flex gap-1 items-end relative">
         <img src={profilePicture} className="h-6 w-6" alt="profilePicture" />
         <p className="mt-6 text-black"><b>{gender}</b> From Section <b>{section}</b></p>
-        <p className='absolute right-0   text-base cursor-pointer'
+        <p className='absolute right-0 text-base cursor-pointer'
            >{time}</p>
       </div>
       
@@ -45,7 +45,9 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       : <p>{' '}</p>
         }
     
-        <p className="text-base text-[#4b6cfcec]">14 Comments</p>
+        <p className="text-base text-[#4b6cfcec]">
+        {(commentCount > 0) ? `${commentCount} Comments` : "Comments" }
+        </p>
         
       </div>
     </div>
