@@ -1,3 +1,4 @@
+ 
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import { parseMarkdownToHtml } from '../utils/parseMarkdownToHtml'; // Import the function
@@ -13,6 +14,13 @@ function Chatbox() {
   const [error, setError] = useState("");
   const chatBoxRef = useRef(null);
 
+  // custom response
+  const customResponses = {
+    "what is your name": "I am campusai, your virtual assistant.",
+    "how are you": "I'm just a bunch of code, but I'm functioning as expected!",
+    // Add more custom  
+  };
+
   async function generateAnswer() {
     if (!question.trim()) {
       setError("Please enter a valid question.");
@@ -21,9 +29,25 @@ function Chatbox() {
     setError("");
     setIsLoading(true);
 
+    // Normalize the question
+    const normalQuestion = question.toLowerCase().trim();
+
+    // Check for custom responses
+    if (customResponses[normalQuestion]) {
+      const customAnswer = customResponses[normalQuestion];
+      setAnswer(customAnswer);
+      setHistory((prevHistory) => [
+        ...prevHistory,
+        { question, answer: customAnswer },
+      ]);
+      setIsLoading(false);
+      setQuestion("");
+      return;
+    }
+
     try {
       const response = await axios({
-        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
+        url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=API_KEY',
         method: "POST",
         data: {
           contents: { parts: [{ text: question }] },
@@ -78,10 +102,10 @@ function Chatbox() {
         <div className="overflow-y-auto">
           {history.map((item, index) => (
             <div key={index} className="flex flex-col space-y-2 mb-2">
-              <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border border-blue-200">
+              <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border shadow-md self-end border-blue-200">
                 <p><strong>Q:</strong> {item.question}</p>
               </div>
-              <div className="bg-[#ffffff] text-gray-800 p-2 rounded-lg border text-base border-gray-200">
+              <div className=" bg-box1-gradient text-gray-800 p-2 rounded-lg border text-base  self-start  shadow-md border-gray-200">
                <p><FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
                :
                <div dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
@@ -91,12 +115,17 @@ function Chatbox() {
           ))}
         </div>
       </div>
+      {isLoading && (
+        <div className="flex justify-center items-center py-4">
+          <div className="animate-spin text-blue-500 h-8 w-8 border-t-2 border-blue-500 border-solid rounded-full"></div>
+        </div>
+      )}
       {/* Fixed button and input section */}
       <div className="fixed bottom-20 w-full bg-white p-2 border-t border-gray-200">
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 bg-red-100 p-2 rounded-lg  ">{error}</p>}
         <input
           placeholder="Ask a question..."
-          className="border rounded-lg p-3 w-full text-gray-700 mb-2 outline-none"
+          className="border rounded-full p-3 w-full text-gray-700 mb-2  outline-none"
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
