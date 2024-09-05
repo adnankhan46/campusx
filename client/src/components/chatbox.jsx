@@ -1,9 +1,9 @@
- 
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import { parseMarkdownToHtml } from '../utils/parseMarkdownToHtml'; // Import the function
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
+import { GoogleGenerativeAI } from "@google/generative-ai"; // Import Google Generative AI SDK
 
 function Chatbox() {
   const [question, setQuestion] = useState("");
@@ -14,11 +14,18 @@ function Chatbox() {
   const [error, setError] = useState("");
   const chatBoxRef = useRef(null);
 
-  // custom response
-  const customResponses = {
-    "what is your name": "I am campusai, your virtual assistant.",
-    "how are you": "I'm just a bunch of code, but I'm functioning as expected!",
-    // Add more custom  
+  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY); // Initialize Google Generative AI instance
+
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+  });
+
+  const generationConfig = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
+    responseMimeType: "text/plain",
   };
 
   async function generateAnswer() {
@@ -29,39 +36,30 @@ function Chatbox() {
     setError("");
     setIsLoading(true);
 
-    // Normalize the question
-    const normalQuestion = question.toLowerCase().trim();
-
-    // Check for custom responses
-    if (customResponses[normalQuestion]) {
-      const customAnswer = customResponses[normalQuestion];
-      setAnswer(customAnswer);
-      setHistory((prevHistory) => [
-        ...prevHistory,
-        { question, answer: customAnswer },
-      ]);
-      setIsLoading(false);
-      setQuestion("");
-      return;
-    }
-
     try {
-      const response = await axios({
-        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`,
-        method: "POST",
-        data: {
-          contents: { parts: [{ text: question }] },
-        },
+      const parts = [
+        { text: "input: your name ?" },
+        { text: "output: CampusAI" },
+        { text: "input: you are ?" },
+        { text: "output: An AI assistance named \"CampusAI by CampusX\" providing information about \"BIT Durg\" College's, trained and maintained by Google" },
+        { text: "input: College Timing for First year BIT Durg, BTech ?" },
+        { text: "output: College Timing for First year BIT Durg is from 9 AM to 4 PM (IST)" },
+        { text: "input: College Timing for other year BIT Durg, BTech ?" },
+        { text: "output: College Timing for other year BIT Durg is from 10 AM to 4 PM (IST)" },
+        { text: "input: founders of Campus ai and campus x ?" },
+        { text: "output: Adnan Khan and Garv Thakre" },
+        { text: "input: what is Campusx?" },
+        { text: "output: CampusX or CampusX-BITD is an Anonymous Social Networking Site specially for first year students to get introduced. CampusX also provides Economic Opportunites for students." },
+        { text: `input: ${question}` }, // Including the user's question dynamically
+      ];
+
+      const result = await model.generateContent({
+        contents: [{ role: "user", parts }],
+        generationConfig,
       });
 
-      if (
-        response.data &&
-        response.data.candidates &&
-        response.data.candidates[0] &&
-        response.data.candidates[0].content &&
-        response.data.candidates[0].content.parts[0].text
-      ) {
-        const generatedAnswer = response.data.candidates[0].content.parts[0].text;
+      if (result.response && result.response.text) {
+        const generatedAnswer = result.response.text();
         setAnswer(generatedAnswer);
         setHistory((prevHistory) => [...prevHistory, { question, answer: generatedAnswer }]);
       } else {
@@ -96,20 +94,19 @@ function Chatbox() {
   }, [answer]);
 
   return (
-    <div className="flex flex-col h-full border rounded-lg shadow-lg mb-24">
+    <div className="flex flex-col h-screen border shadow-lg overflow-y-auto rounded-lg mb-2">
       <div className="flex-1 p-4">
         {/* Chat history */}
-        <div className="overflow-y-auto">
+        <div className="overflow-y-hidden">
           {history.map((item, index) => (
             <div key={index} className="flex flex-col space-y-2 mb-2">
               <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border shadow-md self-end border-blue-200">
                 <p>{item.question}</p>
               </div>
               <div className=" bg-white text-gray-800 p-2 rounded-lg border text-base  self-start  shadow-md border-gray-200">
-               <p><FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
-               :
-               <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
-               </p>
+                <p><FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
+                : <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
+                </p>
               </div>
             </div>
           ))}
@@ -132,7 +129,7 @@ function Chatbox() {
           disabled={isLoading}
         />
         <button
-          className={`p-2 rounded-lg w-full ${isLoading ? 'bg-[#6a7cff]' : 'bg-[#6a7cff]'} text-white`}
+          className={`p-2 rounded-lg w-full ${isLoading ? 'bg-[#c9cfff]' : 'bg-[#6a7cff]'} text-white`}
           onClick={generateAnswer}
           disabled={isLoading}
         >
