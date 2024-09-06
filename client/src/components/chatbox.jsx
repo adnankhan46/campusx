@@ -4,6 +4,7 @@
  import { parseMarkdownToHtml } from '../utils/parseMarkdownToHtml'; // Import the function
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
+ import { GoogleGenerativeAI } from "@google/generative-ai"; 
 
  function Chatbox() {
   const [question, setQuestion] = useState("");
@@ -126,7 +127,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
               <div className="bg-white text-gray-800 p-2 rounded-lg border text-base self-start shadow-md border-gray-200">
                 <p>
                   <FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
-                  <span>{index === history.length - 1 ? typedAnswer : item.answer}</span>
+                  <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(index === history.length - 1 ? typedAnswer : item.answer) }} />
                 </p>
               </div>
             </div>
