@@ -1,115 +1,137 @@
-import axios from 'axios';
-import React, { useState, useRef, useEffect } from 'react';
-import { parseMarkdownToHtml } from '../utils/parseMarkdownToHtml'; // Import the function
+ 
+ import axios from 'axios';
+ import React, { useState, useRef, useEffect } from 'react';
+ import { parseMarkdownToHtml } from '../utils/parseMarkdownToHtml'; // Import the function
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
-import { GoogleGenerativeAI } from "@google/generative-ai"; // Import Google Generative AI SDK
+ import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
 
-function Chatbox() {
+ function Chatbox() {
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [parsedAnswer, setParsedAnswer] = useState(""); // State for parsed answer
-  const [history, setHistory] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const chatBoxRef = useRef(null);
+   const [answer, setAnswer] = useState(""); // Full answer
+   const [typedAnswer, setTypedAnswer] = useState(""); // Incrementally typed answer
+   const [parsedAnswer, setParsedAnswer] = useState(""); // State for parsed answer
+   const [history, setHistory] = useState([]);
+   const [isLoading, setIsLoading] = useState(false);
+   const [error, setError] = useState("");
+   const chatBoxRef = useRef(null);
+   
 
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY); // Initialize Google Generative AI instance
+   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY); // Initialize Google Generative AI instance
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-  });
-
-  const generationConfig = {
-    temperature: 1,
-    topP: 0.95,
-    topK: 64,
-    maxOutputTokens: 8192,
-    responseMimeType: "text/plain",
-  };
-
-  async function generateAnswer() {
-    if (!question.trim()) {
-      setError("Please enter a valid question.");
-      return;
-    }
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const parts = [
-        { text: "input: your name ?" },
-        { text: "output: CampusAI" },
-        { text: "input: you are ?" },
-        { text: "output: An AI assistance named \"CampusAI by CampusX\" providing information about \"BIT Durg\" College's, trained and maintained by Google" },
-        { text: "input: College Timing for First year BIT Durg, BTech ?" },
-        { text: "output: College Timing for First year BIT Durg is from 9 AM to 4 PM (IST)" },
-        { text: "input: College Timing for other year BIT Durg, BTech ?" },
-        { text: "output: College Timing for other year BIT Durg is from 10 AM to 4 PM (IST)" },
-        { text: "input: founders of Campus ai and campus x ?" },
-        { text: "output: Adnan Khan and Garv Thakre" },
-        { text: "input: what is Campusx?" },
-        { text: "output: CampusX or CampusX-BITD is an Anonymous Social Networking Site specially for first year students to get introduced. CampusX also provides Economic Opportunites for students." },
-        { text: `input: ${question}` }, // Including the user's question dynamically
-      ];
-
-      const result = await model.generateContent({
-        contents: [{ role: "user", parts }],
-        generationConfig,
-      });
-
-      if (result.response && result.response.text) {
-        const generatedAnswer = result.response.text();
-        setAnswer(generatedAnswer);
-        setHistory((prevHistory) => [...prevHistory, { question, answer: generatedAnswer }]);
-      } else {
-        setAnswer("Unexpected response structure.");
-        setError("Failed to generate an answer.");
-      }
-
-    } catch (error) {
-      console.error("Error generating answer:", error);
-
-      if (error.response) {
-        setError(`Error: ${error.response.status} - ${error.response.data.message || 'Server error'}`);
-      } else if (error.request) {
-        setError("Network error. Please check your internet connection.");
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
-
-      setAnswer("Failed to generate an answer.");
-    } finally {
-      setIsLoading(false);
-      setQuestion("");
-    }
-  }
+   const model = genAI.getGenerativeModel({
+     model: "gemini-1.5-flash",
+   });
+ 
+    const generationConfig = {
+     temperature: 1,
+     topP: 0.95,
+     topK: 64,
+     maxOutputTokens: 8192,
+     responseMimeType: "text/plain",
+   };
+ 
+   async function generateAnswer() {
+     if (!question.trim()) {
+       setError("Please enter a valid question.");
+       return;
+     }
+     setError("");
+     setIsLoading(true);
+ 
+     try {
+       const parts = [
+         { text: "input: your name ?" },
+         { text: "output: CampusAI" },
+         { text: "input: you are ?" },
+         { text: "output: An AI assistance named \"CampusAI by CampusX\" providing information about \"BIT Durg\" College's, trained and maintained by Google" },
+         { text: "input: College Timing for First year BIT Durg, BTech ?" },
+         { text: "output: College Timing for First year BIT Durg is from 9 AM to 4 PM (IST)" },
+         { text: "input: College Timing for other year BIT Durg, BTech ?" },
+         { text: "output: College Timing for other year BIT Durg is from 10 AM to 4 PM (IST)" },
+         { text: "input: founders of Campus ai and campus x ?" },
+         { text: "output: Adnan Khan and Garv Thakre" },
+         { text: "input: what is Campusx?" },
+         { text: "output: CampusX or CampusX-BITD is an Anonymous Social Networking Site specially for first year students to get introduced. CampusX also provides Economic Opportunites for students." },
+         { text: `input: ${question}` }, // Including the user's question dynamically
+       ];
+ 
+       const result = await model.generateContent({
+         contents: [{ role: "user", parts }],
+         generationConfig,
+       });
+ 
+       if (result.response && result.response.text) {
+         const generatedAnswer = result.response.text();
+         setAnswer(generatedAnswer);
+         setHistory((prevHistory) => [...prevHistory, { question, answer: generatedAnswer }]);
+       } else {
+         setAnswer("Unexpected response structure.");
+         setError("Failed to generate an answer.");
+       }
+ 
+     } catch (error) {
+       console.error("Error generating answer:", error);
+ 
+       if (error.response) {
+         setError(`Error: ${error.response.status} - ${error.response.data.message || 'Server error'}`);
+       } else if (error.request) {
+         setError("Network error. Please check your internet connection.");
+       } else {
+         setError("An unexpected error occurred. Please try again.");
+       }
+ 
+       setAnswer("Failed to generate an answer.");
+     } finally {
+       setIsLoading(false);
+       setQuestion("");
+     }
+   }
 
   useEffect(() => {
-    // Parsing the answer whenever it changes
+    // Typewriter effect
+    const typingSpeed = 20;
+    let index = 0;
     if (answer) {
-      const parsed = parseMarkdownToHtml(answer);
-      setParsedAnswer(parsed);
+      const typingInterval = setInterval(() => {
+        setTypedAnswer(answer.slice(0, index + 1)); // Add one character at a time
+        index++;
+        if (index === answer.length) {
+          clearInterval(typingInterval); // Stop typing when done
+        }
+      }, typingSpeed);
+
+      return () => clearInterval(typingInterval); // Clean up on unmount
     }
   }, [answer]);
 
+  useEffect(() => {
+    // Scroll to the bottom after answer is typed
+    if (typedAnswer) {
+      chatBoxRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [typedAnswer]);
+
   return (
-    <div className="flex flex-col h-screen border shadow-lg overflow-y-auto rounded-lg mb-2">
-      <div className="flex-1 p-4">
+    <div className="flex flex-col h-full rounded-lg overflow-y-auto">
+      <div className="flex-grow">
         {/* Chat history */}
-        <div className="overflow-y-hidden">
+        <div className="overflow-y-auto">
           {history.map((item, index) => (
-            <div key={index} className="flex flex-col space-y-2 mb-2">
+            <div key={index} className="flex flex-col space-y-2 pb-8 mb-2">
               <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border shadow-md self-end border-blue-200">
                 <p>{item.question}</p>
+                 
               </div>
-              <div className=" bg-white text-gray-800 p-2 rounded-lg border text-base  self-start  shadow-md border-gray-200">
-                <p><FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
-                : <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(item.answer) }} />
+              
+              <div className="bg-white text-gray-800 p-2 rounded-lg border text-base self-start shadow-md border-gray-200">
+                <p>
+                  <FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
+                  <span>{index === history.length - 1 ? typedAnswer : item.answer}</span>
                 </p>
               </div>
             </div>
           ))}
+<div ref={chatBoxRef} />
         </div>
       </div>
       {isLoading && (
@@ -118,18 +140,18 @@ function Chatbox() {
         </div>
       )}
       {/* Fixed button and input section */}
-      <div className="fixed bottom-24 w-full bg-white p-2 border-t border-gray-200">
-        {error && <p className="text-red-500">{error}</p>}
+      <div className="fixed bottom-20 w-full bg-white p-2 border-t border-gray-200">
+        {error && <p className="text-red-500 bg-red-100 p-2 rounded-lg">{error}</p>}
         <input
           placeholder="Ask a question..."
-          className="border rounded-full p-3 w-full text-gray-700 mb-2  outline-none"
+          className="border rounded-full p-3 w-full text-gray-700 mb-2 outline-none"
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           disabled={isLoading}
         />
         <button
-          className={`p-2 rounded-lg w-full ${isLoading ? 'bg-[#c9cfff]' : 'bg-[#6a7cff]'} text-white`}
+          className={`p-2 rounded-lg w-full ${isLoading ? 'bg-[#6a7cff]' : 'bg-[#6a7cff]'} text-white`}
           onClick={generateAnswer}
           disabled={isLoading}
         >
