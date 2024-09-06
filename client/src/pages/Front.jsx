@@ -1,9 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import Typed from 'typed.js';
+import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import Chatbox from '../components/chatbox'; 
-import { useSelector } from 'react-redux';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
 
 const Front = () => {
   const navigate = useNavigate();
@@ -25,13 +27,14 @@ const Front = () => {
         "Say Good bye to Clone Projects by Real World Project Collaborations",
         "Build. Collaborate. Share Ideas",
         "RCB players are AI Generated?",
+        "Try the New Campus AI Chat",
         "CampusX is the best thing that happened",
       ],
-      typeSpeed: 50,
+      typeSpeed: 10,
       smartBackspace: true,
-      backDelay: 2500,
+      backDelay: 2000,
       startDelay: 1000,
-      showCursor: false,
+      showCursor: true,
       loop: true,
     };
 
@@ -48,11 +51,11 @@ const Front = () => {
   }, []);
 
   return (
-    <div className="overflow-x-hidden bg-[#FAF4FE] h-screen">
+    <div className="overflow-x-hidden bg-[#FAF4FE] h-screen scroll-smooth">
       <nav>
         <Navbar />
       </nav>
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center p-3 md:px-64 gap-20 md:gap-10">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center p-3 md:px-64 gap-12 md:gap-10">
         <div className="flex flex-col">
           <div className="bg-box1-gradient flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
             <div className="font-poppins font-light text-white text-sm">
@@ -113,12 +116,31 @@ const Front = () => {
             </button>
           </Link>
           <Link to="/login">
-            <button className="login p-2 font-poppins font-bold h-12 shadow-none border-0 bg-[#6a7cff] text-white text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
+            <button className="login p-2 mb-2 font-poppins font-bold h-12 shadow-none border-0 bg-[#6a7cff] text-white text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
               LogIN
             </button>
           </Link>
-          <Chatbox />
+          <Link to="/campusai">
+            <button className="login p-2 font-poppins font-bold h-12 shadow-none text-white bg-custom-gradient text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
+              Try CampusAI
+            </button>
+          </Link>
         </div>
+      </div>
+      {/**  Section 2    */}
+      <div className="flex flex-col md:flex-row md:justify-between gap-10 mt-8 px-8 py-6 mx-4 md:mx-64 rounded-lg bg-custom-gradient">
+       {/**  Section 2(a)    */}
+      <div>
+      <p className='text-white text-5xl mb-2 font-semibold'>
+      INTRODUCING
+      </p>
+      <p className=' text-white text-4xl font-extrabold'>
+      <FontAwesomeIcon icon={faWandSparkles} className='md:h-8 h-8 mx-2 text-[#6a7cff]' />
+      CampusAI
+      </p>
+      </div>
+       {/**  Section 2(b)    */}
+      <img src="" alt="" className='h-10 w-10'/>
       </div>
     </div>
   );

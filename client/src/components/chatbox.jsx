@@ -90,7 +90,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
   useEffect(() => {
     // Typewriter effect
-    const typingSpeed = 20;
+    const typingSpeed = 8;
     let index = 0;
     if (answer) {
       const typingInterval = setInterval(() => {
@@ -118,13 +118,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
         {/* Chat history */}
         <div className="overflow-y-auto">
           {history.map((item, index) => (
-            <div key={index} className="flex flex-col space-y-2 pb-8 mb-2">
-              <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border shadow-md self-end border-blue-200">
+            <div key={index} className="flex flex-col space-y-2 pb-2 mb-2">
+              <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border self-end max-w-3/4 border-blue-200">
                 <p>{item.question}</p>
                  
               </div>
               
-              <div className="bg-white text-gray-800 p-2 rounded-lg border text-base self-start shadow-md border-gray-200">
+              <div className="bg-white text-gray-800 p-2 rounded-lg border text-base self-start border-gray-200">
                 <p>
                   <FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
                   <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(index === history.length - 1 ? typedAnswer : item.answer) }} />
@@ -152,7 +152,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
           disabled={isLoading}
         />
         <button
-          className={`p-2 rounded-lg w-full ${isLoading ? 'bg-[#6a7cff]' : 'bg-[#6a7cff]'} text-white`}
+          className={`p-2 rounded-lg w-full ${isLoading ? 'bg-[#c9cfff]' : 'bg-[#6a7cff]'} text-white`}
           onClick={generateAnswer}
           disabled={isLoading}
         >

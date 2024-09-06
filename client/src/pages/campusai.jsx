@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import BottomBar from '../components/Bottombar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
-import Chatbox from '../components/chatbox';
+import Chatbox from '../components/Chatbox';
 
 function CampusAi() {
   return (
