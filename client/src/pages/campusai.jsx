@@ -13,7 +13,7 @@ function CampusAi() {
     
       </div>
     
-      <p className="text-2xl md:text-4xl font-bold my-2 text-center">
+      <p className="text-2xl md:text-4xl font-outfit font-bold my-2 text-center">
         <FontAwesomeIcon icon={faWandSparkles} className='md:h-8 h-6 mx-2 text-[#6a7cff]' />
         CampusAI
       </p>
