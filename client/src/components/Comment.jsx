@@ -18,7 +18,7 @@ const Comment = ({ comment, PersonAddedComment }) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
     try {
       await deleteComment({ commentId, commentText: { userId: currentUser?._id } }).unwrap();
-      (location.pathname === `/post/${postId}`) && navigate("/home");
+      {/* (location.pathname === `/post/${postId}`) && navigate("/home"); */}
       console.log("Delete Deletion Success");
     } catch (error) {
       console.log('Failed to delete:', error);
@@ -27,17 +27,12 @@ const Comment = ({ comment, PersonAddedComment }) => {
   }
   
   return (
-    <div className="border p-4 mb-4 rounded-lg bg-blue-100">
-      <div className="flex justify-between items-center">
-        <p className="font-semibold text-blue-400">{comment.username}</p>
-        <p className="text-gray-500 text-sm">{comment.timestamp}</p>
-      </div>
-      <span className="">{comment.text}</span>
-      
+    <div className="border p-4 mb-2 rounded-xl">
+      <span className="font-inter">{comment.text}</span>
       <div className="flex gap-1 items-end relative mt-2">
       <img src={comment.user.profilePicture} className="h-6 w-6 rounded-full" alt="profilePicture" />
-      <p className="text-black"><b>{comment.user.gender}</b> From Section <b>{comment.user.section}</b></p>
-      <p className="absolute right-0 text-base cursor-pointer">{new Date(comment.createdAt).toLocaleString()}</p>
+      <p className="text-black text-sm"><b>{comment.user.gender}</b> From Section <b>{comment.user.section}</b></p>
+      <p className="absolute right-0 text-sm cursor-pointer">{new Date(comment.createdAt).toLocaleString()}</p>
       </div>
       {(currentUser?._id === PersonAddedComment) ?
         <p

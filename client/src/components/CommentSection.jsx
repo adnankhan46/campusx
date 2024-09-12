@@ -26,15 +26,15 @@ const CommentSection = ({ comments = [], commentLoading, commentError, postId, C
     <div className="max-w-4xl mx-auto bg-white p-6 border-black rounded-lg shadow-md w-full">
     <p className="mb-4 text-xl md:text-2xl text-gray-400">{(comments.length > 0) ? `${comments.length} Comments` : "No comments yet" }</p>
 
-      <div className="mb-4 w-full flex border-2 border-black-500 bg-slate-400 rounded-lg items-center">
-        <textarea
-          className="w-full p-2 text-cyan-600 rounded-lg mr-2"
-          placeholder="Write a new comment..."
+      <div className="mb-4 w-full flex border-2 border-black-500 rounded-xl items-center font-inter">
+        <input
+          className="w-full p-2 text-black font-inter rounded-lg mr-2 focus:outline-none"
+          placeholder="Add a new comment..."
           value={newCommentText}
           onChange={(e) => setNewCommentText(e.target.value)}
         />
         <button
-          className="px-4 py-2 text-blue-500 text-2xl rounded-lg hover:bg-blue-600 text-white-500" 
+          className="h-full p-4  text-white text-2xl rounded-xl bg-[#6a7cff]" 
           onClick={handleCommentSubmit}
         >
           Add

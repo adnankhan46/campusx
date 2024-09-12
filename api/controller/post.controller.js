@@ -6,7 +6,7 @@ export const checkHi = async (req, res) => {
     res.json({message: "Cookie hai"});
   }
 
-export const allPost = async (req, res) => {
+export const allPost = async (req, res, next) => {
     try {
         const posts = await Post.find().populate('user', 'gender section profilePicture');
 

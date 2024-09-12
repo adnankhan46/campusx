@@ -3,19 +3,20 @@ import Typed from 'typed.js';
 import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
-
+import Footer from '../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles} from '@fortawesome/free-solid-svg-icons';
+import CampusAIMockup from "../assets/campusai-mockup.png";
 
 const Front = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    if (currentUser !== null) {
-      navigate("/home");
-    }
-  }, [currentUser, navigate]);
+  // useEffect(() => {
+  //   if (currentUser !== null) {
+  //     navigate("/home");
+  //   }
+  // }, [currentUser, navigate]);
 
   const typedTextRef = useRef(null);
   const typedInstanceRef = useRef(null);
@@ -145,9 +146,12 @@ const Front = () => {
       CampusAI
       </span>
       </p>
+      <p className='font-inter mt-10 text-white'>Ask Questions Regarding Campus or anything else comes to your mind
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus quis quia nulla?
+      </p>
       </div>
        {/**  Section 2(b)    */}
-      <img src="" alt="" className='h-10 w-10'/>
+      <img src={CampusAIMockup} alt="CampusAI Mockup" className='h-[36rem] md:h-[26rem] md:mt-2'/>
       </div>
 
       {/**  Section 2(1)    */}
@@ -168,48 +172,11 @@ const Front = () => {
       </p>
       </div>
        {/**  Section 2(1)(b)    */}
-      <img src="" alt="" className='h-10 w-10'/>
+       <img src={CampusAIMockup} alt="CampusAI Mockup" className='h-[36rem] md:h-[26rem] md:mt-2'/>
       </div>
 
        {/**  Footer will Come here    */}
-    <div className='footer f1 bg-white p-12 flex flex-col gap-12'>
-       
-    <div className='footer flex flex-col md:flex-row justify-center gap-16'>
-    <div className='1st border-2 border-red-500'>
-    <p className='font-bold font-outfit text-4xl'>CampusX</p>
-    <p className='font-inter mt-4'>Build. Share. Collaborate <br /> For Developers, By Developers</p>
-   <button className='bg-[#6a7cff] py-3 px-6 mt-2 rounded-xl text-white font-inter font-medium'>Email Us</button>
-    </div>
-    <div className='2nd border-2 border-green-500 flex flex-col md:flex-row gap-10'>
-    <div className='col-1'>
-    <p className='font-bold font-outfit text-2xl'>About</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    </div>
-    <div className='col-2'>
-    <p className='font-bold font-outfit text-2xl'>Products</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    </div>
-    <div className='col-3'>
-    <p className='font-bold font-outfit text-2xl'>Contact Us</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    <p className='font-inter mt-4'>/techstack</p>
-    </div>
-    </div>
-    <div className='3rd border-2 border-blue-500 flex flex-col'>
-    <p className='font-bold font-outfit text-4xl'>Build By</p>
-    <button className='bg-[#6a7cff] py-3 px-6 mt-4 rounded-xl text-white font-inter font-medium'>Adnan Khan</button>
-    <button className='bg-[#6a7cff] py-3 px-6 mt-2 rounded-xl text-white font-inter font-medium'>Garv Thakre</button>
-    </div>
-    </div>
-    <p className='flex flex-col md:flex-row justify-center items-center font-inter'>
-    @2024, All Rights Reserved
-    </p>
-    </div>
+       <Footer/>
     </div>
   );
 };

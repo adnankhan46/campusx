@@ -22,7 +22,7 @@ function Home() {
   return (
     <div className="overflow-x-hidden flex flex-col items-center min-h-screen bg-[#FAF4FE] mb-[120px]">
     <Navbar/>
-      <div className="mt-4 flex flex-col w-full md:w-1/2 items-center">
+      <div className="mt-2 flex flex-col w-full md:w-1/2 items-center">
       {/*<h1 className="text-2xl md:text-4xl font-bold mb-4">Home</h1>*/}
 
       {(isLoading) &&

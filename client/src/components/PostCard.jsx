@@ -25,16 +25,16 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
   }
 
   return (
-    <div className="overflow-x-hidden bg-white border border-[#D9D9D9] p-4 rounded-lg mb-2 w-full
+    <div className="overflow-x-hidden bg-white border border-[#D9D9D9] p-4 rounded-xl mb-2 w-full font-inter
     " onClick={()=>navigate(`/post/${postId}`)}>
       <div className="mb-4">
-        <p className='text-md'>{text}</p>
+        <p className='text-sm md:text-base'>{text}</p>
         {postImage && <img className='rounded-lg border border-[#D9D9D9]' src={postImage} alt="postImg" onError={(e) => e.target.style.display = 'none'} />}
       </div>
       <div className="flex gap-1 items-end relative">
         <img src={profilePicture} className="h-6 w-6" alt="profilePicture" />
-        <p className="mt-6 text-black"><b>{gender}</b> From Section <b>{section}</b></p>
-        <p className='absolute right-0 text-base cursor-pointer'
+        <p className="mt-6 text-black text-sm"><b>{gender}</b> From Section <b>{section}</b></p>
+        <p className='absolute right-0 text-sm cursor-pointer'
            >{time}</p>
       </div>
       
@@ -45,7 +45,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       : <p>{' '}</p>
         }
     
-        <p className="text-base text-[#4b6cfcec]">
+        <p className="text-base text-[#4b6cfcec] cursor-pointer">
         {(commentCount > 0) ? `${commentCount} Comments` : "Comments" }
         </p>
         

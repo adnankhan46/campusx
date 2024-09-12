@@ -35,6 +35,7 @@ export const postsApi = authApi.injectEndpoints({
       getCommentAllPost: builder.query({
         query: (postId) => `/comment/all/${postId}`,
         providesTags: ['Comments'],
+        transformResponse: (data) => data.reverse(),
       }),
       // Add Comment to Post
       addCommentToPost: builder.mutation ({

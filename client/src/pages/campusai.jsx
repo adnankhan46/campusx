@@ -13,9 +13,9 @@ function CampusAi() {
     
       </div>
     
-      <p className="text-2xl md:text-4xl font-outfit font-bold my-2 text-center">
-        <FontAwesomeIcon icon={faWandSparkles} className='md:h-8 h-6 mx-2 text-[#6a7cff]' />
-        CampusAI
+      <p className="text-base md:text-xl font-outfit font-bold my-2 text-center text-[#7686ff]">
+        <FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
+       Ask Questions about Campus or anything
       </p>
    
       <div className='flex-1 overflow-y-auto h-5 mb-[136px]'>

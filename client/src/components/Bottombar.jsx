@@ -35,7 +35,7 @@ const BottomBar = () => {
     navigate(path);
   };
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 gap-2 w-full md:w-1/2 border-2 border-gray-500 bg-[#FAF4FE] bg-opacity-50 text-white p-2 flex justify-evenly items-center backdrop-blur-sm">
+    <div className="fixed font-inter bottom-0 left-1/2 transform -translate-x-1/2 gap-2 w-full md:w-1/2 border-2 border-gray-500 bg-[#FAF4FE] bg-opacity-50 text-white p-2 flex justify-evenly items-center backdrop-blur-sm">
 
 
       <div onClick={() => handleTabClick('home', '/home')} className="flex flex-col text-black items-center justify-center">

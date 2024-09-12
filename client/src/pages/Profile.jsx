@@ -42,7 +42,7 @@ const Profile = () => {
    try { 
      await logout().unwrap();
      dispatch(setCurrentUser(null));
-     localStorage.removeItem('persist:root'); 
+     localStorage.removeItem('persist:root');
      navigate("/login");
      console.log("LogOut Success");
    } catch (error) {
@@ -52,7 +52,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white mb-[120px]">
+    <div className="flex flex-col items-center min-h-screen bg-white mb-[120px] font-inter">
       <Navbar />
       <div className='flex flex-col w-full items-center'>
         <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />

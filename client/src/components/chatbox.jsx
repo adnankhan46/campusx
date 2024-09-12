@@ -42,9 +42,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
      try {
        const parts = [
          { text: "input: your name ?" },
-         { text: "output: CampusAI" },
-         { text: "input: you are ?" },
-         { text: "output: An AI assistance named \"CampusAI by CampusX\" providing information about \"BIT Durg\" College's, trained and maintained by Google" },
+         { text: "output: I am CampusAI" },
+         { text: "input: who are you ?" },
+         { text: "output: An AI assistance named \"CampusAI by CampusX\" providing information about \"BIT Durg\" College, trained and maintained by CampusX builders" },
          { text: "input: College Timing for First year BIT Durg, BTech ?" },
          { text: "output: College Timing for First year BIT Durg is from 9 AM to 4 PM (IST)" },
          { text: "input: College Timing for other year BIT Durg, BTech ?" },
@@ -113,18 +113,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   }, [typedAnswer]);
 
   return (
-    <div className="flex flex-col h-full rounded-lg overflow-y-auto">
+    <div className="flex flex-col h-full rounded-lg overflow-y-auto scroll-smooth font-inter">
       <div className="flex-grow">
         {/* Chat history */}
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto scroll-smooth">
           {history.map((item, index) => (
             <div key={index} className="flex flex-col space-y-2 pb-2 mb-2">
-              <div className="bg-blue-100 text-blue-800 p-2 text-base rounded-lg border self-end max-w-3/4 border-blue-200">
+              <div className="bg-blue-100 text-blue-800 p-2 mr-2 text-base rounded-lg border self-end w-fit max-w-3/4 border-blue-200">
                 <p>{item.question}</p>
                  
               </div>
               
-              <div className="bg-white text-gray-800 p-2 rounded-lg border text-base self-start border-gray-200">
+              <div className="bg-white text-gray-800 p-2 ml-2 mr-2 rounded-lg border text-base self-start border-gray-200">
                 <p>
                   <FontAwesomeIcon icon={faWandSparkles} className='md:h-6 h-4 mx-2 text-[#6a7cff]' />
                   <span dangerouslySetInnerHTML={{ __html: parseMarkdownToHtml(index === history.length - 1 ? typedAnswer : item.answer) }} />
