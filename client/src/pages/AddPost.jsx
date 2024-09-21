@@ -61,7 +61,7 @@ const AddPost = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-[#EFEFF4] pb-[120px]">
+    <div className="flex flex-col items-center min-h-screen bg-[#EFEFF4] pb-[120px] font-inter">
       <Navbar />
       <h1 className="text-2xl md:text-4xl font-bold my-4">Add a Post</h1>
       <textarea
@@ -95,7 +95,7 @@ const AddPost = () => {
               className="mt-2 max-w-full max-h-36 rounded"
             />
             <button
-              className="mt-2 p-2 bg-gray-500 text-white hover:text-black rounded"
+              className="mt-2 p-2 bg-gray-500 text-white hover:bg-red-600 rounded"
               onClick={handleCancelImage}
             >
               <FontAwesomeIcon icon={faTimes} className="mr-2" />

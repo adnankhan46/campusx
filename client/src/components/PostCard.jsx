@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDeletePostsMutation } from '../redux/posts/postApi';
 
 const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);
+  const location = useLocation();
 
   const [deletePosts] = useDeletePostsMutation();
 
@@ -15,6 +16,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
     if (window.confirm('Are you sure you want to delete this post?')) {
     try {
       await deletePosts(postId).unwrap();
+       (location.pathname === `/post/${postId}`) && navigate("/home");
       console.log("Post Deletion Success");
     } catch (error) {
       console.log('Failed to delete:', error);
@@ -27,7 +29,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
   return (
     <div className="overflow-x-hidden bg-white border border-[#D9D9D9] p-4 rounded-xl mb-2 w-full font-inter
     " onClick={()=>navigate(`/post/${postId}`)}>
-      <div className="mb-4">
+      <div className="mb-1">
         <p className='text-sm md:text-base'>{text}</p>
         {postImage && <img className='rounded-lg border border-[#D9D9D9]' src={postImage} alt="postImg" onError={(e) => e.target.style.display = 'none'} />}
       </div>
@@ -46,7 +48,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
         }
     
         <p className="text-base text-[#4b6cfcec] cursor-pointer">
-        {(commentCount > 0) ? `${commentCount} Comments` : "Comments" }
+        {(commentCount > 0) ? `${commentCount} Comments` : "Show Comments" }
         </p>
         
       </div>

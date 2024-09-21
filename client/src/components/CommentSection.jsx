@@ -34,7 +34,7 @@ const CommentSection = ({ comments = [], commentLoading, commentError, postId, C
           onChange={(e) => setNewCommentText(e.target.value)}
         />
         <button
-          className="h-full p-4  text-white text-2xl rounded-xl bg-[#6a7cff]" 
+          className="h-full p-4  text-white text-lg rounded-xl bg-[#6a7cff]" 
           onClick={handleCommentSubmit}
         >
           Add

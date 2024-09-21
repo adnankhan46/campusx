@@ -11,6 +11,7 @@ import PostPage from "./pages/PostPage";
 import ReportPage from "./pages/ReportPage";
 import Notification from "./pages/Notification";
 import ErrorPage from "./pages/ErrorPage";
+import Explore from "./pages/Explore";
 // import Comment from "./components/Comment";
 
 
@@ -36,6 +37,7 @@ function App() {
    {/* <Route path='/campusai' element={<CampusAi/>}/> */}
    <Route path='/post/:postId' element={<PostPage/>}/>
    <Route path='/notification' element={<Notification/>}/>
+   <Route path='/explore' element={<Explore/>}/>
    
    <Route path='/report' element={<ReportPage/>}/>
 

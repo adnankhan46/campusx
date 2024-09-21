@@ -4,17 +4,13 @@ import BottomBar from '../components/Bottombar'
 
 function Notification() {
   return (
-    <div className='overflow-x-hidden flex flex-col border-3 border-red-500 items-center min-h-screen bg-white mb-[120px]'>
+    <div className='overflow-x-hidden flex flex-col items-center min-h-screen font-inter bg-white mb-[120px]'>
     <Navbar/>
-    <div className='mt-4 flex flex-col border-2 border-blue-500 w-full md:w-1/2 items-center h-screen p-6'>
-    <div className='border border-green-300 w-full h-12'>
-    Notifications
-    </div>
-    <div className='border border-green-300 w-full mt-2 h-12'>
-    Notifications
-    </div>
-    <div className='border border-green-300 w-full mt-2 h-12'>
-    Notifications
+    <p className="text-2xl md:text-4xl font-bold mt-2">All Notifications</p>
+    <div className='mt-4 flex flex-col w-full md:w-1/2 items-center h-screen px-2'>
+    <div className='border border-gray-300 rounded-lg w-full h-fit p-2 text-center'>
+    You have No Notifications yet
+    {/** API Need to be Done */}
     </div>
     
     </div>

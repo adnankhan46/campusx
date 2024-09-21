@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faPlus, faBell, faWandSparkles } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faPlus, faWandSparkles, faExplosion } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomBar = () => {
@@ -17,8 +17,8 @@ const BottomBar = () => {
         return 'upload';
       case '/campusai':
         return 'campusai';
-      case '/notification':
-        return 'notification';
+      case '/explore':
+        return 'explore';
       default:
         return '';
     }
@@ -39,28 +39,28 @@ const BottomBar = () => {
 
 
       <div onClick={() => handleTabClick('home', '/home')} className="flex flex-col text-black items-center justify-center">
-        <FontAwesomeIcon icon={faHome} className={`md:h-8 h-6 mb-2 ${activeTab === 'home' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
+        <FontAwesomeIcon icon={faHome} className={`md:h-8 h-6 mb-2  cursor-pointer ${activeTab === 'home' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
       <p className={`text-sm md:text-xl ${activeTab === 'home' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Home</p>
       </div>
      
      
       <div onClick={() => handleTabClick('upload', '/upload')} className="flex flex-col text-black  items-center justify-center">
-        <FontAwesomeIcon icon={faPlus} className={`md:h-8 h-6 mb-2 ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
+        <FontAwesomeIcon icon={faPlus} className={`md:h-8 h-6 mb-2  cursor-pointer ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
         <p className={`text-sm md:text-xl ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Upload</p>
         </div>
 
       <div onClick={() => handleTabClick('campusai', '/campusai')} className="flex flex-col text-black  items-center justify-center">
-        <FontAwesomeIcon icon={ faWandSparkles} className={`md:h-8 h-6 mb-2 ${activeTab === 'campusai' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
+        <FontAwesomeIcon icon={ faWandSparkles} className={`md:h-8 h-6 mb-2  cursor-pointer ${activeTab === 'campusai' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
         <p className={`text-sm md:text-xl ${activeTab === 'campusai' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>TRY AI</p>
         </div>
 
-      <div onClick={() => handleTabClick('notification', '/notification')} className="flex flex-col text-black  items-center justify-center">
-        <FontAwesomeIcon icon={faBell} className={`md:h-8 h-6 mb-2 ${activeTab === 'notification' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
-        <p className={`text-sm md:text-xl ${activeTab === 'notification' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Notification</p>
+      <div onClick={() => handleTabClick('explore', '/explore')} className="flex flex-col text-black  items-center justify-center">
+        <FontAwesomeIcon icon={faExplosion} className={`md:h-8 h-6 mb-2 cursor-pointer ${activeTab === 'explore' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
+        <p className={`text-sm md:text-xl ${activeTab === 'explore' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Explore</p>
   </div>
 
       <div onClick={() => handleTabClick('profile', '/profile')} className="flex flex-col text-black  items-center justify-center">
-        <FontAwesomeIcon icon={faUser} className={`md:h-6 h-6 mb-2  ${activeTab === 'profile' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
+        <FontAwesomeIcon icon={faUser} className={`md:h-6 h-6 mb-2  cursor-pointer  ${activeTab === 'profile' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
         <p className={`text-sm md:text-xl ${activeTab === 'profile' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Profile</p>
         </div>
     </div>

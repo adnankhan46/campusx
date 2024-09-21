@@ -2,9 +2,9 @@ import React from 'react'
 
 function Footer() {
   return (
-    <div className='footer f1 bg-white p-12 flex flex-col gap-12'>
+    <div className='footer f1 bg-white p-12 flex flex-col gap-8'>
        
-    <div className='footer flex flex-col md:flex-row justify-center gap-16'>
+    <div className='footer flex flex-col md:flex-row justify-center gap-12'>
     {/** Border point */}
     <div className='1st'>
     <p className='font-bold font-outfit text-4xl'>CampusX</p>
@@ -12,7 +12,7 @@ function Footer() {
    <button className='bg-[#6a7cff] py-3 px-6 mt-2 rounded-xl text-white font-inter font-medium'>Email Us</button>
     </div>
     {/** Border point */}
-    <div className='2nd flex flex-col md:flex-row gap-10'>
+    <div className='2nd flex flex-col md:flex-row gap-8'>
     <div className='col-1'>
     <p className='font-bold font-outfit text-2xl'>About</p>
     <p className='font-inter mt-4 cursor-pointer'>/techstack</p>
