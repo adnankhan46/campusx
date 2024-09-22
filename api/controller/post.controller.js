@@ -6,10 +6,23 @@ export const checkHi = async (req, res) => {
     res.json({message: "Cookie hai"});
   }
 
-export const allPost = async (req, res, next) => {
+// Get all posts with pagination
+export const allPost = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Pagination params
     try {
-        const posts = await Post.find().populate('user', 'gender section profilePicture');
+        // Ensure limit and page are integers
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit,10);
 
+        // Find all posts, populate user data, apply pagination
+        const posts = await Post.find()
+            .populate('user', 'gender section profilePicture')
+            .sort({createdAt: -1})
+            
+            .limit(limitNumber) // Limit the number of results per page
+            .skip((pageNumber - 1) * limitNumber); // Skip to the next page
+
+        // Format posts for the response
         const formattedPosts = posts.map(post => ({
             text: post.text,
             user: post.user._id,
@@ -20,13 +33,23 @@ export const allPost = async (req, res, next) => {
             profilePicture: post.user.profilePicture,
             gender: post.user.gender,
             section: post.user.section
-          }));
-      
-          res.status(200).json(formattedPosts);
-        } catch (error) {
-          next(error);
-        }
-  }
+        }));
+
+        // Get total count of documents
+        const totalPosts = await Post.countDocuments();
+
+        // Send formatted posts and pagination data
+        res.status(200).json({
+            posts: formattedPosts,
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalPosts / limitNumber),
+            hasMore: (pageNumber * limitNumber) < totalPosts // Pagination check
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 export const addPost = async (req, res) => {
     try {
