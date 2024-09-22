@@ -4,29 +4,103 @@ import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
 import BottomBar from '../components/Bottombar';
 import Navbar from '../components/Navbar';
 import app from '../firebase';
-import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage"
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useAddPostsMutation } from '../redux/posts/postApi';
 import { useNavigate } from 'react-router-dom';
+import * as nsfwjs from 'nsfwjs';
 
 const AddPost = () => {
   const [postContent, setPostContent] = useState('');
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [nsfwAlert, setNsfwAlert] = useState(null); // NSFW alert and result
+  const [modelStatus, setModelStatus] = useState('loading'); // it may loading, loaded, analyzing
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const [model, setModel] = useState(null); // To store the loaded NSFW model
 
   const [addPost, { isLoading, error }] = useAddPostsMutation();
 
   useEffect(() => {
     inputRef.current.focus();
+    const loadModel = async () => {
+      setModelStatus('loading'); // Show model loading
+      try {
+        const nsfwModel = await nsfwjs.load('/models/model.json', { size: 299 }); // Load NSFW model
+        setModel(nsfwModel);
+        setModelStatus('loaded'); // Model loaded
+        console.log('NSFW Model loaded successfully');
+      } catch (err) {
+        console.error('Failed to load NSFW Model:', err);
+        setModelStatus('error');
+      }
+    };
+    loadModel();
   }, []);
 
-  
-  const handlePost = async () => {
-    
-    
+  const checkImageForNSFW = async (imgFile) => {
+    if (!model) {
+      console.warn('NSFW Model not loaded yet');
+      return false; // Assuming safe if model isn't loaded
+    }
 
+    try {
+      const imgElement = document.createElement('img');
+      imgElement.src = URL.createObjectURL(imgFile);
+      
+      return new Promise((resolve) => {
+        imgElement.onload = async () => {
+          setModelStatus('analyzing'); // status to analyzing
+          const predictions = await model.classify(imgElement);
+          console.log('Predictions:', predictions);
+
+          // Relevant predictions for thresholds
+        let pornProbability = 0;
+        let hentaiProbability = 0;
+        let sexyProbability = 0;
+
+        predictions.forEach(pred => {
+          if (pred.className === 'Porn') pornProbability = pred.probability;
+          if (pred.className === 'Hentai') hentaiProbability = pred.probability;
+          if (pred.className === 'Sexy') sexyProbability = pred.probability;
+        });
+
+        const isNSFW = (
+          pornProbability > 0.05 || 
+          hentaiProbability > 0.10 || 
+          sexyProbability > 0.15
+        );
+
+        setModelStatus('loaded'); // status to loaded after analysis
+        resolve({ isNSFW, predictions });
+      };
+    });
+  } catch (error) {
+    console.error('Error during NSFW classification:', error);
+    setModelStatus('loaded'); // status loaded even on error
+    return { isNSFW: false, predictions: [] };
+  }
+  };
+
+  const handleImageUpload = async (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      setNsfwAlert(null); // previous NSFW alert to null
+      const { isNSFW, predictions } = await checkImageForNSFW(selectedImage);
+      
+      if (isNSFW) {
+        setNsfwAlert({ isNSFW: true, predictions });
+        setImage(null); // Clearing image selection
+      } else {
+        setNsfwAlert({ isNSFW: false, predictions });
+        setImage(selectedImage); // Setting image if its appropriate
+      }
+    }
+  };
+
+  const handlePost = async () => {
     setLoading(true);
+    setNsfwAlert(null); // NSFW alert to null
 
     let imageUrl = null;
 
@@ -36,16 +110,14 @@ const AddPost = () => {
         const storageRef = ref(storage, "images/" + image.name);
         await uploadBytes(storageRef, image);
         imageUrl = await getDownloadURL(storageRef);
-        console.log(imageUrl);
-        
+        console.log('Image uploaded to:', imageUrl);
       } catch (error) {
-        console.log(error);
+        console.error('Error uploading image:', error);
       }
     }
 
     try {
-      console.log("New wala ",imageUrl);
-       await addPost({ text: postContent, postImage: imageUrl }).unwrap();
+      await addPost({ text: postContent, postImage: imageUrl }).unwrap();
       setPostContent('');
       setImage(null);
       navigate("/home");
@@ -57,6 +129,8 @@ const AddPost = () => {
   };
 
   const handleCancelImage = () => {
+    setNsfwAlert(null);
+    setLoading(null);
     setImage(null);
   };
 
@@ -74,17 +148,22 @@ const AddPost = () => {
 
       <div className="w-full md:w-1/2 mb-4">
         <p>{`(Optional)`}</p>
-        <label className="flex items-center justify-start p-4 cursor-pointer hover:bg-gray-200  border-2 border-gray-300 rounded-xl">
+        <label className="flex items-center justify-start p-4 cursor-pointer hover:bg-gray-200 border-2 border-gray-300 rounded-xl">
           <FontAwesomeIcon icon={faUpload} className="text-gray-600 mr-2" />
           <span className="text-gray-600">Upload an image</span>
           <input
             type="file"
-            accept="image/*"
+            accept="image/jpeg, image/jpg, image/png"
             className="hidden"
-            onChange={(e) => setImage(e.target.files[0])}
+            onChange={handleImageUpload}
           />
         </label>
-        {image && (
+
+        {/* updating model status (loading, analyzing, loaded.) */}
+        {modelStatus === 'loading' && <p className='text-center'>Please wait: Loading Image Recognition Model...</p>}
+        {modelStatus === 'analyzing' && <p className='text-center'>Analyzing Image...</p>}
+        {modelStatus === 'loaded' && <p className='text-green-500 text-center'>Image Recognition Model Loaded</p>}
+        {modelStatus === 'loaded' && image && (
           <div className="mt-2 flex flex-col items-center">
             <p className="text-center text-gray-600">
               Selected file: {image.name}
@@ -103,8 +182,38 @@ const AddPost = () => {
             </button>
           </div>
         )}
+
+        {/* Showing NSFW Alert and Predictions */}
+        {nsfwAlert && nsfwAlert.isNSFW && (
+          <div className="text-red-500 text-center mb-4">
+            Inappropriate content detected. Please upload a different image.
+          </div>
+        )}
+        {/* Showing Image is approved */}
+        {nsfwAlert && !nsfwAlert.isNSFW && (
+          <div className="text-green-500 text-center mb-2">
+            Image is approved by model for posting.
+          </div>
+        )}
+
+        {/* Showing detailed predictions */}
+        {nsfwAlert && (
+          <div className="text-gray-600 text-center">
+            <h3 className="font-bold">Prediction Details:</h3>
+            {nsfwAlert.predictions.map((prediction, index) => (
+              <p key={index}>
+                {prediction.className}: {(prediction.probability * 100).toFixed(2)}%
+              </p>
+            ))}
+          </div>
+        )}
       </div>
-      <button className="p-2 w-full md:w-1/2 h-14 bg-[#6a7cff] text-white rounded" onClick={handlePost} disabled={loading || isLoading}>
+
+      <button
+        className="p-2 w-full md:w-1/2 h-14 bg-[#6a7cff] disabled:bg-[#c5ccff] text-white rounded"
+        onClick={handlePost}
+        disabled={loading || isLoading || (nsfwAlert && nsfwAlert.isNSFW)}
+      >
         {loading || isLoading ? 'Posting...' : 'Post'}
       </button>
       {error && <div className="text-red-500">Error: {error.data.message}</div>}

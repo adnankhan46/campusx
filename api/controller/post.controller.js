@@ -31,6 +31,10 @@ export const allPost = async (req, res, next) => {
 export const addPost = async (req, res) => {
     try {
         const { text, postImage } = req.body;
+        if(!text)
+        {
+          return res.status(400).json({message: "text can't be empty"})
+        };
         const newPost = new Post({
           text,
           user: req.user.id,
