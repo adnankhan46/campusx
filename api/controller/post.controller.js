@@ -49,6 +49,57 @@ export const allPost = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+//   All Post by specific user
+export const allPostByUser = async (req, res) => {
+  try {
+    const { userId, page = 1, limit = 6 } = req.query;
+
+    // Ensure page and limit are numbers
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+
+    // Check if userId is provided
+    if (!userId) {
+      return res.status(400).json({ message: 'userId is required' });
+    }
+
+    // Fetch posts only for the specific user
+    const posts = await Post.find({ user: userId })
+      .populate('user', 'gender section profilePicture')
+      .sort({ createdAt: -1 })
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber);
+
+      // Formating posts
+      const formattedPosts = posts.map(post => ({
+        text: post.text,
+        user: post.user._id,
+        postId: post._id,
+        postImage: post.postImage,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        profilePicture: post.user.profilePicture,
+        gender: post.user.gender,
+        section: post.user.section
+    }));
+    // Total number of posts for the user (for pagination logic)
+    const totalPosts = await Post.countDocuments({ user: userId });
+
+    // Check if there are more posts to fetch
+    const hasMore = (pageNumber * limitNumber) < totalPosts;
+
+    // Return posts and pagination data
+    res.status(200).json({
+      posts: formattedPosts,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalPosts / limitNumber),
+      hasMore: (pageNumber * limitNumber) < totalPosts // Pagination check
+    });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 
 
 export const addPost = async (req, res) => {

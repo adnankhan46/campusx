@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
 import BottomBar from '../components/Bottombar';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { useGetPostsQuery } from '../redux/posts/postApi';
+import { useGetPostsByUserQuery } from '../redux/posts/postApi';
 import { useUpdatePasswordMutation, useLogoutMutation } from '../redux/apiSlice';
-import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
+import { setCurrentUser } from '../redux/user/userSlice';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Profile = () => {
   const [logout] = useLogoutMutation();
@@ -16,9 +17,18 @@ const Profile = () => {
   const [updatePassword, { isLoading: isUpdating, error: updateError }] = useUpdatePasswordMutation();
 
   const { currentUser } = useSelector((state) => state.user);
-  const { data: posts} = useGetPostsQuery();
+  const [page, setPage] = useState(1);
+  const { data: postsData } = useGetPostsByUserQuery({ page, limit: 6, userId: currentUser._id });
 
-  const userPosts = posts ? posts.filter(post => post.user === currentUser._id) : null;
+  const userPosts = postsData ? postsData.posts : [];
+
+console.log(userPosts);
+
+  const fetchMorePosts = () => {
+    if (postsData && postsData.hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -28,69 +38,75 @@ const Profile = () => {
     }
 
     try {
-      const result = await updatePassword(password).unwrap(); // Correctly passing password
+      const result = await updatePassword({ password }).unwrap();
       alert('Password updated successfully:', result);
-      alert('Password updated successfully!');
     } catch (error) {
       alert('Failed to update password:', error);
-      alert('Failed to update password. Please try again.');
     }
   };
 
   const handleLogout = async (e) => {
-   e.preventDefault();
-   try { 
-     await logout().unwrap();
-     dispatch(setCurrentUser(null));
-     localStorage.removeItem('persist:root');
-     navigate("/login");
-     console.log("LogOut Success");
-   } catch (error) {
-     console.error('Failed to logout:', error);
-     alert('Failed to logout. Please try again.');
-   }
-  }
+    e.preventDefault();
+    try {
+      await logout().unwrap();
+      dispatch(setCurrentUser(null));
+      localStorage.removeItem('persist:root');
+      localStorage.removeItem('nsfwModelLoaded');
+      navigate("/login");
+      console.log("LogOut Success");
+    } catch (error) {
+      console.error('Failed to logout:', error);
+      alert('Failed to logout. Please try again.');
+    }
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-white mb-[120px] font-inter">
       <Navbar />
-      <div className='flex flex-col w-full items-center'>
+      <div className='flex flex-col w-full md:w-1/2 items-center'>
         <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />
         <h1 className="text-2xl md:text-4xl font-bold mb-4">{currentUser.admissionNumber}</h1>
-        <input className="w-full md:w-1/2 p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
-        <input className="w-full md:w-1/2 p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
-        <input className="w-full md:w-1/2 p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <p className='text-xs text-start'>NOTE: Passwords are hashed and then stored, You can change it here</p>
+        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
+        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
+        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <p className='text-xs text-start'>NOTE: Passwords are hashed and then stored. You can change it here.</p>
         <div className='flex gap-6'>
           <button className="mt-4 p-3 bg-[#ffffff] border-2 border-[#D9D9D9] font-bold text-[#6a7cff] rounded-xl" onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? 'Updating...' : 'Change Password'}
           </button>
-          {/** LogOut */}
-          <button className="mt-4 p-3 bg-[#ffffff] border-2 border-[#D9D9D9] text-[#6a7cff] font-bold rounded-xl" aria-pressed="true"
-          onClick={handleLogout}>Logout</button>
+          <button className="mt-4 p-3 bg-[#ffffff] border-2 border-[#D9D9D9] text-[#6a7cff] font-bold rounded-xl" onClick={handleLogout}>Logout</button>
         </div>
         {updateError && <div className="text-red-500">Error: {updateError.data?.message || 'Failed to update password.'}</div>}
-        <div className="mt-4 flex flex-col w-full md:w-1/2 items-center">
-          <h1 className="text-2xl md:text-4xl font-bold mb-4">My Posts</h1>
-          {userPosts && userPosts.length > 0 ? (
-            userPosts.map((post, index) => (
-              <PostCard
-                key={index}
-                text={post.text}
-                section={post.section}
-                gender={post.gender}
-                profilePicture={post.profilePicture}
-                postImage={post.postImage}
-                time={new Date(post.createdAt).toLocaleString()}
-                postId={post.postId}
-                postUser={post.user}
-              />
-            ))
-          ) : (
-            <div>You have No Posts Yet</div>
-          )}
+        
+        <h1 className="text-2xl md:text-4xl font-bold my-4">My Posts</h1>
+        <div className='flex flex-col w-full'>
+          <InfiniteScroll
+            dataLength={userPosts.length}
+            next={fetchMorePosts}
+            hasMore={postsData && postsData.hasMore}
+            loader={<div>Loading more posts...</div>}
+            endMessage={<div> </div>}
+          >
+            {userPosts.length > 0 ? (
+              userPosts.map((post) => (
+                <PostCard
+                  key={post.postId}
+                  text={post.text}
+                  section={post.section}
+                  gender={post.gender}
+                  profilePicture={post.profilePicture}
+                  postImage={post.postImage}
+                  time={new Date(post.createdAt).toLocaleString()}
+                  postId={post.postId}
+                  postUser={post.user}
+                />
+              ))
+            ) : (
+              <div>You have no posts yet.</div>
+            )}
+          </InfiniteScroll>
         </div>
-      </div>
+        </div>
       <BottomBar />
     </div>
   );

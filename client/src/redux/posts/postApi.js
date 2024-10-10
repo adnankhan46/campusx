@@ -15,6 +15,16 @@ export const postsApi = authApi.injectEndpoints({
         };
       },
     }),
+    getPostsByUser: builder.query({
+      query: ({ page = 1, limit = 6, userId }) => `/post/allpostbyuser?page=${page}&limit=${limit}&userId=${userId}`,
+      providesTags: ['Posts'],
+      transformResponse: (response) => {
+        return {
+          posts: response.posts,
+          hasMore: response.currentPage < response.totalPages // Handle pagination
+        };
+      },
+    }),
     
  
     // Posting to addpost API
@@ -67,6 +77,7 @@ export const postsApi = authApi.injectEndpoints({
 
 export const { 
   useGetPostsQuery,
+  useGetPostsByUserQuery,
   useAddPostsMutation,
   useDeletePostsMutation,
   useGetSinglePostQuery,

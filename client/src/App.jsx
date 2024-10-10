@@ -28,15 +28,14 @@ function App() {
    <Route path='/campusai' element={<CampusAi/>}/>
    
    
+   {/** Will be Private */}
    <Route element={<PrivateRoute/>}>
    <Route path='/profile' element={<Profile/>}/>
-   </Route>
-   {/** Will be Private */}
-   <Route path='/home' element={<Home/>}/>
    <Route path='/upload' element={<AddPost/>}/>
-   {/* <Route path='/campusai' element={<CampusAi/>}/> */}
    <Route path='/post/:postId' element={<PostPage/>}/>
    <Route path='/notification' element={<Notification/>}/>
+   </Route>
+   <Route path='/home' element={<Home/>}/>
    <Route path='/explore' element={<Explore/>}/>
    
    <Route path='/report' element={<ReportPage/>}/>
