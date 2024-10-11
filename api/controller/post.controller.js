@@ -1,5 +1,6 @@
 import Post from "../model/post.model.js";
 import User from "../model/user.model.js";
+import Comment from "../model/comment.model.js"
 import mongoose from "mongoose";
 
 export const checkHi = async (req, res) => {
@@ -150,24 +151,29 @@ export const getSinglePost = async (req, res) => {
     }
     };
 
-export const deletePost = async (req, res) => {
-  const { postId } = req.params;
-  try {
-    const post = await Post.findById(postId);
-  
-    if (!post) {
-      return res.status(404).json({message: "Post Not Found"})
-    }
-  
-    if (post.user.toString() !== req.user.id) {
-       return res.status(401).json({ message: "Unauthorized" });
-    }
-  // deleting
-     await Post.findByIdAndDelete(postId);
-  
-     res.status(200).json({ message: "Post deleted successfully" });
+    export const deletePost = async (req, res) => {
+      const { postId } = req.params;
     
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
+      try {
+        const post = await Post.findById(postId);
+      
+        if (!post) {
+          return res.status(404).json({ message: "Post Not Found" });
+        }
+      
+        if (post.user.toString() !== req.user.id) {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
+    
+        // Deleting the post
+        await Post.findByIdAndDelete(postId);
+    
+        // Deleting all comments associated with the post
+        await Comment.deleteMany({ post: postId });
+    
+        res.status(200).json({ message: "Post and its comments deleted successfully" });
+        
+      } catch (error) {
+        res.status(500).json({ message: "Server error" });
+      }
 }
