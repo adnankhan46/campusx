@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import Notification from './model/notification.model.js';
 
 const users = {}; // Store userId and socketId mappings
 
@@ -26,7 +27,7 @@ const setupSocket = (httpserver) => {
     });
 
     
-    socket.on('newComment', (data) => {
+    socket.on('newComment', async (data) => {
       console.log('New comment received:', data);
       
       
@@ -36,11 +37,24 @@ const setupSocket = (httpserver) => {
         return;
       }
 
-       
       const postOwnerSocketId = users[postOwnerId];
+
+      // Create and save the notification to the database
+  const notification = new Notification({
+    from: comment.userId,
+    to: postOwnerId,
+    notificationType: 'comment',
+    text: `${comment.userGender} from Section ${comment.userSection} commented: "${comment.text}"`,
+    postId: postId,
+    isRead: false,
+  });
+
+  await notification.save();
+
+// Emiting real-time notification if the post owner is online
       if (postOwnerSocketId) {
         io.to(postOwnerSocketId).emit('notification', {
-          message: `New comment: ${comment.text}`,
+          message: `New comment: ${comment.userGender} from ${comment.userSection} ${comment.text}`,
           postId: postId,
         });
         console.log(`Notified post owner (${postOwnerId}) about the new comment.`);

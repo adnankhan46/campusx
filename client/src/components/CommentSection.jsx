@@ -62,6 +62,8 @@ const CommentSection = ({ comments = [], commentLoading, commentError, postId, C
           comment: {
             text: text,
             userId: currentUser?._id,
+            userGender: currentUser?.gender,
+            userSection: currentUser?.section,
             postId,
             CommentUserId
           },
