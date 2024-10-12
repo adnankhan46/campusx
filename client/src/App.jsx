@@ -3,7 +3,7 @@ import Front from "./pages/Front";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import CampusAi from "./pages/CampusAi";
+import CampusAi from "./pages/Campusai";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import AddPost from "./pages/AddPost";

@@ -1,50 +1,51 @@
+// server.js
 import express from "express";
 import cors from 'cors';
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-//
 import authRoutes from "./route/auth.route.js";
 import PostRoutes from "./route/post.route.js";
-import CommentRoutes from "./route/comment.route.js"
+import CommentRoutes from "./route/comment.route.js";
 import cookieParser from "cookie-parser";
 
+import http from 'http';
+import setupSocket from './socket.js'; // Import the socket setup
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const httpserver = http.createServer(app);
 
-app.use(cors());
+// Initialize Socket.io
+setupSocket(httpserver);
 
-// Middlewares
-app.use(express.json());
-app.use(cookieParser());
-
+// Middleware
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true, // Allow credentials (cookies)
-  
+  credentials: true
 }));
+app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/post", PostRoutes);
 app.use("/api/comment", CommentRoutes);
 
-
-app.use((err, req, res, next)=>{
+// Error handling middleware
+app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
   return res.status(statusCode).json({
-      success: false,
-      message,
-      statusCode
-  })
-})
+    success: false,
+    message,
+    statusCode
+  });
+});
 
-// ################################################ MongoDB Connection
+// MongoDB Connection
 const dbURI = process.env.MONGO;
-
 if (!dbURI) {
   console.error('Error: MONGO environment variable is not defined.');
   process.exit(1);
@@ -52,39 +53,34 @@ if (!dbURI) {
 
 mongoose.connect(dbURI)
   .then(() => {
-    console.log("Connected to MONGODB");
+    console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.error('MongoDB connection error:', err);
+    console.error("MongoDB connection error:", err);
   });
-
-app.get('/api/front', (req, res) => {
-  res.json('Hello World!');
-});
-
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello World!' });
-});
-
- // check memory usage
-
- const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
-
- const memoryData = process.memoryUsage();
- 
- const memoryUsage = {
-   rss: `${formatMemoryUsage(memoryData.rss)} -> Resident Set Size - total memory allocated for the process execution`,
-   heapTotal: `${formatMemoryUsage(memoryData.heapTotal)} -> total size of the allocated heap`,
-   heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
-   external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
- };
- 
- console.log(memoryUsage);
- // Done Checking Memory usage
-
-
-
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  app.get('/api/front', (req, res) => {
+    res.json('Hello World!');
+  });
+  
+  app.get('/', (req, res) => {
+    res.json({ message: 'Hello World!' });
+  });
+  
+   // check memory usage
+  
+   const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
+  
+   const memoryData = process.memoryUsage();
+   
+   const memoryUsage = {
+     rss: `${formatMemoryUsage(memoryData.rss)} -> Resident Set Size - total memory allocated for the process execution`,
+     heapTotal: `${formatMemoryUsage(memoryData.heapTotal)} -> total size of the allocated heap`,
+     heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
+     external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
+   };
+   
+   console.log(memoryUsage);
+// Start server
+httpserver.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
