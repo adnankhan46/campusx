@@ -45,7 +45,18 @@ function Notification() {
   return (
     <div className='overflow-x-hidden flex flex-col items-center min-h-screen font-inter bg-white mb-[120px]'>
       <Navbar />
+      <div className="flex w-full md:w-1/2 justify-center items-center relative">
       <p className="text-2xl md:text-4xl font-bold mt-2">All Notifications</p>
+      {combinedNotifications.length === 0 ?
+        ""
+        :
+        <button
+        onClick={handleClearNotifications}
+        className='absolute right-0 mr-2 mt-2 px-2 py-1 text-red-500 text-base md:text-base'>
+        Clear All
+        </button>
+        }
+        </div>
 
       <div className='mt-4 flex flex-col w-full md:w-1/2 items-center h-full px-2'>
         <div className='border border-gray-300 rounded-lg w-full p-4'>
@@ -56,7 +67,9 @@ function Notification() {
               {combinedNotifications.reverse().map((notification, index) => (
                 <li key={index} className='border-b border-gray-200 py-2'>
                    {/* Display 'text' if it exists, otherwise fall back to 'message' */}
+    <p className='text-[#6a7cff] font-bold'>New {notification.notificationType || ''}</p> 
     <p>{notification.text || notification.message || 'No message available'}</p> 
+    <p className="text-gray-500 text-sm">{`${notification.from?.gender} from Section ${notification.from?.section}`}</p>
                   <p className="text-gray-500 text-sm">{`Post ID: ${notification.postId}`}</p>
                   <p className="text-gray-400 text-xs">{notification.timestamp || notification.createdAt || "Null timestamp"}</p>
                 </li>
@@ -66,11 +79,6 @@ function Notification() {
         </div>
       </div>
 
-      <button
-        onClick={handleClearNotifications}
-        className='mt-4 px-4 py-2 bg-red-500 text-white rounded-lg'>
-        Clear Notifications
-      </button>
 
       <BottomBar />
     </div>

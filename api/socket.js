@@ -44,7 +44,7 @@ const setupSocket = (httpserver) => {
     from: comment.userId,
     to: postOwnerId,
     notificationType: 'comment',
-    text: `${comment.userGender} from Section ${comment.userSection} commented: "${comment.text}"`,
+    text: `${comment.text}`,
     postId: postId,
     isRead: false,
   });
@@ -54,7 +54,7 @@ const setupSocket = (httpserver) => {
 // Emiting real-time notification if the post owner is online
       if (postOwnerSocketId) {
         io.to(postOwnerSocketId).emit('notification', {
-          message: `New comment: ${comment.userGender} from ${comment.userSection} ${comment.text}`,
+          message: `New comment: ${comment.userGender} from Section ${comment.userSection} "${comment.text}"`,
           postId: postId,
         });
         console.log(`Notified post owner (${postOwnerId}) about the new comment.`);
