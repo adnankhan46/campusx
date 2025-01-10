@@ -17,7 +17,7 @@ export const allPost = async (req, res) => {
 
         // Find all posts, populate user data, apply pagination
         const posts = await Post.find()
-            .populate('user', 'gender section profilePicture')
+            .populate('user', 'gender section profilePicture year')
             .sort({createdAt: -1})
             
             .limit(limitNumber) // Limit the number of results per page
@@ -33,7 +33,8 @@ export const allPost = async (req, res) => {
             updatedAt: post.updatedAt,
             profilePicture: post.user.profilePicture,
             gender: post.user.gender,
-            section: post.user.section
+            section: post.user.section,
+            year: post.user.year
         }));
 
         // Get total count of documents
@@ -66,7 +67,7 @@ export const allPostByUser = async (req, res) => {
 
     // Fetch posts only for the specific user
     const posts = await Post.find({ user: userId })
-      .populate('user', 'gender section profilePicture')
+      .populate('user', 'gender section profilePicture year')
       .sort({ createdAt: -1 })
       .skip((pageNumber - 1) * limitNumber)
       .limit(limitNumber);
@@ -81,7 +82,8 @@ export const allPostByUser = async (req, res) => {
         updatedAt: post.updatedAt,
         profilePicture: post.user.profilePicture,
         gender: post.user.gender,
-        section: post.user.section
+        section: post.user.section,
+        year: post.user.year
     }));
     // Total number of posts for the user (for pagination logic)
     const totalPosts = await Post.countDocuments({ user: userId });
@@ -94,7 +96,7 @@ export const allPostByUser = async (req, res) => {
       posts: formattedPosts,
       currentPage: pageNumber,
       totalPages: Math.ceil(totalPosts / limitNumber),
-      hasMore: (pageNumber * limitNumber) < totalPosts // Pagination check
+      hasMore: hasMore // Pagination check
     });
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -130,7 +132,7 @@ export const getSinglePost = async (req, res) => {
       if (!mongoose.Types.ObjectId.isValid(postId)) {
         return res.status(400).json({ message: "Invalid post ID" });
       }
-      const post = await Post.findById(postId).populate('user', 'gender section profilePicture');
+      const post = await Post.findById(postId).populate('user', 'gender section profilePicture year');
       if(!post) {
       return res.status(404).json({ message: "Post not found" });
       };
@@ -143,7 +145,8 @@ export const getSinglePost = async (req, res) => {
         updatedAt: post.updatedAt,
         profilePicture: post.user.profilePicture,
         gender: post.user.gender,
-        section: post.user.section
+        section: post.user.section,
+        year: post.user.year
       };
       res.status(200).json({post: formattedPost});
     } catch (error) {

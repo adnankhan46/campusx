@@ -23,7 +23,7 @@ const PostPage = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-[#FAF4FE] mb-[120px]">
     <Navbar/>
-    
+    {console.log(post)}
     <div className='mt-2 flex flex-col w-full md:w-1/2 items-center'>
     {(isLoading) &&
       <PostCard
@@ -35,6 +35,7 @@ const PostPage = () => {
       postImage={"Loading"}
       time={"Loading"}
       commentCount={"Loading"}
+      year={"Loading"}
       />}
 
     {post ? <PostCard
@@ -48,6 +49,7 @@ const PostPage = () => {
           postId={post.post.postId}
           postUser={post.post.user}
           commentCount={comments.length}
+          year={post.post.year|| "year"}
     /> :  (
       isLoading ?
       <div>Loading...</div>

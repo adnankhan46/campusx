@@ -4,13 +4,11 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDeletePostsMutation } from '../redux/posts/postApi';
 
-const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount }) => {
+const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount, year }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);
   const location = useLocation();
-
   const [deletePosts] = useDeletePostsMutation();
-
   const handleDeletePost = async (e)=>{
     e.stopPropagation();
     if (window.confirm('Are you sure you want to delete this post?')) {
@@ -35,7 +33,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       </div>
       <div className="flex gap-1 items-end relative">
         <img src={profilePicture} className="h-6 w-6" alt="profilePicture" />
-        <p className="mt-6 text-black text-sm"><b>{gender}</b> From Section <b>{section}</b></p>
+        <p className="mt-6 text-black text-sm"><b>{gender}</b> From <b>{section}</b></p>
         <p className='absolute right-0 text-sm cursor-pointer'
            >{time}</p>
       </div>
@@ -44,14 +42,14 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
    
       {(currentUser?._id === postUser) ?
       <p className="text-base text-red-500 cursor-pointer" onClick={handleDeletePost}>Delete</p>
-      : <p>{' '}</p>
+      : <span className='text-sm bg-[#D9D9D9] p-1 text-black rounded-md'>{year}-{(parseInt(year, 10)+4)}</span>
         }
     
         <p className="text-base text-[#4b6cfcec] cursor-pointer">
         {(commentCount > 0) ? `${commentCount} Comments` : "Show Comments" }
         </p>
-        
       </div>
+       
     </div>
   );
 };

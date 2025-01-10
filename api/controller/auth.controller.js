@@ -31,9 +31,17 @@ export const handleSignUp = async (req, res, next) => {
   }
 
   // ################## Checking if the admission number or email is allowed
-  if (!allowedAdmissionNumbers.includes(admissionNumber)) {
-    return res.status(400).json({ message: "Admission Number is not allowed" });
+  // if (!allowedAdmissionNumbers.includes(admissionNumber)) {
+  //   return res.status(400).json({ message: "Admission Number is not allowed" });
+  // }
+  if (!/^\d{10}$/.test(admissionNumber)) {
+    return next(errorHandler(400, "Invalid admission number format"));
   }
+
+  // Extract year and determine year tag
+  const yearDigits = admissionNumber.slice(0, 2);
+  const currentYear = 2000 + parseInt(yearDigits); // Convert to full year (e.g., 24 -> 2024)
+  console.log(currentYear)
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
@@ -43,6 +51,7 @@ export const handleSignUp = async (req, res, next) => {
     password: hashedPassword,
     section,
     gender,
+    year: currentYear,
     username: email.toString() + admissionNumber.toString(),
   });
 

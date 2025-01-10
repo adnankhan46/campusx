@@ -65,7 +65,8 @@ console.log(userPosts);
       <Navbar />
       <div className='flex flex-col w-full md:w-1/2 items-center'>
         <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">{currentUser.admissionNumber}</h1>
+        <h1 className="text-2xl md:text-4xl font-bold mb-2">{currentUser.admissionNumber}</h1>
+        <p className="text-base md:text-lg font-bold mb-4 text-gray-500 bg-[#D9D9D9] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year))+1}</p>
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -99,6 +100,7 @@ console.log(userPosts);
                   time={new Date(post.createdAt).toLocaleString()}
                   postId={post.postId}
                   postUser={post.user}
+                  year={post.year}
                 />
               ))
             ) : (

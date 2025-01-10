@@ -35,13 +35,16 @@ const userSchema  = new mongoose.Schema({
     section: {
         type: String,
         required: true,
-        enum: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
     },
     gender: {
         type: String,
         required: true,
         enum: ['Male', 'Female']
     },
+    year: {
+        type: String, // Year based on admission number, e.g., "24XXXXX" -> 2024
+        required: false,
+      },
     profilePicture: {
         type: String,
         default: "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",

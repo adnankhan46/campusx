@@ -58,9 +58,10 @@ const Register = () => {
               name="admissionNumber"
               value={formData.admissionNumber}
               onChange={handleChange}
-              placeholder="Addmission Number (From Id Card)"
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
+              placeholder="Admission Number (From Id Card)"
+              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl"
             />
+            <div className=' mb-2 text-gray-400'>10 digit </div>
             <input
               type="email"
               name="email"
@@ -83,19 +84,18 @@ const Register = () => {
               onChange={handleChange}
               className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
             >
-              <option value="" disabled>Select your section</option>
-              <option value="A">Section A</option>
-              <option value="B">Section B</option>
-              <option value="C">Section C</option>
-              <option value="D">Section D</option>
-              <option value="E">Section E</option>
-              <option value="F">Section F</option>
-              <option value="G">Section G</option>
-              <option value="H">Section H</option>
-              <option value="H">Section I</option>
-              <option value="H">Section J</option>
-              <option value="H">Section K</option>
-              <option value="H">Section L</option>
+              <option value="" disabled>Select your Branch</option>
+              <option value="CSE">CSE</option>
+              <option value="CSE AI">CSE AI</option>
+              <option value="CSE DS">CSE DS</option>
+              <option value="ETC">ETC</option>
+              <option value="IT">IT</option>
+              <option value="ECS">ECS</option>
+              <option value="ITCS">ITCS</option>
+              <option value="EE">EE</option>
+              <option value="EEE">EEE</option>
+              <option value="Mechanical">Mechanical</option>
+              <option value="Civil">Civil</option>
             </select>
 
             <div className="mb-4">

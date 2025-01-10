@@ -92,6 +92,7 @@ function Home() {
                 time={new Date(post.createdAt).toLocaleString()}
                 postId={post.postId}
                 postUser={post.user}
+                year={post.year}
               />
             ))
           ) : (
