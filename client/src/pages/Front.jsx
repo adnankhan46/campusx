@@ -1,8 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import Typed from 'typed.js';
-import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles} from '@fortawesome/free-solid-svg-icons';
@@ -10,15 +9,6 @@ import CampusAIMockup from "../assets/campusai-mockup.png";
 import CampusXMockup from "../assets/campusx-mockup.png";
 
 const Front = () => {
-  const navigate = useNavigate();
-  const { currentUser } = useSelector((state) => state.user);
-
- //  useEffect(() => {
-//   if (currentUser !== null) {
-//       navigate("/home");
-//     }
-//   }, [currentUser, navigate]);
-
   const typedTextRef = useRef(null);
   const typedInstanceRef = useRef(null);
 
@@ -81,7 +71,7 @@ const Front = () => {
                   d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
                 />
               </svg>
-              <span className='font-inter'>Male From Section H</span>
+              <span className='font-inter'>Female From CSE</span>
             </div>
           </div>
           <div className="bg-box2-gradient flex flex-col h-[135px] w-50 rounded-[23px] p-3 relative mt-4 mx-12 right-8 transition-all duration-1000 md:hover:translate-x-10">
@@ -103,15 +93,15 @@ const Front = () => {
                   d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
                 />
               </svg>
-              <span className='font-inter'>Female From Section F</span>
+              <span className='font-inter'>Male From ETC</span>
             </div>
           </div>
         </div>
         <div className="flex flex-col relative mx-auto">
-          <div className="text-[#505153] text-base md:text-base font-inter font-light">Share what you Think</div>
-          <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wider md:text-xl mb-4 mx-auto">
-            Without Revealing <br /> your Identity
-          </div>
+        <div className="text-[#505153] text-base md:text-base font-inter font-light">Share what you Think</div>
+        <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wider md:text-xl mb-4 mx-auto">
+          Without Revealing <br /> your Identity
+                    </div>
           <Link to="/signup">
             <button className="register mb-2 p-2 font-inter font-bold h-12 shadow-none border-0 bg-[#D9E5ED] text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-[#6a7cff] hover:text-white">
               Join Now
@@ -123,9 +113,9 @@ const Front = () => {
             </button>
           </Link>
           
-          <div class="relative p-[2px] rounded-md bg-gradient-to-r from-[#f6a1fff5] via-[#e886edf6] to-[#4b6cfcec]">
+          <div className="relative p-[2px] rounded-md bg-gradient-to-r from-[#f6a1fff5] via-[#e886edf6] to-[#4b6cfcec]">
         <Link to="/campusai">
-  <div class="flex justify-center items-center h-12 w-full bg-[#FAF4FE] rounded-md">
+  <div className="flex justify-center items-center h-12 w-full bg-[#FAF4FE] rounded-md">
   <button className="login font-outfit p-2 font-extrabold h-12 shadow-none bg-custom-gradient bg-clip-text text-transparent text-2xl rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
     Try CampusAI
   </button>

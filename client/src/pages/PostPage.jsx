@@ -50,6 +50,7 @@ const PostPage = () => {
           postUser={post.post.user}
           commentCount={comments.length}
           year={post.post.year|| "year"}
+          isAuthenticated={post.post.isAuthenticated}
     /> :  (
       isLoading ?
       <div>Loading...</div>

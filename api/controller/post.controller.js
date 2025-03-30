@@ -17,7 +17,7 @@ export const allPost = async (req, res) => {
 
         // Find all posts, populate user data, apply pagination
         const posts = await Post.find()
-            .populate('user', 'gender section profilePicture year')
+            .populate('user', 'gender section profilePicture year isAuthenticated')
             .sort({createdAt: -1})
             
             .limit(limitNumber) // Limit the number of results per page
@@ -34,7 +34,8 @@ export const allPost = async (req, res) => {
             profilePicture: post.user.profilePicture,
             gender: post.user.gender,
             section: post.user.section,
-            year: post.user.year
+            year: post.user.year,
+            isAuthenticated: post.user.isAuthenticated
         }));
 
         // Get total count of documents
@@ -67,7 +68,7 @@ export const allPostByUser = async (req, res) => {
 
     // Fetch posts only for the specific user
     const posts = await Post.find({ user: userId })
-      .populate('user', 'gender section profilePicture year')
+      .populate('user', 'gender section profilePicture year isAuthenticated')
       .sort({ createdAt: -1 })
       .skip((pageNumber - 1) * limitNumber)
       .limit(limitNumber);
@@ -83,7 +84,8 @@ export const allPostByUser = async (req, res) => {
         profilePicture: post.user.profilePicture,
         gender: post.user.gender,
         section: post.user.section,
-        year: post.user.year
+        year: post.user.year,
+        isAuthenticated: post.user.isAuthenticated
     }));
     // Total number of posts for the user (for pagination logic)
     const totalPosts = await Post.countDocuments({ user: userId });
@@ -132,7 +134,7 @@ export const getSinglePost = async (req, res) => {
       if (!mongoose.Types.ObjectId.isValid(postId)) {
         return res.status(400).json({ message: "Invalid post ID" });
       }
-      const post = await Post.findById(postId).populate('user', 'gender section profilePicture year');
+      const post = await Post.findById(postId).populate('user', 'gender section profilePicture year isAuthenticated');
       if(!post) {
       return res.status(404).json({ message: "Post not found" });
       };
@@ -146,6 +148,7 @@ export const getSinglePost = async (req, res) => {
         profilePicture: post.user.profilePicture,
         gender: post.user.gender,
         section: post.user.section,
+        isAuthenticated: post.user.isAuthenticated,
         year: post.user.year
       };
       res.status(200).json({post: formattedPost});

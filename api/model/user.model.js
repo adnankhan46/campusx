@@ -7,7 +7,7 @@ password
 Section
 Gender
 Role
-isActive,
+isAuthenticated,
 profilePicture
 */
 import mongoose from "mongoose";
@@ -54,6 +54,10 @@ const userSchema  = new mongoose.Schema({
         default: false,
     },
     isFreeze: {
+        type: Boolean,
+        default: false,
+    },
+    isAuthenticated: {
         type: Boolean,
         default: false,
     },

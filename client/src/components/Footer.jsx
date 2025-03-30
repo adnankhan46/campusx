@@ -1,44 +1,47 @@
-import React from 'react'
+import {Instagram, Linkedin} from 'lucide-react'
 
-function Footer() {
-  return (
-    <div className='footer f1 bg-white p-12 flex flex-col gap-8'>
-       
-    <div className='footer flex flex-col md:flex-row justify-center gap-8 md:gap-12'>
-    {/** Border point */}
-    <div className='1st'>
-    <p className='font-bold font-outfit text-4xl'>CampusX</p>
-    <p className='font-inter mt-3'>Build. Share. Collaborate <br /> For Developers, By Developers</p>
-   <button className='bg-[#6a7cff] py-3 px-6 mt-2 rounded-lg text-white font-inter font-medium'>Email Us</button>
+const Footer = () => (
+  <footer className="bg-white text-black">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex flex-col md:flex-row w-full justify-between md:px-24 gap-14">
+        <div className="booleanai">
+          <div className="onlyElement">
+          <h2 className='text-4xl font-extrabold font-outfit hover:text-[#243CB6]'>CampusX</h2>
+            <p className='my-2 text-gray-600'>Build. Share. Collaborate</p>
+            <div className="social-list flex gap-4">
+            <Instagram size={20} />
+            <Linkedin size={20}/>
+            </div>
+            <div className="campusx-branding border-t border-gray-300 flex gap-4 mt-4 pt-2">
+            <p className='text-gray-600'>Also Try</p>
+            <a href="https://booleanai.netlify.app/" className="text-gray-500 hover:text-[#243CB6]">BooleanAI</a>
+           </div>
+          </div>
+        </div>
+      <div className='flex flex-col md:flex-row gap-8 md:gap-12'>
+        <div className='1st element'>
+          <h3 className="text-lg font-semibold mb-4">Product</h3>
+          <ul className="space-y-2">
+            <li><a href="#" className="text-gray-600 hover:text-[#243CB6]">Features</a></li>
+            <li><a href="#" className="text-gray-600  hover:text-[#243CB6]">Sponsor</a></li>
+            <li><a href="#" className="text-gray-600  hover:text-[#243CB6]">About Us</a></li>
+          </ul>
+        </div>
+        <div className='2nd element'>
+          <h3 className="text-lg font-semibold mb-4">Support</h3>
+          <ul className="space-y-2">
+            <li><a href="#" className="text-gray-600 hover:text-[#243CB6]">Documentation</a></li>
+            <li><a href="#" className="text-gray-600 hover:text-[#243CB6]">Sponsor</a></li>
+            <li><a href="#" className="text-gray-600 hover:text-[#243CB6]">Help Center</a></li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      <div className="mt-4 pt-6 text-center text-gray-400">
+        <p>&copy; 2024 Adnan Khan. All rights reserved.</p>
+      </div>
     </div>
-    {/** Border point */}
-    <div className='2nd flex flex-col md:flex-row gap-8'>
-    <div className='col-1'>
-    <p className='font-bold font-inter text-2xl'>Product</p>
-    <p className='font-inter mt-3 cursor-pointer hover:underline'>CampusX</p>
-    <p className='font-inter mt-3 cursor-pointer hover:underline'>CampusAI</p>
-    <p className='font-inter mt-3 cursor-pointer hover:underline'>About Us</p>
-    </div>
-    <div className='col-2'>
-    <p className='font-bold font-inter text-2xl'>Support</p>
-    <p className='font-inter mt-3 cursor-pointer hover:underline'>Help Center</p>
-    <p className='font-inter mt-3 cursor-pointer hover:underline'>Open Source</p>
-    <p className='font-inter mt-3 cursor-pointer hover:underline'>Sponsor</p>
-    </div>
-    
-    </div>
-    {/** Border point */}
-    <div className='3rd flex flex-col'>
-    <p className='font-bold font-inter text-2xl'>Built By</p>
-    <button className='bg-[#6a7cff] py-3 px-6 mt-4 rounded-xl text-white font-inter font-medium'>Adnan Khan</button>
-    <button className='bg-[#6a7cff] py-3 px-6 mt-2 rounded-xl text-white font-inter font-medium'>Garv Thakre</button>
-    </div>
-    </div>
-    <p className='flex flex-col md:flex-row justify-center items-center font-inter mb-4'>
-    @2024, All Rights Reserved
-    </p>
-    </div>
-  )
-}
+  </footer>
+)
 
 export default Footer

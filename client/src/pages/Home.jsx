@@ -19,7 +19,6 @@ function Home() {
   const { data, error, isLoading } = useGetPostsQuery({ page, limit: 6 }, {
     refetchOnWindowFocus: false,
   });
-
   useEffect(() => {
     if (!currentUser) {
       navigate("/");
@@ -88,6 +87,7 @@ function Home() {
                 section={post.section}
                 gender={post.gender}
                 profilePicture={post.profilePicture}
+                isAuthenticated={post.isAuthenticated}
                 postImage={post.postImage}
                 time={new Date(post.createdAt).toLocaleString()}
                 postId={post.postId}

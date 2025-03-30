@@ -1,10 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import {BadgeCheck} from 'lucide-react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDeletePostsMutation } from '../redux/posts/postApi';
+import PropTypes from 'prop-types';
 
-const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount, year }) => {
+// PropTypes are defined here with required and non required fields
+const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount, year, isAuthenticated }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);
   const location = useLocation();
@@ -34,6 +35,9 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
       <div className="flex gap-1 items-end relative">
         <img src={profilePicture} className="h-6 w-6" alt="profilePicture" />
         <p className="mt-6 text-black text-sm"><b>{gender}</b> From <b>{section}</b></p>
+       {/* ****** TODO: AUTH -> if OCR scanned id card admission no. === entered admission number, then Verify */}
+        {(isAuthenticated) &&
+        <span><BadgeCheck className='w-4 pt-1 text-[#4b6cfcec]'/></span>}
         <p className='absolute right-0 text-sm cursor-pointer'
            >{time}</p>
       </div>
@@ -42,7 +46,7 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
    
       {(currentUser?._id === postUser) ?
       <p className="text-base text-red-500 cursor-pointer" onClick={handleDeletePost}>Delete</p>
-      : <span className='text-sm bg-[#D9D9D9] p-1 text-black rounded-md'>{year}-{(parseInt(year, 10)+4)}</span>
+      : <span className='text-sm bg-[#FAF4FE] p-1 text-gray-800 rounded-md'>{year}-{(parseInt(year, 10)+4)}</span>
         }
     
         <p className="text-base text-[#4b6cfcec] cursor-pointer">
@@ -52,6 +56,19 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
        
     </div>
   );
+};
+
+PostCard.propTypes = {
+  text: PropTypes.string,
+  gender: PropTypes.string,
+  section: PropTypes.string,
+  profilePicture: PropTypes.string,
+  postImage: PropTypes.string,
+  time: PropTypes.string,
+  postId: PropTypes.string.isRequired,
+  postUser: PropTypes.string.isRequired,
+  commentCount: PropTypes.number,
+  year: PropTypes.string
 };
 
 export default PostCard;

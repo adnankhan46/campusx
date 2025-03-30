@@ -1,6 +1,4 @@
- 
- import axios from 'axios';
- import React, { useState, useRef, useEffect } from 'react';
+ import { useState, useRef, useEffect } from 'react';
  import { parseMarkdownToHtml } from '../utils/parseMarkdownToHtml'; // Import the function
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
  import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
@@ -10,17 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   const [question, setQuestion] = useState("");
    const [answer, setAnswer] = useState(""); // Full answer
    const [typedAnswer, setTypedAnswer] = useState(""); // Incrementally typed answer
-   const [parsedAnswer, setParsedAnswer] = useState(""); // State for parsed answer
    const [history, setHistory] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const [error, setError] = useState("");
    const chatBoxRef = useRef(null);
    
 
-   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY); // Initialize Google Generative AI instance
+   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
    const model = genAI.getGenerativeModel({
-     model: "gemini-1.5-flash",
+     model: import.meta.env.VITE_GEMINI_MODEL,
    });
  
     const generationConfig = {
@@ -45,14 +42,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
          { text: "output: I am CampusAI" },
          { text: "input: who are you ?" },
          { text: "output: An AI assistance named \"CampusAI by CampusX\" providing information about \"BIT Durg\" College, trained and maintained by CampusX builders" },
-         { text: "input: College Timing for First year BIT Durg, BTech ?" },
-         { text: "output: College Timing for First year BIT Durg is from 9 AM to 4 PM (IST)" },
-         { text: "input: College Timing for other year BIT Durg, BTech ?" },
-         { text: "output: College Timing for other year BIT Durg is from 10 AM to 4 PM (IST)" },
          { text: "input: founders of Campus ai and campus x ?" },
          { text: "output: Adnan Khan and Garv Thakre" },
          { text: "input: what is Campusx?" },
-         { text: "output: CampusX or CampusX-BITD is an Anonymous Social Networking Site specially for first year students to get introduced. CampusX also provides Economic Opportunites for students." },
+         { text: "output: CampusX or CampusX-BITD is an Anonymous Social Networking Site specially for students. CampusX also provides Economic Opportunites for students." },
+         { text: "input: Tell more about economic opportunities in Campusx?" },
+         { text: "output: It is incentivized Opportunity finding Social App. A social app in the campus that connects students with companies offering paid micro-tasks, such as: 1. Engagement tasks:Commenting on posts, liking content, subscribing to channels. 2. Survey task: Filling out surveys, giving feedback on products or services. 3. Marketing task: Serving as campus ambassadors or brand representatives. 3. Work Experience tasks: Short internships, project-based gigs. 4. Professors Survey, etc" },
          { text: `input: ${question}` }, // Including the user's question dynamically
        ];
  
