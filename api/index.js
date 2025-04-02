@@ -13,6 +13,7 @@ import http from 'http';
 import setupSocket from './socket.js'; // Import the socket setup
 
 dotenv.config();
+console.log("MONGO env value:", process.env.MONGO);
 
 const app = express();
 const port = process.env.PORT || 3000;
