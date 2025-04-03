@@ -130,6 +130,38 @@ export const updatePassword = async (req, res, next) => {
 
 }
 
+
+// Add this function to your auth.controller.js file
+export const updateAuthenticationStatus = async (req, res, next) => {
+  try {
+    const { userId, isAuthenticated } = req.body;
+    
+    // Verify that the request includes the required fields
+    if (!userId) {
+      return next(errorHandler(400, "User ID is required"));
+    }
+    
+    // Find the user and update their authentication status
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { isAuthenticated },
+      { new: true }
+    );
+    
+    if (!updatedUser) {
+      return next(errorHandler(404, "User not found"));
+    }
+    
+    // Return the updated user (excluding password)
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 export const logout = async (req, res) => {
     res.clearCookie("jwt").status(200).json({message: "Signout Success"});  
 }
+
