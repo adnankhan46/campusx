@@ -12,6 +12,7 @@ import ReportPage from "./pages/ReportPage";
 import Notification from "./pages/Notification";
 import ErrorPage from "./pages/ErrorPage";
 import Explore from "./pages/Explore";
+import UserPage from "./pages/UserPage";
 // import Comment from "./components/Comment";
 
 
@@ -34,6 +35,7 @@ function App() {
    <Route path='/upload' element={<AddPost/>}/>
    <Route path='/post/:postId' element={<PostPage/>}/>
    <Route path='/notification' element={<Notification/>}/>
+   <Route path='/user' element={<UserPage/>}/>
    </Route>
    <Route path='/home' element={<Home/>}/>
    <Route path='/explore' element={<Explore/>}/>

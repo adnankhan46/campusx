@@ -34,7 +34,7 @@ const PostPage = () => {
       profilePicture={"Loading"}
       postImage={"Loading"}
       time={"Loading"}
-      commentCount={"Loading"}
+      commentCount={0}
       year={"Loading"}
       />}
 

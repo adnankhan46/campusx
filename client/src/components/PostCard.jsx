@@ -30,11 +30,14 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
     " onClick={()=>navigate(`/post/${postId}`)}>
       <div className="mb-1">
         <p className='text-sm md:text-base'>{text}</p>
-        {postImage && <img className='rounded-lg border border-[#D9D9D9]' src={postImage} alt="postImg" onError={(e) => e.target.style.display = 'none'} />}
+        {postImage && <img className='rounded-lg border border-[#D9D9D9]' src={postImage} alt="postImg" onError={(e) => e.target.style.display = 'none'}/>}
       </div>
       <div className="flex gap-1 items-end relative">
-        <img src={profilePicture} className="h-6 w-6" alt="profilePicture" />
-        <p className="mt-6 text-black text-sm"><b>{gender}</b> From <b>{section}</b></p>
+        <div></div>
+        <img src={profilePicture} className="h-6 w-6 cursor-pointer" alt="profilePicture" onClick={(e)=>{e.stopPropagation(); navigate(`/user/?userId=${postUser}`)}} />
+        <p className="mt-6 text-black text-sm cursor-pointer"
+           onClick={(e)=>{e.stopPropagation(); navigate(`/user/?userId=${postUser}`)}}
+        ><b>{gender}</b> From <b>{section}</b></p>
        {/* ****** TODO: AUTH -> if OCR scanned id card admission no. === entered admission number, then Verify */}
         {(isAuthenticated) &&
         <span><BadgeCheck className='w-4 pt-1 text-[#4b6cfcec]'/></span>}
@@ -68,7 +71,8 @@ PostCard.propTypes = {
   postId: PropTypes.string.isRequired,
   postUser: PropTypes.string.isRequired,
   commentCount: PropTypes.number,
-  year: PropTypes.string
+  year: PropTypes.string,
+  isAuthenticated: PropTypes.bool,
 };
 
 export default PostCard;

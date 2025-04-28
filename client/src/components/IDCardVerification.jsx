@@ -2,7 +2,8 @@ import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Tesseract from 'tesseract.js';
 import { setCurrentUser } from '../redux/user/userSlice';
-import axios from 'axios'; // Make sure this is imported
+import { BadgeCheck } from 'lucide-react';
+import axios from 'axios';
 
 const IDCardVerification = () => {
   const [isVerifying, setIsVerifying] = useState(false);
@@ -13,6 +14,7 @@ const IDCardVerification = () => {
   const [cardValidation, setCardValidation] = useState({ isValid: false, reason: '' });
   const [processingStage, setProcessingStage] = useState('');
   const [isUpdatingServer, setIsUpdatingServer] = useState(false);
+  const [isFaqVisible, setIsFaqVisible] = useState(false);
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
@@ -55,9 +57,11 @@ const IDCardVerification = () => {
           
           // Look for key markers of BIT ID card
           const hasBITMarkers = 
-            text.includes('bhilai institute') || 
-            text.includes('admission no') || 
-            text.includes('roll no');
+            text.includes('Bhilai Institute') || 
+            text.includes('Admission No') || 
+            text.includes('Admission No.') || 
+            text.includes('BhilaiHouse, G.E.Road, Durg-491001(CG)') || 
+            text.includes('Durg-491001(CG)');
           
           if (!hasBITMarkers) {
             resolve({ isValid: false, reason: 'This does not appear to be a BIT ID card' });
@@ -89,8 +93,7 @@ const IDCardVerification = () => {
       });
       
       if (response.status === 200) {
-        // Successfully updated in the database
-        console.log('Authentication status updated in database');
+        console.log('Authentication status updated');
         return true;
       }
     } catch (error) {
@@ -276,13 +279,15 @@ const IDCardVerification = () => {
     setCardValidation({ isValid: false, reason: '' });
   };
 
+  const toggleFaqVisibility = () => {
+    setIsFaqVisible(!isFaqVisible);
+  };
+
   if (currentUser.isAuthenticated) {
     return (
-      <div className="w-full mb-4 p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-        </svg>
-        <span>Your account is verified</span>
+      <div className="w-full mb-4 p-3 text-[#4b6cfcec] flex items-center justify-center gap-2">
+        <span><BadgeCheck className='w-5 text-[#4b6cfcec]'/></span>
+        <span>ID card is verified</span>
       </div>
     );
   }
@@ -397,16 +402,52 @@ const IDCardVerification = () => {
           </div>
         )}
         
+        {/* FAQs Section - Expandable */}
         <div className="mt-4 border-t border-gray-200 pt-3">
-          <h4 className="font-medium text-sm mb-2">Guidelines for ID Card Scanning:</h4>
-          <ul className="text-xs text-gray-600 list-disc pl-4 space-y-1">
-            <li>Upload only your official BIT ID card</li>
-            <li>Ensure the admission number is clearly visible</li>
-            <li>Make sure all four corners of the ID card are visible</li>
-            <li>Take the photo in good lighting without glare</li>
-            <li>Hold the camera steady to avoid blur</li>
-            <li>Your ID card is processed locally and not stored or sent to any server</li>
-          </ul>
+          <button 
+            onClick={toggleFaqVisibility}
+            className="flex justify-between items-center w-full text-left focus:outline-none"
+          >
+            <h4 className="font-medium text-sm">Guidelines for Scanning</h4>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className={`h-5 w-5 text-gray-500 transition-transform ${isFaqVisible ? 'transform rotate-180' : ''}`} 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          
+          {isFaqVisible && (
+            <div className="mt-2 text-xs text-gray-600 space-y-3">
+              <div>
+                <h5 className="font-medium mb-1">Guidelines for ID Card Scanning:</h5>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>Upload only your official BIT ID card</li>
+                  <li>Ensure the admission number is clearly visible</li>
+                  <li>Make sure all four corners of the ID card are visible</li>
+                  <li>Take the photo in good lighting without glare</li>
+                  <li>Hold the camera steady to avoid blur</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h5 className="font-medium mb-1">Privacy Policy:</h5>
+                <p>Your ID card is processed locally and not stored or sent to any server</p>
+              </div>
+              
+              <div>
+                <h5 className="font-medium mb-1">Troubleshooting:</h5>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>If verification fails, try taking the photo again with better lighting</li>
+                  <li>Make sure there's no glare or shadows on the admission number</li>
+                  <li>Clean your camera lens for better image quality</li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -66,10 +66,10 @@ const Profile = () => {
       <div className='flex flex-col w-full md:w-1/2 items-center'>
         <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />
         <h1 className="text-2xl md:text-4xl font-bold mb-2">{currentUser.admissionNumber}</h1>
-        <div className='flex gap-1'>
-          <p className="text-base md:text-lg font-bold mb-4 text-gray-800 bg-[#FAF4FE] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year))+4}</p>
+        <div className='flex gap-1 items-center'>
+          <p className="text-base md:text-lg font-bold text-gray-800 bg-[#FAF4FE] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year))+4}</p>
           {(currentUser.isAuthenticated) &&
-          <span><BadgeCheck className='w-5 text-[#4b6cfcec]'/></span>}
+          <span><BadgeCheck className='w-6 text-[#4b6cfcec]'/></span>}
         </div>
         
         {/* Add the ID Card Verification component */}
