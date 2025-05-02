@@ -1,14 +1,15 @@
 // server.js
+import dotenv from "dotenv";
 import express from "express";
 import cors from 'cors';
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+import opportunityRoutes from "./route/company.route.js";
 import authRoutes from "./route/auth.route.js";
 import PostRoutes from "./route/post.route.js";
 import CommentRoutes from "./route/comment.route.js";
 import NotificationRoutes from "./route/notification.route.js";
 import cookieParser from "cookie-parser";
-
+import companyRoutes from "./route/company.route.js";
 import http from 'http';
 import setupSocket from './socket.js'; // Import the socket setup
 
@@ -35,7 +36,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", PostRoutes);
 app.use("/api/comment", CommentRoutes);
 app.use("/api/notification", NotificationRoutes);
-
+app.use("/api/company", companyRoutes); 
+app.use("/api/opportunities", opportunityRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -48,7 +50,7 @@ app.use((err, req, res, next) => {
 });
 
 // MongoDB Connection
-const dbURI = process.env.MONGO;
+const dbURI ="mongodb+srv://garvthakre:BIjacT1V9ciA6PLW@campusx-bitd.8wry4cg.mongodb.net/?retryWrites=true&w=majority&appName=campusx-bitd";
 if (!dbURI) {
   console.error('Error: MONGO environment variable is not defined.');
   process.exit(1);
