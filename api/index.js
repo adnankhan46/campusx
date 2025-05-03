@@ -8,6 +8,7 @@ import authRoutes from "./route/auth.route.js";
 import PostRoutes from "./route/post.route.js";
 import CommentRoutes from "./route/comment.route.js";
 import NotificationRoutes from "./route/notification.route.js";
+import applicantRouter from "./route/applicant.route.js"
 import cookieParser from "cookie-parser";
 import companyRoutes from "./route/company.route.js";
 import http from 'http';
@@ -38,6 +39,7 @@ app.use("/api/comment", CommentRoutes);
 app.use("/api/notification", NotificationRoutes);
 app.use("/api/company", companyRoutes); 
 app.use("/api/opportunities", opportunityRoutes);
+app.use("/api/applicants", applicantRouter);
 // Error handling middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

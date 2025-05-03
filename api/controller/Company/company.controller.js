@@ -64,6 +64,7 @@ export const handleCompanySignUp = async (req, res, next) => {
   }
 };
 
+// Update this in your user authentication controller
 export const handleCompanySignIn = async (req, res, next) => {
   const { username, password } = req.body;
 
@@ -72,22 +73,27 @@ export const handleCompanySignIn = async (req, res, next) => {
   }
 
   try {
-    // Find company by username or email
-    const company = await Company.findOne({
+    // Find user by username or email
+    const user = await User.findOne({
       $or: [{ username }, { email: username }]
     });
     
-    if (!company) {
+    if (!user) {
       return res.status(400).json({ message: "Invalid username/email or password" });
     }
 
-    const isPasswordValid = await bcryptjs.compare(password, company.password);
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid username/email or password" });
     }
 
+    // IMPORTANT: Add isCompany: false to the token
     const token = jwt.sign(
-      { id: company._id, isCompany: true },
+      { 
+        id: user._id, 
+        isCompany: false,  // Explicitly set this to false
+        isAdmin: user.isAdmin 
+      },
       process.env.JWT_SECRET,
       { expiresIn: "3d" }
     );
@@ -99,14 +105,13 @@ export const handleCompanySignIn = async (req, res, next) => {
       maxAge: 30 * 24 * 60 * 60 * 1000
     });
 
-    const { password: hashedPassword, ...rest } = company._doc;
+    const { password: hashedPassword, ...rest } = user._doc;
 
-    res.status(200).json({...rest,token});
+    res.status(200).json({...rest, token});
   } catch (error) {
     next(error);
   }
 };
-
 export const updateCompanyPassword = async (req, res, next) => {
   const { currentPassword, newPassword } = req.body;
   const companyId = req.user.id;
