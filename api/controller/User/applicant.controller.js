@@ -2,7 +2,6 @@ import Opportunity from "../../model/opportunity.model.js";
 import Applicant from "../../model/applicant.model.js"; // Add this import
 import { errorHandler } from "../../middlewares/error.js";
 
-// Updated Apply for Opportunity controller
 export const applyForOpportunity = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -37,12 +36,19 @@ export const applyForOpportunity = async (req, res, next) => {
     if (alreadyApplied) {
       return next(errorHandler(400, "You have already applied for this opportunity"));
     }
+
+    // Extract proof of work from request body
+    const { coverLetter, proofOfWork } = req.body;
     
     // Create an applicant record in the Applicant collection
     const newApplicant = new Applicant({
       userId: req.user.id,
       opportunityId: id,
-      coverLetter: req.body.coverLetter || "No cover letter provided",
+      coverLetter: coverLetter || "No cover letter provided",
+      proofOfWork: {
+        screenshot: proofOfWork?.screenshot || null,
+        link: proofOfWork?.link || null
+      },
       status: 'applied'
     });
     
@@ -57,7 +63,10 @@ export const applyForOpportunity = async (req, res, next) => {
     
     await opportunity.save();
     
-    res.status(200).json({ message: "Application submitted successfully" });
+    res.status(200).json({ 
+      message: "Application submitted successfully",
+      application: newApplicant
+    });
   } catch (error) {
     next(error);
   }
