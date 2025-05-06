@@ -39,12 +39,15 @@ export const verifyCompany = (req, res, next) => {
   });
 };
 
+ 
+ 
+
 export const verifyCompanyOrAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.isCompany || req.user.isAdmin) {
       next();
     } else {
-      return next(errorHandler(403, "Only companies or admins can perform this action"));
+      return next(errorHandler(403, "You are not authorized to access this resource"));
     }
   });
 };

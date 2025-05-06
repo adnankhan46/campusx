@@ -1,4 +1,5 @@
 import Opportunity from "../../model/opportunity.model.js";
+import Applicant from "../../model/applicant.model.js"; // Add this import
 import { errorHandler } from "../../middlewares/error.js";
 
 // Updated Apply for Opportunity controller
@@ -6,8 +7,6 @@ export const applyForOpportunity = async (req, res, next) => {
   try {
     const { id } = req.params;
     
-    // Check if user is a company - this is the key issue in your original code
-    // We now explicitly check if isCompany is true, NOT undefined
     if (req.user.isCompany === true) {
       return next(errorHandler(403, "Companies cannot apply for opportunities"));
     }
@@ -282,3 +281,4 @@ export const getMyOpportunities = async (req, res, next) => {
     next(error);
   }
 };
+
