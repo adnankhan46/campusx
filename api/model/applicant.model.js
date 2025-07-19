@@ -1,4 +1,4 @@
-// api/model/applicant.model.js
+// TODO
 import mongoose from "mongoose";
 
 const applicantSchema = new mongoose.Schema({

@@ -174,6 +174,83 @@ export const getOpportunityById = async (req, res, next) => {
   }
 };
 
+export const getOpportunityByCompanyId = async (req, res, next) => {
+  try {
+    console.log("Starting getOpportunityByCompanyId");
+
+    const companyId = req.params.id;
+    const { page = 1, limit = 10, sort = '-createdAt' } = req.query;
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      return res.status(400).json({ message: "Invalid company ID format" });
+    }
+
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const query = {
+      creator: "company",
+      "createdBy.id": new mongoose.Types.ObjectId(companyId)
+    };
+
+    console.log(`Pagination: page=${pageNum}, limit=${limitNum}, skip=${skip}`);
+    console.log("Query filters:", JSON.stringify(query));
+
+    const totalCount = await Opportunity.countDocuments(query);
+    console.log(`Total count: ${totalCount}`);
+
+    // Try standard query
+    const opportunities = await Opportunity.find(query)
+      .sort(sort)
+      .skip(skip)
+      .limit(limitNum)
+      .setOptions({ skipMiddleware: true });
+
+    console.log(`Retrieved ${opportunities.length} opportunities with middleware bypass attempt`);
+
+    if (opportunities.length === 0) {
+      console.log("Attempting direct aggregation fallback...");
+
+      const aggregateResults = await Opportunity.aggregate([
+        { $match: query },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limitNum }
+      ]);
+
+      console.log(`Aggregation returned ${aggregateResults.length} results`);
+
+      if (aggregateResults.length > 0) {
+        res.status(200).json({
+          opportunities: aggregateResults,
+          totalPages: Math.ceil(totalCount / limitNum),
+          currentPage: pageNum,
+          totalCount
+        });
+        return;
+      }
+    }
+
+    const opportunitiesData = opportunities.map(opp =>
+      opp.toObject({ virtuals: true })
+    );
+
+    res.status(200).json({
+      opportunities: opportunitiesData,
+      totalPages: Math.ceil(totalCount / limitNum),
+      currentPage: pageNum,
+      totalCount
+    });
+
+    console.log("Response sent successfully");
+  } catch (error) {
+    console.error("Error in getOpportunityByCompanyId:", error);
+    next(error);
+  }
+};
+
 // Update opportunity
 export const updateOpportunity = async (req, res, next) => {
   try {

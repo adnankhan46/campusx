@@ -189,7 +189,12 @@ export const updatePaymentStatus = async (req, res, next) => {
 };
 
 // Get opportunities a user has applied for
-export const getMyApplications = async (req, res, next) => {
+export const getMyAppliedOpp = async (req, res, next) => {
+  /* Algo:
+        //1: Get user Id from Params
+        //2: FindAll Opp. Now sort by this applicants[0].userId === this id
+        //3: Return Opp.
+  */
   try {
     // Only for regular users
     if (req.user.isCompany) {
