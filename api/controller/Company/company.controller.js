@@ -1,4 +1,5 @@
 import Company from "../../model/company.model.js";
+import Opportunity from "../../model/opportunity.model.js";
 import { errorHandler } from "../../middlewares/error.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -179,6 +180,90 @@ export const getCompanyProfile = async (req, res, next) => {
     
     const { password, ...rest } = company._doc;
     res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getMyapplicants = async (req,res,next) => {
+   
+    try {
+        const { id }= req.params;
+      const opportunity = await Opportunity.findById(id);
+      console.log("Opp: ", opportunity);
+      if(!opportunity) {
+        return res.status(404).json("NO OPPORTUNITY FOUND");
+
+      }
+      const applicant = opportunity.applicants;
+       if (!applicant || applicant.length === 0) {
+      return res.status(200).json({ message: "No applicants yet." });
+    }
+    res.status(200).json(applicant);
+
+    } catch (error) {
+      console.error("Error fetching applicants",error);
+      next(error);
+    }
+}
+
+export const updateApplicantStatus = async (req, res, next) => {
+  try {
+    const { opportunityId, userId } = req.params;
+    const { status } = req.body;
+    
+    // Validate status
+    if (!['applied', 'shortlisted', 'selected', 'rejected'].includes(status)) {
+      return next(errorHandler(400, "Invalid status"));
+    }
+    
+    const opportunity = await Opportunity.findById(opportunityId);
+    
+    if (!opportunity) {
+      return next(errorHandler(404, "Opportunity not found"));
+    }
+    
+     
+    if (
+      opportunity.createdBy.id.toString() !== req.user.id && 
+      !req.user.isAdmin
+    ) {
+      return next(errorHandler(403, "You are not authorized to update applicant status"));
+    }
+    
+    // Find the applicant
+    const applicantIndex = opportunity.applicants.findIndex(
+      applicant => applicant.userId.toString() === userId
+    );
+    
+    if (applicantIndex === -1) {
+      return next(errorHandler(404, "Applicant not found"));
+    }
+    
+ 
+    opportunity.applicants[applicantIndex].status = status;
+    
+ 
+    if (status === 'selected') {
+      const alreadySelected = opportunity.selectedCandidates.find(
+        candidate => candidate.userId.toString() === userId
+      );
+      
+      if (!alreadySelected) {
+        opportunity.selectedCandidates.push({
+          userId,
+           
+           
+        });
+      }
+    }
+    
+    await opportunity.save();
+    
+    res.status(200).json({ 
+      message: "Applicant status updated successfully",
+      opportunity
+    });
   } catch (error) {
     next(error);
   }

@@ -17,7 +17,6 @@ export const createOpportunity = async (req, res, next) => {
     if (isPaid && (!amount || amount <= 0)) {
       return next(errorHandler(400, "Please provide a valid amount for paid opportunity"));
     }
-
     // Validate deadline is in the future
     const deadlineDate = new Date(deadline);
     if (deadlineDate <= new Date()) {
@@ -58,6 +57,12 @@ export const createOpportunity = async (req, res, next) => {
       createdBy: {
         id: req.user.id,
         name: creatorName
+      },
+      paymentStatus: {
+       firstPayment: {
+        status: isPaid ? false : null,
+        date: null
+      }
       }
     });
 

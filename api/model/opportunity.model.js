@@ -83,12 +83,7 @@ const opportunitySchema = new mongoose.Schema({
       default: Date.now
     }
   }],
-  selectedCandidates: [{
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    paymentStatus: {
+  paymentStatus: {
       firstPayment: {
         status: {
           type: Boolean,
@@ -110,10 +105,10 @@ const opportunitySchema = new mongoose.Schema({
         }
       }
     },
-    completionStatus: {
-      type: String,
-      enum: ['pending', 'completed', 'failed'],
-      default: 'pending'
+  selectedCandidates: [{
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     }
   }]
 }, { timestamps: true });

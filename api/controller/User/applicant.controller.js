@@ -4,7 +4,7 @@ import { errorHandler } from "../../middlewares/error.js";
 
 export const applyForOpportunity = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params;//asking for oppId
     
     if (req.user.isCompany === true) {
       return next(errorHandler(403, "Companies cannot apply for opportunities"));
@@ -72,72 +72,7 @@ export const applyForOpportunity = async (req, res, next) => {
   }
 };
 
-
-// Update applicant status (for companies/admins)
-export const updateApplicantStatus = async (req, res, next) => {
-  try {
-    const { opportunityId, userId } = req.params;
-    const { status } = req.body;
-    
-    // Validate status
-    if (!['applied', 'shortlisted', 'selected', 'rejected'].includes(status)) {
-      return next(errorHandler(400, "Invalid status"));
-    }
-    
-    const opportunity = await Opportunity.findById(opportunityId);
-    
-    if (!opportunity) {
-      return next(errorHandler(404, "Opportunity not found"));
-    }
-    
-    // Check if the user is authorized
-    if (
-      opportunity.createdBy.id.toString() !== req.user.id && 
-      !req.user.isAdmin
-    ) {
-      return next(errorHandler(403, "You are not authorized to update applicant status"));
-    }
-    
-    // Find the applicant
-    const applicantIndex = opportunity.applicants.findIndex(
-      applicant => applicant.userId.toString() === userId
-    );
-    
-    if (applicantIndex === -1) {
-      return next(errorHandler(404, "Applicant not found"));
-    }
-    
-    // Update applicant status
-    opportunity.applicants[applicantIndex].status = status;
-    
-    // If selected, add to selectedCandidates if not already there
-    if (status === 'selected') {
-      const alreadySelected = opportunity.selectedCandidates.find(
-        candidate => candidate.userId.toString() === userId
-      );
-      
-      if (!alreadySelected) {
-        opportunity.selectedCandidates.push({
-          userId,
-          paymentStatus: {
-            firstPayment: { status: false, date: null },
-            secondPayment: { status: false, date: null }
-          },
-          completionStatus: 'pending'
-        });
-      }
-    }
-    
-    await opportunity.save();
-    
-    res.status(200).json({ 
-      message: "Applicant status updated successfully",
-      opportunity
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+ 
 
 // Update payment status
 export const updatePaymentStatus = async (req, res, next) => {
@@ -195,63 +130,21 @@ export const getMyAppliedOpp = async (req, res, next) => {
         //2: FindAll Opp. Now sort by this applicants[0].userId === this id
         //3: Return Opp.
   */
-  try {
-    // Only for regular users
-    if (req.user.isCompany) {
-      return next(errorHandler(403, "Companies cannot have applications"));
+   try {
+    const {id} = req.params;
+    const myopp = await Opportunity.find({'applicants.userId': id,});
+    // const matchopp = allopp.filter((opp)=>
+    //   opp.applicants.some(applicant=>applicant.userId.toString()===id)
+    // );
+    if(myopp.length===0){
+      return res.status(404).json({message:"YOU DIDN'T APPLIED FOR ANY OPPORTUNITY"})
     }
-    
-    const { 
-      status, 
-      page = 1, 
-      limit = 10 
-    } = req.query;
-    
-    let query = {
-      'applicants.userId': req.user.id
-    };
-    
-    // Filter by application status if provided
-    if (status) {
-      query['applicants.status'] = status;
-    }
-    
-    // Calculate pagination
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    
-    // Find opportunities where user has applied
-    const opportunities = await Opportunity.find(query)
-      .sort('-createdAt')
-      .skip(skip)
-      .limit(parseInt(limit));
-    
-    // Get total count for pagination
-    const totalCount = await Opportunity.countDocuments(query);
-    
-    // Format the response to include application status for the user
-    const formattedOpportunities = opportunities.map(opp => {
-      const application = opp.applicants.find(
-        app => app.userId.toString() === req.user.id
-      );
-      
-      return {
-        ...opp._doc,
-        myApplication: {
-          status: application.status,
-          appliedAt: application.appliedAt
-        }
-      };
-    });
-    
-    res.status(200).json({
-      applications: formattedOpportunities,
-      totalPages: Math.ceil(totalCount / parseInt(limit)),
-      currentPage: parseInt(page),
-      totalCount
-    });
-  } catch (error) {
+
+    res.status(200).json(myopp);
+   } catch (error) {
+    console.error("Error fetching applied opportunity:", error);
     next(error);
-  }
+   }
 };
 
 // Get opportunities created by current company/user
@@ -295,4 +188,19 @@ export const getMyOpportunities = async (req, res, next) => {
     next(error);
   }
 };
+
+export const applicationId = async (req,res) => {
+  try {
+    const {applicationId}= req.params;
+     const applicant = await Applicant.findById(applicationId);
+     if(!applicant){
+      console.log("YOU DIDN'T APPLY FOR THIS OPPORTUNITY")
+       return res.status(404).json("YOU DIDN'T APPLY FOR ANY OPPORTUNITY")
+     }
+     res.status(200).json(applicant)
+  } catch (error) {
+    console.error("MEREKO NAHI PATA BHAIII,DEKH LO yeh ho sakta HH",error);
+    res.status(404).json("Internal server error");
+  }
+}
 

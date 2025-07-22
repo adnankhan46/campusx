@@ -5,7 +5,9 @@ import {
   updateCompanyPassword, 
   updateCompanyProfile,
   companyLogout,
-  getCompanyProfile
+  getCompanyProfile,
+  getMyapplicants,
+  updateApplicantStatus
 } from "../controller/Company/company.controller.js";
  
 import {
@@ -57,9 +59,10 @@ router.delete("/:id", verifyCompanyOrAdmin, deleteOpportunity);
    //1
 
 // APPLICANT:
-   //API:1
-   //API:2
-
+   //API:1 TODO: to get the applicants of a particular opportunity
+   router.get("/applicants/:id",verifyCompanyOrAdmin,getMyapplicants);
+   //API:2  TODO: to update the status of applicants from applied to selected or shortlisted
+   router.put("/applicants/status/:opportunityId/:userId",verifyCompanyOrAdmin,updateApplicantStatus);
 // PAY-2nd: for Company/Provider
    //1
 

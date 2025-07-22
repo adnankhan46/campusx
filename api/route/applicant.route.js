@@ -1,5 +1,6 @@
 import express from "express";
 import {
+   applicationId,
   applyForOpportunity,
   getMyAppliedOpp
 } from "../controller/User/applicant.controller.js";
@@ -28,11 +29,11 @@ router.get('/verify-email', );
 router.post("/opportunities/:id/apply", applyForOpportunity); // apply for an opp
    // for profile
     router.get("/applied-opp/:userId", getMyAppliedOpp);  // get only applied opp by user, TODO: params lagana h
-   // API-3: TODO
-    //router.get("/applied-op/:applicationId", );  // get SINGLE applied opp detail by application id
+   // API-3: TODO:
+    router.get("/applied-op/:applicationId",applicationId );  // get SINGLE applied opp detail by application id
 
 // PAY-TO-USER
- // 1API: TODO
+ // 1API: TODO: TO MAKE THE PAYMENT TO APPLICANT
 
  export default router;
 
