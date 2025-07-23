@@ -12,7 +12,7 @@ const router = express.Router();
 /**
  *  User/Applicant Routes: Ordered by AUTH, OPP, Pay1st, Applicants, Pay2nd
  */
-
+//BASE URL = /api/applicants
 
 router.use(verifyToken); // check Logged in
 

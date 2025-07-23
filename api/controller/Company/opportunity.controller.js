@@ -74,94 +74,95 @@ export const createOpportunity = async (req, res, next) => {
 };
 
 // Get all opportunities (with filters)
-export const getOpportunities = async (req, res, next) => {
-  try {
-    console.log("Starting getOpportunities");
-    const { status, type, isPaid, creator, page = 1, limit = 10, sort = '-createdAt' } = req.query;
+// export const getOpportunities = async (req, res, next) => {
+//   try {
+//     console.log("Starting getOpportunities");
+//     const { status, type, isPaid, creator, page = 1, limit = 10, sort = '-createdAt' } = req.query;
 
-    // Validate and convert pagination parameters
-    const pageNum = parseInt(page) || 1;
-    const limitNum = parseInt(limit) || 10;
-    const skip = (pageNum - 1) * limitNum;
+//     // Validate and convert pagination parameters
+//     const pageNum = parseInt(page) || 1;
+//     const limitNum = parseInt(limit) || 10;
+//     const skip = (pageNum - 1) * limitNum;
 
-    console.log(`Pagination: page=${pageNum}, limit=${limitNum}, skip=${skip}`);
+//     console.log(`Pagination: page=${pageNum}, limit=${limitNum}, skip=${skip}`);
 
-    // Build query object
-    const query = {};
-    if (status) query.status = status;
-    if (type) query.type = type;
-    if (isPaid !== undefined) query.isPaid = isPaid === 'true';
-    if (creator) query.creator = creator;
+//     // Build query object
+//     const query = {};
+//     if (status) query.status = status;
+//     if (type) query.type = type;
+//     if (isPaid !== undefined) query.isPaid = isPaid === 'true';
+//     if (creator) query.creator = creator;
 
-    console.log("Query filters:", JSON.stringify(query));
+//     console.log("Query filters:", JSON.stringify(query));
 
-    // First get total count for pagination info (not affected by pre-find middleware)
-    const totalCount = await Opportunity.countDocuments(query);
-    console.log(`Total count: ${totalCount}`);
+//     // First get total count for pagination info (not affected by pre-find middleware)
+//     const totalCount = await Opportunity.countDocuments(query);
+//     console.log(`Total count: ${totalCount}`);
 
-    // Get raw data from MongoDB to check what's in the database
-    const db = mongoose.connection.db;
-    const opportunitiesCollection = db.collection('opportunities');
-    const rawOpportunities = await opportunitiesCollection.find(query).toArray();
-    console.log(`Raw MongoDB documents: ${rawOpportunities.length}`);
+//     // Get raw data from MongoDB to check what's in the database
+//     const db = mongoose.connection.db;
+//     const opportunitiesCollection = db.collection('opportunities');
+//     const rawOpportunities = await opportunitiesCollection.find(query).toArray();
+//     console.log(`Raw MongoDB documents: ${rawOpportunities.length}`);
     
-    if (rawOpportunities.length > 0) {
-      console.log("First raw opportunity:", JSON.stringify(rawOpportunities[0]._id));
-    }
+//     if (rawOpportunities.length > 0) {
+//       console.log("First raw opportunity:", JSON.stringify(rawOpportunities[0]._id));
+//     }
 
-    // Try with explicit find that avoids pre-find middleware
-    const opportunities = await Opportunity.find(query)
-      .sort(sort)
-      .skip(skip)
-      .limit(limitNum)
-      .setOptions({ skipMiddleware: true }); // Try to bypass middleware if possible
+//     // Try with explicit find that avoids pre-find middleware
+//     const opportunities = await Opportunity.find(query)
+//       .sort(sort)
+//       .skip(skip)
+//       .limit(limitNum)
+//       .setOptions({ skipMiddleware: true }); // Try to bypass middleware if possible
     
-    console.log(`Retrieved ${opportunities.length} opportunities with middleware bypass attempt`);
+//     console.log(`Retrieved ${opportunities.length} opportunities with middleware bypass attempt`);
     
-    // If still empty, try with a direct aggregation
-    if (opportunities.length === 0) {
-      console.log("Attempting direct aggregation...");
-      const aggregateResults = await Opportunity.aggregate([
-        { $match: query },
-        { $sort: { createdAt: -1 } },
-        { $skip: skip },
-        { $limit: limitNum }
-      ]);
+//     // If still empty, try with a direct aggregation
+//     if (opportunities.length === 0) {
+//       console.log("Attempting direct aggregation...");
+//       const aggregateResults = await Opportunity.aggregate([
+//         { $match: query },
+//         { $sort: { createdAt: -1 } },
+//         { $skip: skip },
+//         { $limit: limitNum }
+//       ]);
       
-      console.log(`Aggregation returned ${aggregateResults.length} results`);
+//       console.log(`Aggregation returned ${aggregateResults.length} results`);
       
-      if (aggregateResults.length > 0) {
-        console.log("Using aggregation results");
-        // Return the aggregation results
-        res.status(200).json({
-          opportunities: aggregateResults,
-          totalPages: Math.ceil(totalCount / limitNum),
-          currentPage: pageNum,
-          totalCount
-        });
-        return;
-      }
-    }
+//       if (aggregateResults.length > 0) {
+//         console.log("Using aggregation results");
+//         // Return the aggregation results
+//         res.status(200).json({
+//           opportunities: aggregateResults,
+//           totalPages: Math.ceil(totalCount / limitNum),
+//           currentPage: pageNum,
+//           totalCount
+//         });
+//         return;
+//       }
+//     }
     
-    // If we get here, use whatever the find returned (even if empty)
-    const opportunitiesData = opportunities.map(opp => {
-      return opp.toObject({ virtuals: true });
-    });
+ 
+//     // If we get here, use whatever the find returned (even if empty)
+//     const opportunitiesData = opportunities.map(opp => {
+//       return opp.toObject({ virtuals: true });
+//     });
     
-    // Send response
-    res.status(200).json({
-      opportunities: opportunitiesData,
-      totalPages: Math.ceil(totalCount / limitNum),
-      currentPage: pageNum,
-      totalCount
-    });
+//     // Send response
+//     res.status(200).json({
+//       opportunities: opportunitiesData,
+//       totalPages: Math.ceil(totalCount / limitNum),
+//       currentPage: pageNum,
+//       totalCount
+//     });
     
-    console.log("Response sent successfully");
-  } catch (error) {
-    console.error("Error in getOpportunities:", error);
-    next(error);
-  }
-};
+//     console.log("Response sent successfully");
+//   } catch (error) {
+//     console.error("Error in getOpportunities:", error);
+//     next(error);
+//   }
+// };
 // Get opportunity by ID
 export const getOpportunityById = async (req, res, next) => {
   try {
@@ -179,6 +180,17 @@ export const getOpportunityById = async (req, res, next) => {
   }
 };
 
+export const getOpportunities = async (req,res,next) => {
+  try {
+    const opp = await Opportunity.find();
+    res.status(200).json(opp);
+    console.log("ALL OPPORTUNITIES FETCHED")
+  } catch (error) {
+    next(error);
+  }
+
+
+}
 export const getOpportunityByCompanyId = async (req, res, next) => {
   try {
     console.log("Starting getOpportunityByCompanyId");

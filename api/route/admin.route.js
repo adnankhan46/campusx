@@ -31,3 +31,41 @@
  * @Needs make sure 2nd payment done & get array of shortlisted applicant to pay them
  * @Response PaidToApplicant, {"payment-to-applicants": "paid"}
  */
+
+import express from "express";
+import router from "./applicant.route";
+
+// AUTH SECTION
+// ==========================
+
+// API 1: To Login
+router.post('/login',  );
+
+
+// VERIFY-PAYMENT SECTION
+// ==========================
+
+// API 1: Verify payment for opportunity
+router.post('/verifyOpp/:OPPid',  );
+
+
+// OPP SECTION
+// ==========================
+
+// API 1: Get all applicants
+router.get('/getAllOpp' );
+
+// API 2: Get all applicants by companyId
+router.get('/getAllOpp/Company/:companyId' ,);
+
+
+// PAYMENT SECTION
+// ==========================
+
+// API 1: Get shortlisted applicants (status = selected)
+router.get('/getShortlisted', );
+
+// API 2: Pay to shortlisted applicants
+router.post('/payToApplicants', );
+
+module.exports = router;

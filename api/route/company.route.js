@@ -27,7 +27,7 @@ const router = express.Router();
 /**
  *  Company/Provider Routes: Ordered by AUTH, OPP, Pay1st, Applicants, Pay2nd
  */
-
+// BASE URL = /api/company
 // AUTH
 router.get("/", getOpportunities);
 router.post("/signup", handleCompanySignUp);
