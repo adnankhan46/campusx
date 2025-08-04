@@ -55,7 +55,7 @@ const opportunitySchema = new mongoose.Schema({
   creator: {
     type: String,
     required: true,
-    enum: ['company', 'user']
+    enum: ['Company', 'User']
   },
   createdBy: {
     id: {

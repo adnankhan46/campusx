@@ -32,7 +32,7 @@ const applicantSchema = new mongoose.Schema({
     default: 'applied'
   },
   paymentStatus: {
-    firstPayment: {
+    firstPayment: { // this will be is applicant paid or not || admin pays to selected applicants, if opp's second payment done
       status: {
         type: Boolean,
         default: false
@@ -42,7 +42,7 @@ const applicantSchema = new mongoose.Schema({
         default: null
       }
     },
-    secondPayment: {
+    secondPayment: { // this will not be used
       status: {
         type: Boolean,
         default: false

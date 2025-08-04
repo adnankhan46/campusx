@@ -12,24 +12,24 @@ import {
  
 import {
   createOpportunity,
-  getOpportunities,
   getOpportunityById,
   updateOpportunity,
   deleteOpportunity,
   closeOpportunity,
-  getOpportunityByCompanyId
+  getOpportunityByCompanyId,
+  
 } from "../controller/Company/opportunity.controller.js";
 
 import { verifyToken, verifyCompanyOrAdmin } from "../middlewares/auth.js";
+import {  MakePayment} from "../controller/Company/payment.controller.js";
 
 const router = express.Router();
 
 /**
- *  Company/Provider Routes: Ordered by AUTH, OPP, Pay1st, Applicants, Pay2nd
+ *  Company/Provider Routes: Ordered by AUTH, OPP, Payment, Applicants
+   @BASE_URL = /api/company
  */
-// BASE URL = /api/company
 // AUTH
-router.get("/", getOpportunities);
 router.post("/signup", handleCompanySignUp);
 router.post("/signin", handleCompanySignIn);
 router.post("/logout", companyLogout);
@@ -52,18 +52,15 @@ router.get("/:id", getOpportunityById); // when click on an Opportunity, For Use
 router.put("/:id", verifyCompanyOrAdmin, updateOpportunity); // update single opp
 router.put("/:id/close", verifyCompanyOrAdmin, closeOpportunity); // can close before deadline
 router.delete("/:id", verifyCompanyOrAdmin, deleteOpportunity);
-// router.post("/verify/opportunity", verifyCompanyOrAdmin, []); // for COMP // TODO: To verify 1/2 payment, [Razorpay- REQUIRED]
 
-//////////////// TODO
-// PAY-1st: for Company/Provider
-   //1
+// [#] PAYMENT: 1st & 2nd Handle for Company/Provider to Admin || Logic is handled by Webhook acc to paymentLevel
+   router.get('/payments/opportunity/:oppId', MakePayment)
 
 // APPLICANT:
    //API:1 TODO: to get the applicants of a particular opportunity
    router.get("/applicants/:id",verifyCompanyOrAdmin,getMyapplicants);
    //API:2  TODO: to update the status of applicants from applied to selected or shortlisted
    router.put("/applicants/status/:opportunityId/:userId",verifyCompanyOrAdmin,updateApplicantStatus);
-// PAY-2nd: for Company/Provider
-   //1
+
 
 export default router;

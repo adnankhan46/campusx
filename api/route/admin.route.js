@@ -1,71 +1,63 @@
-// AUTH, []
-// api 1: 
-/**
- * To Login
- */
-
-
-// VERIFY-PAYMENT, [verifyOpp/:OPPid]
-// api 1: 
-/**
- * @Needs oppid > companyid + payment proof (SS or payId)[RAZORPAY] + 1st-payment/2nd-Payment
- * @TODO  we change the firstpayment to True from False [MANUALLY]
- * @middleware to decide check if 1st-payment is done or not for 2nd
- */
-
-
-// OPP, [getAllOpp] , [getAllOpp/COmpany/:companyId]
-/** API 1:  [getAllOpp] - with filters
- * @Response get all users who are applicant
- */
-/** API 2:  [getAllgetAllOpp/COmpany/:companyIdlOpp]
- * @Response same as API 1 of APPLICANT section of Company route
- */
-
-// PAYMENT, [GetShortlisted], [PayToApplicants]
-/** API 1:  [GetShortlisted]
- * @Needs applicant.status==selected + 2ndPayment of an Opp  || This will be in Company to send this data to Admin
- * @Response got
- */
-/** API 2:  [PayToApplicants]
+/** API:  [PayToApplicants]
  * @Needs make sure 2nd payment done & get array of shortlisted applicant to pay them
  * @Response PaidToApplicant, {"payment-to-applicants": "paid"}
  */
 
 import express from "express";
-import router from "./applicant.route";
+import { verifyAdmin } from "../middlewares/auth.js";
+import { getAllOpportunities, getOpportunityByCompanyId, getOpportunityById } from "../controller/Company/opportunity.controller.js";
+import { allApplicants, allComments, allCompany, allUsers } from "../controller/Admin/admin.controller.js";
+import { allPost, allPostByUser, getSinglePost } from "../controller/post.controller.js";
+import { getMyapplicants } from "../controller/Company/company.controller.js";
 
-// AUTH SECTION
-// ==========================
+const router = express.Router();
 
-// API 1: To Login
-router.post('/login',  );
-
-
-// VERIFY-PAYMENT SECTION
-// ==========================
-
-// API 1: Verify payment for opportunity
-router.post('/verifyOpp/:OPPid',  );
+router.use(verifyAdmin);
 
 
-// OPP SECTION
-// ==========================
+/**
+ * @Title Section 1 : Anonymous Social Dashboard
+ * @Routes - allUsers/byId      --- 1.1 [USER]
+ *         - allPost/byId       --- 1.2 [POST]
+ *         - allComments/byId   ---1.3 [COMMENT]
+ */
 
-// API 1: Get all applicants
-router.get('/getAllOpp' );
+// --- API 1.1: USER
+router.get('/getAllUsers' , allUsers);
+// --- API 1.2: USER
+router.get('/getAllPosts' , allPost);
+router.get('/getAllPostsByUser' , allPostByUser); // pass query as 'userId'
+router.get('/getSinglePost/:postId' , getSinglePost);  // pass params as 'postId'
+// --- API 1.3: USER
+router.get('/getAllComments' , allComments);
 
-// API 2: Get all applicants by companyId
-router.get('/getAllOpp/Company/:companyId' ,);
+/**
+ * @Title Section 2 : Opportunities Dashboard
+ * @Routes - allOpp/byId/OppByCompanyId   --- 2.1 [OPPORTUNITY]
+ *         - allCompany                   --- 2.2 [COMPANY]
+ *         - allApplicants/AppByOppId     --- 2.3 [APPLICANT]
+ *         - payToApplicants              --- 2.4 [PAYMENT]*
+ */
+
+// --- API 2.1: OPP
+router.get('/getAllOpp' , getAllOpportunities);
+router.get('/getAllOpp/:id' , getOpportunityById);
+router.get('/getAllOppByComp/:companyId' , getOpportunityByCompanyId); // pass params as 'companyId'
+
+// --- API 2.2: COMP
+router.get('/getAllCompany', allCompany);
+
+// --- API 2.3: Get all applicants by companyId
+router.get('/getAllApplicants', allApplicants);
+router.get('/getAllApplicantsByCompany/:id', getMyapplicants);
+
+// === API 2.4: PAYMENT
 
 
-// PAYMENT SECTION
-// ==========================
-
-// API 1: Get shortlisted applicants (status = selected)
-router.get('/getShortlisted', );
+// API 1: Get shortlisted applicants from Opp's whose 2nd payment.status == TRUE
+router.get('/getShortlisted', ); // *TODO
 
 // API 2: Pay to shortlisted applicants
-router.post('/payToApplicants', );
+router.post('/payToApplicants', ); // *TODO: admin pays to selected applicants, if opp's second payment done
 
-module.exports = router;
+export default router;

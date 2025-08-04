@@ -53,16 +53,10 @@ export const createOpportunity = async (req, res, next) => {
       proofOfWork: proofOfWork || { screenshot: null, link: null },
       type,
       status: 'open',
-      creator: req.user.isCompany ? 'company' : 'user',
+      creator: req.user.isCompany ? 'Company' : 'User',
       createdBy: {
         id: req.user.id,
         name: creatorName
-      },
-      paymentStatus: {
-       firstPayment: {
-        status: isPaid ? false : null,
-        date: null
-      }
       }
     });
 
@@ -180,17 +174,39 @@ export const getOpportunityById = async (req, res, next) => {
   }
 };
 
-export const getOpportunities = async (req,res,next) => {
+export const getAllOpportunities = async (req,res,next) => {
   try {
-    const opp = await Opportunity.find();
-    res.status(200).json(opp);
-    console.log("ALL OPPORTUNITIES FETCHED")
+    const { page = 1, limit = 6 } = req.query;
+
+    // Ensure page and limit are numbers
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
+
+    // Fetch opp 
+    const opportunities = await Opportunity.find()
+      .sort({ createdAt: -1 })
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber);
+
+    // Total number of the user (for pagination logic)
+    const totalOpp = await Opportunity.countDocuments();
+
+    // Check if there are more posts to fetch
+    const hasMore = (pageNumber * limitNumber) < totalOpp;
+
+    // Return opp and pagination data
+    res.status(200).json({
+      opportunities,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalOpp / limitNumber),
+      hasMore: hasMore // Pagination check
+    });
   } catch (error) {
-    next(error);
+    console.error('Error fetching posts:', error);
+    res.status(400).json({ message: 'Server error' });
   }
-
-
 }
+
 export const getOpportunityByCompanyId = async (req, res, next) => {
   try {
     console.log("Starting getOpportunityByCompanyId");

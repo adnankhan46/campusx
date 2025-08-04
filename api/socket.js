@@ -1,15 +1,19 @@
 import { Server } from 'socket.io';
 import Notification from './model/notification.model.js';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const users = {}; // Store userId and socketId mappings
+
+const allowedFrontendOrigin = ['http://localhost:5174', process.env.FRONTEND_ORIGIN]
 
 const setupSocket = (httpserver) => {
   const io = new Server(httpserver, {
     cors: {
-      origin: 'http://localhost:5173',  
+      origin: ['http://localhost:5173', allowedFrontendOrigin],  
       credentials: true,
-      methods: ['GET', 'POST']
-       
+      methods: ['GET', 'POST']   
     }
   });
 
@@ -23,7 +27,7 @@ const setupSocket = (httpserver) => {
         return;
       }
       users[userId] = socket.id;  
-      console.log(`User registered: ${userId} with socket id: ${socket.id}`);
+      console.log(`User registered: '${userId}' with socket id: [${socket.id}]`);
     });
 
     
