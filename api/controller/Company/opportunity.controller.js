@@ -209,9 +209,7 @@ export const getAllOpportunities = async (req,res,next) => {
 
 export const getOpportunityByCompanyId = async (req, res, next) => {
   try {
-    console.log("Starting getOpportunityByCompanyId");
-
-    const companyId = req.params.id;
+    const companyId = req.params.companyId;
     const { page = 1, limit = 10, sort = '-createdAt' } = req.query;
 
     // Validate ObjectId
@@ -219,70 +217,56 @@ export const getOpportunityByCompanyId = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid company ID format" });
     }
 
-    const pageNum = parseInt(page) || 1;
-    const limitNum = parseInt(limit) || 10;
-    const skip = (pageNum - 1) * limitNum;
+    // Ensure page and limit are numbers
+    const pageNumber = parseInt(page, 10);
+    const limitNumber = parseInt(limit, 10);
 
+    // Build query to filter opportunities by company
     const query = {
-      creator: "company",
+      creator: "Company",
       "createdBy.id": new mongoose.Types.ObjectId(companyId)
     };
 
-    console.log(`Pagination: page=${pageNum}, limit=${limitNum}, skip=${skip}`);
-    console.log("Query filters:", JSON.stringify(query));
-
-    const totalCount = await Opportunity.countDocuments(query);
-    console.log(`Total count: ${totalCount}`);
-
-    // Try standard query
+    // Fetch opportunities for the specific company
     const opportunities = await Opportunity.find(query)
-      .sort(sort)
-      .skip(skip)
-      .limit(limitNum)
-      .setOptions({ skipMiddleware: true });
+    .populate({
+        path: 'applicants.userId',
+        select: 'name email profile' // returning applicants data, if any
+      })
+    .populate({
+    path: 'selectedCandidates.userId', // returning selected candidates data, if any
+    select: 'name email profile'
+      })
+    .sort(sort)
+    .skip((pageNumber - 1) * limitNumber)
+    .limit(limitNumber);
 
-    console.log(`Retrieved ${opportunities.length} opportunities with middleware bypass attempt`);
+    // Total number of opportunities for this company (for pagination logic)
+    const totalOpportunities = await Opportunity.countDocuments(query);
 
-    if (opportunities.length === 0) {
-      console.log("Attempting direct aggregation fallback...");
+    // Check if there are more opportunities to fetch
+    const hasMore = (pageNumber * limitNumber) < totalOpportunities;
 
-      const aggregateResults = await Opportunity.aggregate([
-        { $match: query },
-        { $sort: { createdAt: -1 } },
-        { $skip: skip },
-        { $limit: limitNum }
-      ]);
-
-      console.log(`Aggregation returned ${aggregateResults.length} results`);
-
-      if (aggregateResults.length > 0) {
-        res.status(200).json({
-          opportunities: aggregateResults,
-          totalPages: Math.ceil(totalCount / limitNum),
-          currentPage: pageNum,
-          totalCount
-        });
-        return;
-      }
-    }
-
+    // Convert opportunities to plain objects with virtuals
     const opportunitiesData = opportunities.map(opp =>
       opp.toObject({ virtuals: true })
     );
 
+    // Return opportunities and pagination data
     res.status(200).json({
       opportunities: opportunitiesData,
-      totalPages: Math.ceil(totalCount / limitNum),
-      currentPage: pageNum,
-      totalCount
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalOpportunities / limitNumber),
+      hasMore: hasMore,
+      totalCount: totalOpportunities
     });
 
-    console.log("Response sent successfully");
   } catch (error) {
     console.error("Error in getOpportunityByCompanyId:", error);
     next(error);
   }
 };
+
 
 // Update opportunity
 export const updateOpportunity = async (req, res, next) => {

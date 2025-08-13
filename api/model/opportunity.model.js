@@ -124,12 +124,12 @@ opportunitySchema.virtual('isExpired').get(function() {
 });
 
 // Middleware to auto-update status to 'expired' when retrieving
-opportunitySchema.pre('find', function() {
-  this.where({ 
-    status: 'open', 
-    deadline: { $lt: new Date() } 
-  }).updateMany({ $set: { status: 'expired' } });
-});
+// opportunitySchema.pre('find', function() {
+//   this.where({ 
+//     status: 'open', 
+//     deadline: { $lt: new Date() } 
+//   }).updateMany({ $set: { status: 'expired' } });
+// });
 
 const Opportunity = mongoose.model("Opportunity", opportunitySchema);
 

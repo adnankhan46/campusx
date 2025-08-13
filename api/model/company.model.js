@@ -26,7 +26,7 @@ const companySchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String,
-    default: "https://img.freepik.com/premium-vector/company-icon-simple-element-illustration-company-concept-symbol-design-can-be-used-web-mobile.jpg",
+    default: "",
   },
   isAuthenticated: {
     type: Boolean,
