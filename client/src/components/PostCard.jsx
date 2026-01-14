@@ -2,9 +2,8 @@ import {BadgeCheck} from 'lucide-react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDeletePostsMutation } from '../redux/posts/postApi';
-import PropTypes from 'prop-types';
 
-// PropTypes are defined here with required and non required fields
+// eslint-disable-next-line react/prop-types
 const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount, year, isAuthenticated }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);
@@ -61,7 +60,8 @@ const PostCard = ({ text, gender, section, profilePicture, postImage, time, post
   );
 };
 
-PostCard.propTypes = {
+export default PostCard;
+/* Props used : since we are not using typescript
   text: PropTypes.string,
   gender: PropTypes.string,
   section: PropTypes.string,
@@ -73,6 +73,4 @@ PostCard.propTypes = {
   commentCount: PropTypes.number,
   year: PropTypes.string,
   isAuthenticated: PropTypes.bool,
-};
-
-export default PostCard;
+*/
