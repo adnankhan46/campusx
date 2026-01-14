@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faTimes } from '@fortawesome/free-solid-svg-icons';
-import BottomBar from '../components/Bottombar';
-import Navbar from '../components/Navbar';
-import app from '../firebase';
+import React, { useState, useEffect, useRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload, faTimes } from "@fortawesome/free-solid-svg-icons";
+import BottomBar from "../components/Bottombar";
+import Navbar from "../components/Navbar";
+import app from "../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { useAddPostsMutation } from '../redux/posts/postApi';
-import { useNavigate } from 'react-router-dom';
-import * as nsfwjs from 'nsfwjs';
+import { useAddPostsMutation } from "../redux/posts/postApi";
+import { useNavigate } from "react-router-dom";
+import * as nsfwjs from "nsfwjs";
 
 let cachedModel = null; // Global variable to store the loaded model
 
 const AddPost = () => {
-  const [postContent, setPostContent] = useState('');
+  const [postContent, setPostContent] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [nsfwAlert, setNsfwAlert] = useState(null); // NSFW alert and result
-  const [modelStatus, setModelStatus] = useState('loading'); // it may loading, loaded, analyzing
+  const [modelStatus, setModelStatus] = useState("loading"); // it may loading, loaded, analyzing
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -27,63 +27,63 @@ const AddPost = () => {
     if (!cachedModel) {
       loadModel();
     } else {
-      setModelStatus('loaded');
+      setModelStatus("loaded");
     }
   }, []);
 
   const loadModel = async () => {
-    setModelStatus('loading');
+    setModelStatus("loading");
     try {
-      const nsfwModel = await nsfwjs.load('/models/model.json', { size: 299 });
+      const nsfwModel = await nsfwjs.load("/models/model.json", { size: 299 });
       cachedModel = nsfwModel; // Store the model in global variable
-      setModelStatus('loaded');
-      console.log('NSFW Model loaded successfully');
+      setModelStatus("loaded");
+      console.log("NSFW Model loaded successfully");
     } catch (err) {
-      console.error('Failed to load NSFW Model:', err);
-      setModelStatus('error');
+      console.error("Failed to load NSFW Model:", err);
+      setModelStatus("error");
     }
   };
 
   const checkImageForNSFW = async (imgFile) => {
     if (!cachedModel) {
-      console.warn('NSFW Model not loaded yet');
+      console.warn("NSFW Model not loaded yet");
       return false;
     }
 
     try {
-      const imgElement = document.createElement('img');
+      const imgElement = document.createElement("img");
       imgElement.src = URL.createObjectURL(imgFile);
 
       return new Promise((resolve) => {
         imgElement.onload = async () => {
-          setModelStatus('analyzing');
+          setModelStatus("analyzing");
           const predictions = await cachedModel.classify(imgElement);
-          console.log('Predictions:', predictions);
+          console.log("Predictions:", predictions);
 
           // Process predictions
           let pornProbability = 0;
           let hentaiProbability = 0;
           let sexyProbability = 0;
 
-          predictions.forEach(pred => {
-            if (pred.className === 'Porn') pornProbability = pred.probability;
-            if (pred.className === 'Hentai') hentaiProbability = pred.probability;
-            if (pred.className === 'Sexy') sexyProbability = pred.probability;
+          predictions.forEach((pred) => {
+            if (pred.className === "Porn") pornProbability = pred.probability;
+            if (pred.className === "Hentai")
+              hentaiProbability = pred.probability;
+            if (pred.className === "Sexy") sexyProbability = pred.probability;
           });
 
-          const isNSFW = (
-            pornProbability > 0.05 || 
-            hentaiProbability > 0.10 || 
-            sexyProbability > 0.15
-          );
+          const isNSFW =
+            pornProbability > 0.05 ||
+            hentaiProbability > 0.1 ||
+            sexyProbability > 0.15;
 
-          setModelStatus('loaded');
+          setModelStatus("loaded");
           resolve({ isNSFW, predictions });
         };
       });
     } catch (error) {
-      console.error('Error during NSFW classification:', error);
-      setModelStatus('loaded');
+      console.error("Error during NSFW classification:", error);
+      setModelStatus("loaded");
       return { isNSFW: false, predictions: [] };
     }
   };
@@ -116,19 +116,19 @@ const AddPost = () => {
         const storageRef = ref(storage, "images/" + image.name);
         await uploadBytes(storageRef, image);
         imageUrl = await getDownloadURL(storageRef);
-        console.log('Image uploaded to:', imageUrl);
+        console.log("Image uploaded to:", imageUrl);
       } catch (error) {
-        console.error('Error uploading image:', error);
+        console.error("Error uploading image:", error);
       }
     }
 
     try {
       await addPost({ text: postContent, postImage: imageUrl }).unwrap();
-      setPostContent('');
+      setPostContent("");
       setImage(null);
       navigate("/home");
     } catch (err) {
-      console.error('Error posting content:', err);
+      console.error("Error posting content:", err);
     } finally {
       setLoading(false);
     }
@@ -164,10 +164,20 @@ const AddPost = () => {
           />
         </label>
 
-        {modelStatus === 'loading' && <p className='text-center'>Please wait: Loading Image Recognition Model...</p>}
-        {modelStatus === 'analyzing' && <p className='text-center'>Analyzing Image...</p>}
-        {modelStatus === 'loaded' && <p className='text-green-500 text-center'>Image Recognition Model Loaded</p>}
-        {modelStatus === 'loaded' && image && (
+        {modelStatus === "loading" && (
+          <p className="text-center">
+            Please wait: Loading Image Recognition Model...
+          </p>
+        )}
+        {modelStatus === "analyzing" && (
+          <p className="text-center">Analyzing Image...</p>
+        )}
+        {modelStatus === "loaded" && (
+          <p className="text-green-500 text-center">
+            Image Recognition Model Loaded
+          </p>
+        )}
+        {modelStatus === "loaded" && image && (
           <div className="mt-2 flex flex-col items-center">
             <p className="text-center text-gray-600">
               Selected file: {image.name}
@@ -201,21 +211,36 @@ const AddPost = () => {
         {nsfwAlert && (
           <div className="text-gray-600 text-center">
             <h3 className="font-bold">Prediction Details:</h3>
-            {nsfwAlert.predictions.map((prediction, index) => (
-              <p key={index}>
-                {prediction.className}: {(prediction.probability * 100).toFixed(2)}%
-              </p>
-            ))}
+            {nsfwAlert.predictions.map((prediction, index) => {
+              // please dont change next line, if contributing
+              const labelMap = {
+                Porn: "Explicit Content",
+                Hentai: "Animated Adult Content",
+                Sexy: "Suggestive Content",
+                Neutral: "Safe Content",
+                Drawing: "Illustration",
+              };
+              const friendlyLabel =
+                labelMap[prediction.className] || prediction.className;
+
+              return (
+                <p key={index}>
+                  {friendlyLabel}: {(prediction.probability * 100).toFixed(2)}%
+                </p>
+              );
+            })}
           </div>
         )}
       </div>
 
       <button
-        className={`p-4 w-full md:w-1/2 ${isLoading ? 'bg-[#c9cfff]' : 'bg-[#6a7cff]'} text-white rounded-xl`}
+        className={`p-4 w-full md:w-1/2 ${
+          isLoading ? "bg-[#c9cfff]" : "bg-[#6a7cff]"
+        } text-white rounded-xl`}
         onClick={handlePost}
         disabled={isLoading || loading}
       >
-        {loading || isLoading ? 'Posting...' : 'Post'}
+        {loading || isLoading ? "Posting..." : "Post"}
       </button>
 
       <BottomBar />
