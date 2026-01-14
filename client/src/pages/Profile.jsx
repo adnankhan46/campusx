@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
 import BottomBar from '../components/Bottombar';
@@ -9,7 +9,6 @@ import { useUpdatePasswordMutation, useLogoutMutation } from '../redux/apiSlice'
 import { setCurrentUser } from '../redux/user/userSlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { BadgeCheck } from 'lucide-react';
-import IDCardVerification from '../components/IDCardVerification'; // Import the new component
 
 const Profile = () => {
   const [logout] = useLogoutMutation();
@@ -72,8 +71,6 @@ const Profile = () => {
           <span><BadgeCheck className='w-6 text-[#4b6cfcec]'/></span>}
         </div>
         
-        {/* Add the ID Card Verification component */}
-        <IDCardVerification />
         
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
