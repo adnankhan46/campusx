@@ -22,8 +22,9 @@ export const handleSignUp = async (req, res, next) => {
   }
   // ################## Checking for Existing user
   const existingUser = await User.findOne({
-    $or: [{ email }, { admissionNumber }],
+    $or: [{ email }],
   });
+  
   if (existingUser) {
     return res
       .status(400)
@@ -34,13 +35,14 @@ export const handleSignUp = async (req, res, next) => {
   // if (!allowedAdmissionNumbers.includes(admissionNumber)) {
   //   return res.status(400).json({ message: "Admission Number is not allowed" });
   // }
-  if (!/^\d{10}$/.test(admissionNumber)) {
+  if (!/^\d{4}$/.test(admissionNumber)) {
     return next(errorHandler(400, "Invalid admission number format"));
   }
 
   // Extract year and determine year tag
-  const yearDigits = admissionNumber.slice(0, 2);
-  const currentYear = 2000 + parseInt(yearDigits); // Convert to full year (e.g., 24 -> 2024)
+  
+  const yearDigits = admissionNumber.slice(0, 4);
+  const currentYear = parseInt(yearDigits);
   console.log(currentYear)
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -78,21 +80,21 @@ export const handleSignUp = async (req, res, next) => {
 };
 
 export const handleSignIn = async (req, res, next) => {
-  const { admissionNumber, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!admissionNumber || !password || admissionNumber === "" || password === "") {
+  if (!email || !password || email === "" || password === "") {
     return next(errorHandler(400, "Admission Number and Password are required"));
   }
 
   try {
-    const user = await User.findOne({ admissionNumber });
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid Admission Number or Password" });
+      return res.status(400).json({ message: "Invalid email or Password" });
     }
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid Admission Number or Password" });
+      return res.status(400).json({ message: "Invalid email or Password" });
     }
 
     const token = jwt.sign(

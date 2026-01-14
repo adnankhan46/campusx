@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from '../components/Navbar';
 import { useDispatch } from 'react-redux';
@@ -13,7 +13,7 @@ const Login = () => {
   const [signIn, { isLoading, error }] = useSignInMutation();
   
   const [credentials, setCredentials] = useState({
-    admissionNumber: '',
+    email: '',
     password: '',
   });
 
@@ -26,18 +26,13 @@ const Login = () => {
   const validate = () => {
     const errors = {};
 
-    if (!credentials.admissionNumber) {
-      errors.admissionNumber = 'Admission number is required';
-    } else if (credentials.admissionNumber.length !== 10) {
-      errors.admissionNumber = 'Admission number is must be 10 digit';
+    if (!credentials.email) {
+      errors.admissionNumber = 'Email is required';
     }
 
     if (!credentials.password) {
       errors.password = 'Password is required';
     }
-    // else if (credentials.password.length < 6) {
-    //   errors.password = 'Password must be at least 6 characters';
-    // }
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -82,7 +77,7 @@ const Login = () => {
           <div className="text-center mb-4">
             <h1 className="text-2xl font-bold mb-6">Log In</h1>
             <span>
-              Don't have an account? <Link to="/signup" className="text-blue-500">Create Account</Link>
+              Dont have an account? <Link to="/signup" className="text-blue-500">Create Account</Link>
             </span>
           </div>
            {error && <div className="text-red-500">Error: {error.data.message}</div>}
@@ -90,11 +85,11 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <input
-                  type="number"
-                  name="admissionNumber"
-                  value={credentials.admissionNumber}
+                  type="text"
+                  name="email"
+                  value={credentials.email}
                   onChange={handleChange}
-                  placeholder="Admission Number"
+                  placeholder="Valid Email"
                   className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl"
                 />
                 {errors.admissionNumber && <p className="text-red-500 text-sm">{errors.admissionNumber}</p>}

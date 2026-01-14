@@ -16,7 +16,7 @@ const userSchema  = new mongoose.Schema({
     admissionNumber: {
         type: String,
         required: true,
-        unique: true,
+        unique: false,
     },
     username: {
         type: String,
