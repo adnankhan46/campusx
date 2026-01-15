@@ -7,6 +7,10 @@ import cookieParser from "cookie-parser";
 import setupSocket from './socket.js';
 import bodyParser from "body-parser";
 import morgan from "morgan"
+import helmet from "helmet";
+import compression from "compression";
+import mongoSanitize from "express-mongo-sanitize";
+import { v4 as uuidv4 } from 'uuid';
 import logger from "./utils/logger.js";
 import config from "./utils/config.js";
 // DODO webhook
@@ -31,13 +35,27 @@ const httpserver = http.createServer(app);
 // Socket.io (notification system)
 setupSocket(httpserver);
 
+// Security Middleware
+app.use(helmet());
+app.use(compression());
+app.use(mongoSanitize());
+
+// Request ID Tracking
+app.use((req, res, next) => {
+  req.id = uuidv4();
+  res.setHeader('X-Request-Id', req.id);
+  next();
+});
+
+// HTTP Request Logging
 app.use(morgan((tokens, req, res) => {
   const method = tokens.method(req, res);
   const url = tokens.url(req, res);
   const status = parseInt(tokens.status(req, res));
   const time = tokens['response-time'](req, res);
+  const requestId = req.id;
   
-  const message = `${method} '${url}' - ${status} (${time}ms)`;
+  const message = `${method} '${url}' - ${status} (${time}ms) [${requestId}]`;
   
   if (status >= 500) {
     logger.error(message);  // Server errors
@@ -50,11 +68,14 @@ app.use(morgan((tokens, req, res) => {
   return null;
 }));
 
-const TURSTED_ORIGIN = ['http://localhost:5173', process.env.FRONTEND_ORIGIN]
+// CORS Configuration
+const TRUSTED_ORIGINS = [
+  'http://localhost:5173',
+  ...(process.env.FRONTEND_ORIGIN ? [process.env.FRONTEND_ORIGIN] : [])
+];
 
-// Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', TURSTED_ORIGIN],
+  origin: TRUSTED_ORIGINS,
   credentials: true
 }));
 
@@ -104,26 +125,38 @@ mongoose.connect(dbURI)
 
   });
 
-  // test routes
-  app.get('/api/front', (req, res) => {
-    res.json('Hello World!');
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    environment: process.env.NODE_ENV || 'development'
   });
-  
-  app.get('/', (req, res) => {
-    res.json({ message: 'Hello World!' });
-  });
+});
 
-   // check memory usage (local-dev)
-   const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
-   const memoryData = process.memoryUsage();
-   const memoryUsage = {
-     rss: `${formatMemoryUsage(memoryData.rss)} -> Resident Set Size - total memory allocated for the process execution`,
-     heapTotal: `${formatMemoryUsage(memoryData.heapTotal)} -> total size of the allocated heap`,
-     heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
-     external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
-   };
-   
-   console.log(memoryUsage);
+// Test Routes
+app.get('/api/front', (req, res) => {
+  res.json('Hello World!');
+});
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello World!' });
+});
+
+// Memory Usage (Development Only)
+if (process.env.NODE_ENV !== 'production') {
+  const formatMemoryUsage = (data) => `${Math.round(data / 1024 / 1024 * 100) / 100} MB`;
+  const memoryData = process.memoryUsage();
+  const memoryUsage = {
+    rss: `${formatMemoryUsage(memoryData.rss)} -> Resident Set Size - total memory allocated for the process execution`,
+    heapTotal: `${formatMemoryUsage(memoryData.heapTotal)} -> total size of the allocated heap`,
+    heapUsed: `${formatMemoryUsage(memoryData.heapUsed)} -> actual memory used during the execution`,
+    external: `${formatMemoryUsage(memoryData.external)} -> V8 external memory`,
+  };
+  logger.info(`[MEMORY]: ${JSON.stringify(memoryUsage)}`);
+}
 
 httpserver.listen(port, () => {
   // console.log(`Server is running on port ${port}`);
