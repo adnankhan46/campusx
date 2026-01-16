@@ -9,9 +9,10 @@ export const objectIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, {
   message: 'Invalid MongoDB ObjectId',
 });
 
-export const emailSchema = z.email({
+export const emailSchema = z.string().email({
   message: 'Invalid email address',
 });
+
 
 export const passwordSchema = z.string().min(4, {
   message: 'Password must be at least 4 characters',

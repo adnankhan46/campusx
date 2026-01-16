@@ -31,7 +31,7 @@ import adminRoutes from "./route/admin.route.js";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 const port = process.env.PORT || 3000;
 const httpserver = http.createServer(app);
 
@@ -117,7 +117,8 @@ if (!dbURI) {
   process.exit(1);
 }
 
-mongoose.connect(dbURI)
+if(process.env.NODE_ENV !== 'test') { 
+  mongoose.connect(dbURI)
   .then(() => {
     // console.log("Connected to MongoDB");
     logger.info(`[CONNECTION]: MongoDB Connected`)
@@ -127,6 +128,7 @@ mongoose.connect(dbURI)
         logger.error(`[CONNECTION-ERR]: MongoDB Connected | ${err}`)
 
   });
+}
 
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {

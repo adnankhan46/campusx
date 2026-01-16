@@ -1,17 +1,18 @@
 import rateLimit from "express-rate-limit";
+import { RATE_LIMIT } from "../../src/shared/utils/constants.js";
 
 // IP-based rate limiter
 export const ipLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 10, // limit each IP to 3 requests per windowMs
+    windowMs: RATE_LIMIT.WINDOW_MS,
+    max: RATE_LIMIT.IP_LIMIT,
     message: { message: "Too many requests in a minute, wait for a minute and retry." },
     standardHeaders: true,
     legacyHeaders: false,
 });
 
 export const postLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 2, // limit each IP to 2 requests per windowMs
+    windowMs: RATE_LIMIT.WINDOW_MS,
+    max: RATE_LIMIT.POST_LIMIT,
     message: { message: "Too many requests in a minute, wait for a minute and retry." },
     standardHeaders: true,
     legacyHeaders: false,
