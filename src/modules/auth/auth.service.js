@@ -17,8 +17,9 @@ export const authService = {
   async signUp(userData) {
     const { admissionNumber, email, password, section, gender } = userData;
 
+    const trimmedEmail = email.trim().toLowerCase();
     // if user already exists
-    const existingUser = await User.findOne({ $or: [{ email }] });
+    const existingUser = await User.findOne({ $or: [{ email: trimmedEmail }] });
     if (existingUser) {
       throw ApiErrors.conflict('Email already in use');
     }
@@ -31,12 +32,12 @@ export const authService = {
     const hashedPassword = bcryptjs.hashSync(password, 10);
 
     // Create username (email + admission number)
-    const username = email.toString() + admissionNumber.toString();
+    const username = trimmedEmail.toString() + admissionNumber.toString();
 
     // new user
     const newUser = new User({
       admissionNumber,
-      email,
+      email: trimmedEmail,
       password: hashedPassword,
       section,
       gender,
