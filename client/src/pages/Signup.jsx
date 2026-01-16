@@ -28,7 +28,7 @@ const Register = () => {
     try {
        const user = await signUp(formData).unwrap();
        console.log("user", user);
-       dispatch(setCurrentUser(user));
+       dispatch(setCurrentUser(user.data));
        dispatch(setLoading(false));
        
         navigate("/home");
