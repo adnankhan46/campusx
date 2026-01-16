@@ -62,7 +62,7 @@ export const allPostByUser = async (req, res) => {
     const limitNumber = parseInt(limit, 10);
 
     // Check if userId is provided
-    if (!userId) {
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: 'userId is required' });
     }
 
