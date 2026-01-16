@@ -1,3 +1,5 @@
+import config from "../../config/index.js";
+
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
@@ -33,4 +35,10 @@ export const PAYMENT_STATUS = {
 export const PAYMENT_LEVELS = {
   FIRST: '1',
   SECOND: '2',
+};
+
+export const RATE_LIMIT = {
+  IP_LIMIT: config.NODE_ENV === NODE_ENV.DEVELOPMENT ? 20 : 8,
+  POST_LIMIT: 2,
+  WINDOW_MS: 1 * 60 * 1000,
 };
