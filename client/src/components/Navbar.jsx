@@ -12,8 +12,8 @@ function Navbar() {
     <div className='flex items-center w-full h-16 bg-custom-gradient justify-between'>
     <Link to='/home'>
     <div className='flex items-center h-16'>
-    <h1 className="text-4xl font-bold font-outfit text-white ml-4">
-    {(location.pathname === `/campusai`) ? "CampusAI" : "CampusX"}
+    <h1 className="text-4xl font-bold font-outfit text-white ml-4 px-12">
+    {(location.pathname === `/campusai`) ? "CampusAI" : "BeCampusX"}
     </h1>
     {(location.pathname === `/campusai`) &&
     <FontAwesomeIcon icon={faWandSparkles} className='md:h-8 h-6 mx-2 text-white' />
@@ -21,7 +21,7 @@ function Navbar() {
     
     
     <span className='text-sm text-white font-bold'>
-    {(location.pathname === `/campusai`) ? "By CampusX" : "BITD"}
+    {(location.pathname === `/campusai`) && "By CampusX"}
     </span>
     </div>
     </Link>

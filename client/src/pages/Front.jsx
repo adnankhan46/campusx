@@ -1,12 +1,84 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Typed from 'typed.js';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWandSparkles} from '@fortawesome/free-solid-svg-icons';
+import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import CampusAIMockup from "../assets/campusai-mockup.png";
 import CampusXMockup from "../assets/campusx-mockup.png";
+
+// Mock Data for Opportunities
+const mockOpportunities = [
+  {
+    id: 1,
+    title: "Design a Logo for Deshaw",
+    amount: 1000,
+    type: "UI/UX",
+    status: "4",
+    opening: "2",
+    deadline: "2024-05-20"
+  },
+  {
+    id: 2,
+    title: "Research with professor",
+    amount: 500,
+    type: "Research",
+    status: "open",
+    opening: "2",
+    deadline: "2024-06-01"
+  },
+  {
+    id: 3,
+    title: "Build a website for a Acme business",
+    amount: 2500,
+    type: "Development",
+    opening: "5",
+    deadline: "2024-04-30"
+  }
+];
+
+// Minimal Opportunity Card Component
+const OpportunityCard = ({ opportunity }) => {
+  return (
+    <div className="group relative p-6 rounded-lg bg-white border border-gray-100/50 hover:border-[#6a7cff]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#6a7cff]/5">
+      <div className="flex flex-col h-full justify-between gap-4">
+        <div>
+          <div className="flex justify-between items-start mb-2">
+            <span className={`text-xs font-medium px-2 py-1 rounded-sm  bg-[#e5e5e5]`}>
+              {opportunity.type}
+            </span>
+            <span className="text-gray-400 text-xs">
+               Due {new Date(opportunity.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+            </span>
+          </div>
+          
+          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#6a7cff] transition-colors line-clamp-2">
+            {opportunity.title}
+          </h3>
+          <div className="flex mt-1">
+            <span className="text-gray-500 text-xs">
+              Opening: {opportunity.opening}
+            </span>
+          </div>
+        </div>
+        
+
+        <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+          <div className="flex items-center gap-1.5 text-[#243CB6]">
+            <span className="font-semibold font-outfit">
+              ₹ {opportunity.amount.toLocaleString()}
+            </span>
+          </div>
+
+          <Link to={`/opportunities/${opportunity.id}`} className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-[#6a7cff] transition-colors group/btn">
+            Apply
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Front = () => {
   const typedTextRef = useRef(null);
@@ -16,11 +88,11 @@ const Front = () => {
     const options = {
       strings: [
         "For Developers, By Developers",
-        "Say Good bye to Clone Projects by Real World Project Collaborations",
-        "Build. Collaborate. Share Ideas",
-        "RCB players are AI Generated?",
-        "Try the New Campus AI Chat",
-        "CampusX is the best thing that happened",
+        "Real tasks. Real money",
+        "Say Good bye to Clone Projects by working in Real World Projects",
+        "Build. Collaborate. Earn. Share Ideas",
+        "Get paid for micro tasks",
+        "BeCampusX is the best thing that happened",
       ],
       typeSpeed: 10,
       smartBackspace: true,
@@ -43,33 +115,25 @@ const Front = () => {
   }, []);
 
   return (
-    <div className="overflow-x-hidden bg-[#FAF4FE] h-screen scroll-smooth">
+    <div className="overflow-x-hidden bg-[#FAF4FE] h-screen scroll-smooth font-inter">
       <nav>
         <Navbar />
       </nav>
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center p-3 md:px-64 gap-12 md:gap-10">
+      
+      {/* Hero Section */}
+      <section className="flex flex-col md:flex-row md:justify-between md:items-center p-3 md:px-64 gap-12 md:gap-10">
         <div className="flex flex-col">
           <div className="bg-box1-gradient flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
             <div className="font-poppins font-light text-white text-sm">
               <p className="text-base font-inter">
-                Share your thoughts Anonymously with{' '}
-                <span className="font-bold text-white font-suse">No Strings Attach</span>
+                Found my first paid gig here{' '}
+                <span className="font-bold text-white font-suse">BeCampusx is real</span>
               </p>
             </div>
             <div className="flex gap-2 items-center font-poppins font-light text-sm text-white absolute bottom-1.5 left-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                className="bi bi-person-circle"
-                viewBox="0 0 16 16"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path
-                  fillRule="evenodd"
-                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                />
+                <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
               </svg>
               <span className='font-inter'>Female From CSE</span>
             </div>
@@ -79,29 +143,19 @@ const Front = () => {
               <span className="text-base font-inter" ref={typedTextRef}></span>
             </div>
             <div className="flex gap-2 items-center font-poppins font-light text-sm text-white absolute bottom-1.5 left-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                className="bi bi-person-circle"
-                viewBox="0 0 16 16"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path
-                  fillRule="evenodd"
-                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                />
+                <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
               </svg>
               <span className='font-inter'>Male From ETC</span>
             </div>
           </div>
         </div>
         <div className="flex flex-col relative mx-auto">
-        <div className="text-[#505153] text-base md:text-base font-inter font-light">Share what you Think</div>
-        <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wider md:text-xl mb-4 mx-auto">
-          Without Revealing <br /> your Identity
-                    </div>
+          <div className="text-[#505153] text-base md:text-base font-inter font-light">Micro tasks. Big opportunities</div>
+          <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wider md:text-xl mb-4 mx-auto">
+            Find Real Opportunities <br /> For Real Growth 
+          </div>
           <Link to="/signup">
             <button className="register mb-2 p-2 font-inter font-bold h-12 shadow-none border-0 bg-[#D9E5ED] text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-[#6a7cff] hover:text-white">
               Join Now
@@ -114,78 +168,68 @@ const Front = () => {
           </Link>
           
           <div className="relative p-[2px] rounded-md bg-gradient-to-r from-[#f6a1fff5] via-[#e886edf6] to-[#4b6cfcec]">
-        <Link to="/campusai">
-  <div className="flex justify-center items-center h-12 w-full bg-[#FAF4FE] rounded-md">
-  <button className="login font-outfit p-2 font-extrabold h-12 shadow-none bg-custom-gradient bg-clip-text text-transparent text-2xl rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
-    Try CampusAI
-  </button>
-  </div>
-</Link>
-</div>
+            <Link to="/explore">
+              <div className="flex justify-center items-center h-12 w-full bg-[#FAF4FE] rounded-md">
+                <button className="login font-outfit p-2 font-extrabold h-12 shadow-none bg-custom-gradient bg-clip-text text-transparent text-2xl rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
+                  Explore
+                </button>
+              </div>
+            </Link>
+          </div>
         </div>
-      </div>
-      {/**  Section 2    */}
-      <div className="flex flex-col md:flex-row justify-center md:justify-between gap-10 mt-8 px-8 py-6 mx-4 md:mx-64 rounded-[24px] bg-[#6a7cff]">
-       {/**  Section 2(a)    */}
-      <div className='flex flex-col'>
-      <p className='text-white text-4xl tracking-widest mb-2 font-semibold font-suse'>
-      INTRODUCING
-      </p>
-      <p className=' text-white font-extrabold font-outfit flex items-center mt-3'>
-      <FontAwesomeIcon icon={faWandSparkles} className='md:h-12 h-14 mx-2 text-white' />
-      <span className='text-5xl' >
-      CampusAI
-      </span>
-      </p>
-      <p className='font-inter mt-10 text-white'>Ask Questions Regarding Campus or anything else comes to your mind
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus quis quia nulla?
-      </p>
-      </div>
-       {/**  Section 2(b)    */}
-      <img src={CampusAIMockup} alt="CampusAI Mockup" className='h-[36rem] md:h-[26rem] md:mt-2'/>
-      </div>
+      </section>
 
-      {/**  Section 2(1)    */}
-      <div className="flex flex-col md:flex-row justify-center md:justify-between gap-10 mt-4 mb-8 px-8 py-6 mx-4 md:mx-64 rounded-[24px] bg-[#d06aff]">
-       {/**  Section 2(1)(a)    */}
-      <div className='flex flex-col'>
-      <p className='text-white text-4xl mb-2 font-semibold font-suse'>
-      Explore CampusX
-      </p>
-      <p className=' text-white font-inter flex flex-col mt-3'>
-     
-      <span className='text-5xl font-extrabold font-outfit' >
-      CampusX
-      </span>
-      <span className='font-inter mt-4'>
-      Anonymous Social Networking Site specially for first year students to get introduced. CampusX also provides Economic Opportunites for students
-      </span>
-      </p>
-      </div>
-       {/**  Section 2(1)(b)    */}
-       <img src={CampusXMockup} alt="CampusAI Mockup" className='h-[36rem] md:h-[26rem] md:mt-2'/>
-      </div>
-       {/**  Section (c)    */}
-      <div className='flex flex-col justify-center items-center mx-4 my-2'>
-        <div className='relative mb-4 flex flex-col border-2 rounded-xl w-full md:w-1/2 items-center h-fit p-6 px-4'>
-    <div className='font-bold font-suse text-lg rounded-lg p-2 w-full h-12 text-[#6a7cff]'>
-   Economic Opportunities for Students
-    </div>
-    <div className='flex flex-col border-2 rounded-lg mb-2 p-2 border-gray-200 w-full h-fit'>
-    Introducing Economic Opportunities through small Freelance Gigs, Internships, Ambassdor Programs, etc.
-    <div className='flex flex-row justify-between mt-2'>
-    <div className='border border-[#6a7cff] p-2 px-3 rounded-lg text-sm'>Participate</div>
-    <div className='bg-[#6a7cff] p-2 text-white rounded-2xl text-sm'>Reward <b>₹400</b></div>
-    </div>
-    </div>
-    <div className="absolute inset-x-0 bottom-0 h-4/5 bg-gradient-to-t from-black to-transparent flex items-end justify-center rounded-xl">
-          <span className="text-white text-3xl font-bold mb-2 font-outfit">Launching Next Month...</span>
+      {/* Opportunities Section */}
+     <section className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-6 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
+        
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#6a7cff]/5 blur-[100px] rounded-full pointer-events-none" />
+        
+        <div className="relative z-10 px-6 md:px-12">
+          
+          {/* Header */}
+          <div className="flex flex-col md:flex-row items-start justify-between mb-10 gap-6 text-center md:text-left">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-suse">
+                Incentivized <span className="text-[#6a7cff]">Opportunities</span>
+              </h2>
+              <p className="text-gray-500 max-w-lg text-sm md:text-base">
+                Explore freelance gigs, design projects, research projects, development projects, and other programs
+              </p>
+            </div>
+            
+            <Link to="/opportunities" className="group flex items-center gap-2 text-[#6a7cff] font-medium hover:text-[#5a6be0] transition-colors px-6 py-3 rounded-sm border border-[#6a7cff]/50">
+              View All
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mockOpportunities.map((opportunity) => (
+              <OpportunityCard key={opportunity.id} opportunity={opportunity} />
+            ))}
+          </div>
+
         </div>
-    </div>
-    </div>
+      </section>
+      
+      {/**  Section 3 - CampusX */}
+      <section className="flex flex-col md:flex-row justify-center md:justify-between gap-10 mt-4 mb-8 px-8 py-6 mx-4 md:mx-64 rounded-[24px] bg-[#d06aff]">
+        <div className='flex flex-col'>
+          <p className=' text-white font-inter flex flex-col'>
+            <span className='text-5xl font-extrabold font-outfit' >
+              CampusX
+            </span>
+          <p className=' mt-3 text-white text-4xl mb-2 font-semibold font-suse'>
+            Explore CampusX
+          </p>
+            <span className='font-inter mt-4'>
+              Anonymous Social Networking Site along with Economic Opportunites for students
+            </span>
+          </p>
+        </div>
+        <img src={CampusXMockup} alt="CampusAI Mockup" className='h-[36rem] md:h-[26rem] md:mt-2'/>
+      </section>
 
-       {/**  Footer will Come here    */}
-       <Footer/>
+      <Footer/>
     </div>
   );
 };
