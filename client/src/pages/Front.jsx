@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
-import CampusAIMockup from "../assets/campusai-mockup.png";
-import CampusXMockup from "../assets/campusx-mockup.png";
 
 // Mock Data for Opportunities
 const mockOpportunities = [
@@ -17,7 +15,7 @@ const mockOpportunities = [
     type: "UI/UX",
     status: "4",
     opening: "2",
-    deadline: "2024-05-20"
+    deadline: "2026-05-20"
   },
   {
     id: 2,
@@ -26,7 +24,7 @@ const mockOpportunities = [
     type: "Research",
     status: "open",
     opening: "2",
-    deadline: "2024-06-01"
+    deadline: "2026-06-01"
   },
   {
     id: 3,
@@ -34,14 +32,14 @@ const mockOpportunities = [
     amount: 2500,
     type: "Development",
     opening: "5",
-    deadline: "2024-04-30"
+    deadline: "2026-04-30"
   }
 ];
 
 // Minimal Opportunity Card Component
 const OpportunityCard = ({ opportunity }) => {
   return (
-    <div className="group relative p-6 rounded-lg bg-white border border-gray-100/50 hover:border-[#6a7cff]/30 transition-all duration-300 hover:shadow-lg hover:shadow-[#6a7cff]/5">
+    <div className="group relative p-6 rounded-lg bg-white border border-gray-100/50 transition-all duration-300 hover:shadow-lg hover:shadow-[#6a7cff]/5">
       <div className="flex flex-col h-full justify-between gap-4">
         <div>
           <div className="flex justify-between items-start mb-2">
@@ -49,10 +47,10 @@ const OpportunityCard = ({ opportunity }) => {
               {opportunity.type}
             </span>
             <span className="text-gray-400 text-xs">
-               Due {new Date(opportunity.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+              Due {new Date(opportunity.deadline).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
             </span>
           </div>
-          
+
           <h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#6a7cff] transition-colors line-clamp-2">
             {opportunity.title}
           </h3>
@@ -62,16 +60,16 @@ const OpportunityCard = ({ opportunity }) => {
             </span>
           </div>
         </div>
-        
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-          <div className="flex items-center gap-1.5 text-[#243CB6]">
+
+        <div className="flex items-center justify-between pt-2 border-t border-gray-50">
+          <div className="flex items-center gap-1.5 text-[#6a7cff]">
             <span className="font-semibold font-outfit">
               ₹ {opportunity.amount.toLocaleString()}
             </span>
           </div>
 
-          <Link to={`/opportunities/${opportunity.id}`} className="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-[#6a7cff] transition-colors group/btn">
+          <Link to={`/opportunities/${opportunity.id}`} className="bg-[#6a7cff] flex items-center gap-1 text-sm font-medium text-white group/btn py-2 px-4 rounded-sm">
             Apply
           </Link>
         </div>
@@ -119,14 +117,14 @@ const Front = () => {
       <nav>
         <Navbar />
       </nav>
-      
+
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row md:justify-between md:items-center p-3 md:px-64 gap-12 md:gap-10">
         <div className="flex flex-col">
-          <div className="bg-box1-gradient flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
+          <div className="bg-box1-gradient md:min-w-[400px] flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
             <div className="font-poppins font-light text-white text-sm">
               <p className="text-base font-inter">
-                Found my first paid gig here{' '}
+                Found my first paid gig here <br />
                 <span className="font-bold text-white font-suse">BeCampusx is real</span>
               </p>
             </div>
@@ -153,8 +151,8 @@ const Front = () => {
         </div>
         <div className="flex flex-col relative mx-auto">
           <div className="text-[#505153] text-base md:text-base font-inter font-light">Micro tasks. Big opportunities</div>
-          <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wider md:text-xl mb-4 mx-auto">
-            Find Real Opportunities <br /> For Real Growth 
+          <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wid md:text-xl mb-4 mx-auto">
+            Find Real Opportunities <br /> For Real Growth
           </div>
           <Link to="/signup">
             <button className="register mb-2 p-2 font-inter font-bold h-12 shadow-none border-0 bg-[#D9E5ED] text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-[#6a7cff] hover:text-white">
@@ -166,7 +164,7 @@ const Front = () => {
               LogIN
             </button>
           </Link>
-          
+
           <div className="relative p-[2px] rounded-md bg-gradient-to-r from-[#f6a1fff5] via-[#e886edf6] to-[#4b6cfcec]">
             <Link to="/explore">
               <div className="flex justify-center items-center h-12 w-full bg-[#FAF4FE] rounded-md">
@@ -180,14 +178,14 @@ const Front = () => {
       </section>
 
       {/* Opportunities Section */}
-     <section className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-6 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
-        
+      <section className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-6 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
+
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#6a7cff]/5 blur-[100px] rounded-full pointer-events-none" />
-        
+
         <div className="relative z-10 px-6 md:px-12">
-          
+
           {/* Header */}
-          <div className="flex flex-col md:flex-row items-start justify-between mb-10 gap-6 text-center md:text-left">
+          <div className="flex flex-col md:flex-row items-center md:items-start justify-between mb-10 gap-6 text-center md:text-left">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 font-suse">
                 Incentivized <span className="text-[#6a7cff]">Opportunities</span>
@@ -196,7 +194,7 @@ const Front = () => {
                 Explore freelance gigs, design projects, research projects, development projects, and other programs
               </p>
             </div>
-            
+
             <Link to="/opportunities" className="group flex items-center gap-2 text-[#6a7cff] font-medium hover:text-[#5a6be0] transition-colors px-6 py-3 rounded-sm border border-[#6a7cff]/50">
               View All
             </Link>
@@ -210,26 +208,39 @@ const Front = () => {
 
         </div>
       </section>
-      
+
       {/**  Section 3 - CampusX */}
-      <section className="flex flex-col md:flex-row justify-center md:justify-between gap-10 mt-4 mb-8 px-8 py-6 mx-4 md:mx-64 rounded-[24px] bg-[#d06aff]">
-        <div className='flex flex-col'>
-          <p className=' text-white font-inter flex flex-col'>
-            <span className='text-5xl font-extrabold font-outfit' >
-              CampusX
-            </span>
-          <p className=' mt-3 text-white text-4xl mb-2 font-semibold font-suse'>
+      <section
+        className="relative flex flex-col md:flex-row justify-center md:justify-between gap-10 mt-4 mb-8 px-8 py-6 mx-4 md:mx-64 rounded-[24px] overflow-hidden"
+        style={{
+          backgroundImage: "url('/backgrounds/bg-1.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Background overlay - opacity */}
+        <div className="absolute inset-0 bg-black/30 rounded-[24px]" />
+
+        {/* Content wrapper with relative positioning */}
+        <div className="relative z-10 flex flex-col w-full">
+          <div className="text-white font-inter flex flex-col">
+
+            <div className='flex justify-between'>
+              <p className="text-5xl font-extrabold font-outfit">
+                CampusX
+              </p>
+              {/* <p className="mt-3 text-white text-4xl mb-2 font-semibold font-suse">
             Explore CampusX
-          </p>
-            <span className='font-inter mt-4'>
-              Anonymous Social Networking Site along with Economic Opportunites for students
-            </span>
-          </p>
+          </p> */}
+            </div>
+            <p className="font-inter mt-4">
+              Anonymous Social Web along with <span className="bg-white/20 rounded-sm px-1 font-outfit">Economic Opportunities</span> for students
+            </p>
+          </div>
         </div>
-        <img src={CampusXMockup} alt="CampusAI Mockup" className='h-[36rem] md:h-[26rem] md:mt-2'/>
       </section>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };
