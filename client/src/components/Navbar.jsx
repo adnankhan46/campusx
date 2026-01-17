@@ -12,7 +12,7 @@ function Navbar() {
     <div className='flex items-center w-full h-16 bg-custom-gradient justify-between'>
     <Link to='/home'>
     <div className='flex items-center h-16'>
-    <h1 className="text-4xl font-bold font-outfit text-white ml-4 px-12">
+    <h1 className="text-4xl font-bold font-outfit text-white ml-4 md:px-12">
     {(location.pathname === `/campusai`) ? "CampusAI" : "BeCampusX"}
     </h1>
     {(location.pathname === `/campusai`) &&
