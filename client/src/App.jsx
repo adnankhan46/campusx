@@ -1,10 +1,8 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Component that doesn't need lazy loading (used frequently)
 import PrivateRoute from "./components/PrivateRoute";
 
-// Lazy load all page components
 const Front = lazy(() => import("./pages/Front"));
 const Home = lazy(() => import("./pages/Home"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -19,7 +17,6 @@ const ErrorPage = lazy(() => import("./pages/ErrorPage"));
 const Explore = lazy(() => import("./pages/Explore"));
 const UserPage = lazy(() => import("./pages/UserPage"));
 
-// Loading component
 const LoadingFallback = () => (
   <div style={{
     display: 'flex',
@@ -28,7 +25,7 @@ const LoadingFallback = () => (
     minHeight: '100vh',
     fontSize: '1.2rem'
   }}>
-    Loading...
+    BeCampusx Loading...
   </div>
 );
 
@@ -41,12 +38,12 @@ function App() {
           <Route path='/' element={<Front />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
-          
+
           <Route path='/campusai' element={<CampusAi />} />
           <Route path='/home' element={<Home />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/report' element={<ReportPage />} />
-          
+
           {/* Protected routes */}
           <Route element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
