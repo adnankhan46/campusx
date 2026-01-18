@@ -3,8 +3,6 @@ import Typed from 'typed.js';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
 
 // Mock Data for Opportunities
 const mockOpportunities = [

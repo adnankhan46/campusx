@@ -1,9 +1,6 @@
-import {React} from 'react';
 import { useLocation, Link } from 'react-router-dom';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles, faBell} from '@fortawesome/free-solid-svg-icons';
-import { useSelector } from 'react-redux';
 
 function Navbar() {
   const location = useLocation();
