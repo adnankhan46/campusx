@@ -22,7 +22,8 @@ import opportunityRoutes from "./route/company.route.js";
 // import authRoutes from "./route/auth.route.js";
 // NEW AUTH ROUTE from src/modules
 import authRoutes from "../src/modules/auth/auth.routes.js";
-import PostRoutes from "./route/post.route.js";
+// import PostRoutes from "./route/post.route.js";
+import PostRoutes from "../src/modules/post/post.route.js";
 import CommentRoutes from "./route/comment.route.js";
 import NotificationRoutes from "./route/notification.route.js";
 import applicantRouter from "./route/applicant.route.js"
