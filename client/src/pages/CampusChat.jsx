@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar';
 import BottomBar from '../components/Bottombar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
-import Chatbox from '../components/Chatbox';
+import Chatbox from '../components/ChatComp';
 
 function CampusChat() {
   return (
