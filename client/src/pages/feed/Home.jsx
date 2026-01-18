@@ -1,16 +1,16 @@
- import { useEffect, useState } from 'react';
-import BottomBar from '../components/Bottombar';
-import Navbar from '../components/Navbar';
+import { useEffect, useState } from 'react';
+import BottomBar from '../../components/constants/Bottombar';
+import Navbar from '../../components/constants/Navbar';
 import { useSelector } from 'react-redux';
-import PostCard from '../components/PostCard';
+import PostCard from '../../components/PostCard';
 import { useNavigate } from 'react-router-dom';
-import { useGetPostsQuery } from '../redux/posts/postApi';
+import { useGetPostsQuery } from '../../redux/posts/postApi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 function Home() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  
+
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -30,36 +30,36 @@ function Home() {
       setPosts((prevPosts) => {
         // Using Map to ensure unique postId
         const postMap = new Map(prevPosts.map(post => [post.postId, post]));
-        
+
         data.posts.forEach(post => {
           postMap.set(post.postId, post);  // This will ensure uniqueness by postId
         });
-  
+
         // Convert the Map back to an array and sort by createdAt (newest first)
         const sortedPosts = Array.from(postMap.values()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
+
         return sortedPosts;  // Return sorted posts (newest at the top)
       });
-  
+
       setHasMore(data.hasMore);
       setLoading(false);
     } else {
       setLoading(false);
     }
   }, [data]);
-  
 
-   
+
+
   const fetchMorePosts = () => {
     if (hasMore) {
-      setLoading(true);  
+      setLoading(true);
       setTimeout(() => {
         setPage((prevPage) => prevPage + 1);
-        setLoading(false);  
+        setLoading(false);
       }, 2000);
     }
   };
-  
+
 
   return (
     <div className="overflow-x-hidden flex flex-col items-center min-h-screen bg-[#FAF4FE] mb-[120px]">
@@ -77,7 +77,7 @@ function Home() {
             </div>
           )}
           endMessage={<div className="text-center py-4">No more posts</div>}
-          
+
         >
           {posts.length > 0 ? (
             posts.map((post) => (
@@ -108,4 +108,3 @@ function Home() {
 
 export default Home;
 
- 

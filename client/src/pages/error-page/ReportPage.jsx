@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/constants/Navbar';
 
 const ReportPage = () => {
   const [admissionNumber, setAdmissionNumber] = useState('');

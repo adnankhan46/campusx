@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PostCard from '../components/PostCard';
-import BottomBar from '../components/Bottombar';
-import Navbar from '../components/Navbar';
+import PostCard from '../../components/PostCard';
+import BottomBar from '../../components/constants/Bottombar';
+import Navbar from '../../components/constants/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { useGetPostsByUserQuery } from '../redux/posts/postApi';
-import { useUpdatePasswordMutation, useLogoutMutation } from '../redux/apiSlice';
-import { setCurrentUser } from '../redux/user/userSlice';
+import { useGetPostsByUserQuery } from '../../redux/posts/postApi';
+import { useUpdatePasswordMutation, useLogoutMutation } from '../../redux/apiSlice';
+import { setCurrentUser } from '../../redux/user/userSlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { BadgeCheck } from 'lucide-react';
 
@@ -66,11 +66,11 @@ const Profile = () => {
         <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />
         <h1 className="text-2xl md:text-4xl font-bold mb-2">{currentUser.admissionNumber}</h1>
         <div className='flex gap-1 items-center'>
-          <p className="text-base md:text-lg font-bold text-gray-800 bg-[#FAF4FE] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year))+4}</p>
+          <p className="text-base md:text-lg font-bold text-gray-800 bg-[#FAF4FE] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year)) + 4}</p>
           {(currentUser.isAuthenticated) &&
-          <span><BadgeCheck className='w-6 text-[#4b6cfcec]'/></span>}
+            <span><BadgeCheck className='w-6 text-[#4b6cfcec]' /></span>}
         </div>
-        
+
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
