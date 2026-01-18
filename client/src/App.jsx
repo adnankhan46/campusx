@@ -39,7 +39,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
 
-          <Route path='/campusai' element={<CampusAi />} />
+          <Route path='/campusai' element={<CampusChat />} />
           <Route path='/home' element={<Home />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/report' element={<ReportPage />} />
