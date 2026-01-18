@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 import { useDispatch } from 'react-redux';
-import { useSignInMutation } from '../redux/apiSlice';
-import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
+import { useSignInMutation } from '../../redux/apiSlice';
+import { setCurrentUser, setLoading, setError } from '../../redux/user/userSlice';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  
+
+
   const [signIn, { isLoading, error }] = useSignInMutation();
-  
+
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -53,17 +53,17 @@ const Login = () => {
       dispatch(setLoading(false));
 
       if (userCredentials.statusCode === 200) {
-         navigate("/home");
+        navigate("/home");
 
       }
-     
-     
-     
+
+
+
     } catch (err) {
       dispatch(setError(err?.data?.message || error?.message));
       console.log(err?.data?.message || error?.message);
       dispatch(setLoading(false));
-      
+
     }
   };
 
@@ -71,7 +71,7 @@ const Login = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <div className="h-screen flex items-center justify-center overflow-x-hidden bg-[#FAF4FE]">
         <div className="bg-white rounded-xl shadow-lg p-8 w-96">
           <div className="text-center mb-4">
@@ -80,7 +80,7 @@ const Login = () => {
               Dont have an account? <Link to="/signup" className="text-blue-500">Create Account</Link>
             </span>
           </div>
-           {error && <div className="text-red-500">Error: {error.data.message}</div>}
+          {error && <div className="text-red-500">Error: {error.data.message}</div>}
           <div>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
@@ -109,15 +109,15 @@ const Login = () => {
                 type="submit"
                 className="w-full bg-blue-500 text-white font-semibold p-3 rounded-xl mt-4"
               >
-              { isLoading ? "Loading..." : "Sign In" }
+                {isLoading ? "Loading..." : "Sign In"}
               </button>
             </form>
           </div>
           <div className="flex items-center mt-4">
-            
+
           </div>
           <div className="text-center mt-4">
-          
+
             <Link to="/report" className="text-red-500">Report a Problem</Link>
           </div>
         </div>

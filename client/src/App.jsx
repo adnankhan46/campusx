@@ -3,19 +3,19 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import PrivateRoute from "./components/PrivateRoute";
 
-const Front = lazy(() => import("./pages/Front"));
-const Home = lazy(() => import("./pages/Home"));
-const Signup = lazy(() => import("./pages/Signup"));
-const Login = lazy(() => import("./pages/Login"));
-const CampusChat = lazy(() => import("./pages/CampusChat"));
-const Profile = lazy(() => import("./pages/Profile"));
-const AddPost = lazy(() => import("./pages/AddPost"));
-const PostPage = lazy(() => import("./pages/PostPage"));
-const ReportPage = lazy(() => import("./pages/ReportPage"));
-const Notification = lazy(() => import("./pages/Notification"));
-const ErrorPage = lazy(() => import("./pages/ErrorPage"));
-const Explore = lazy(() => import("./pages/Explore"));
-const UserPage = lazy(() => import("./pages/UserPage"));
+const Landing = lazy(() => import("./pages/Landing"));
+const Home = lazy(() => import("./pages/feed/Home"));
+const Signup = lazy(() => import("./pages/auth/Signup"));
+const Login = lazy(() => import("./pages/auth/Login"));
+const CampusChat = lazy(() => import("./pages/campusx-chat/CampusChat"));
+const Profile = lazy(() => import("./pages/user/Profile"));
+const AddPost = lazy(() => import("./pages/post/AddPost"));
+const PostPage = lazy(() => import("./pages/post/PostPage"));
+const ReportPage = lazy(() => import("./pages/error-page/ReportPage"));
+const Notification = lazy(() => import("./pages/notification/Notification"));
+const ErrorPage = lazy(() => import("./pages/error-page/ErrorPage"));
+const Explore = lazy(() => import("./pages/opportunity/Explore"));
+const UserPage = lazy(() => import("./pages/user/UserPage"));
 
 const LoadingFallback = () => (
   <div style={{
@@ -35,7 +35,7 @@ function App() {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           {/* Public routes */}
-          <Route path='/' element={<Front />} />
+          <Route path='/' element={<Landing />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faTimes } from "@fortawesome/free-solid-svg-icons";
-import BottomBar from "../components/Bottombar";
-import Navbar from "../components/Navbar";
-import app from "../firebase";
+import BottomBar from "../../components/Bottombar";
+import Navbar from "../../components/Navbar";
+import app from "../../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { useAddPostsMutation } from "../redux/posts/postApi";
+import { useAddPostsMutation } from "../../redux/posts/postApi";
 import { useNavigate } from "react-router-dom";
 import * as nsfwjs from "nsfwjs";
 
@@ -234,9 +234,8 @@ const AddPost = () => {
       </div>
 
       <button
-        className={`p-4 w-full md:w-1/2 ${
-          isLoading ? "bg-[#c9cfff]" : "bg-[#6a7cff]"
-        } text-white rounded-xl`}
+        className={`p-4 w-full md:w-1/2 ${isLoading ? "bg-[#c9cfff]" : "bg-[#6a7cff]"
+          } text-white rounded-xl`}
         onClick={handlePost}
         disabled={isLoading || loading}
       >

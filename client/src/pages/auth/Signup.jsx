@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import {Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { useSignUpMutation } from '../redux/apiSlice';
-import { setCurrentUser, setLoading, setError } from '../redux/user/userSlice';
+import { useSignUpMutation } from '../../redux/apiSlice';
+import { setCurrentUser, setLoading, setError } from '../../redux/user/userSlice';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -16,22 +16,22 @@ const Register = () => {
     password: '',
     section: '',
     gender: '',
-  }); 
-  
+  });
+
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value.trim()});
+    setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
   };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
-       const user = await signUp(formData).unwrap();
-       console.log("user", user);
-       dispatch(setCurrentUser(user.data));
-       dispatch(setLoading(false));
-       
-        navigate("/home");
+      const user = await signUp(formData).unwrap();
+      console.log("user", user);
+      dispatch(setCurrentUser(user.data));
+      dispatch(setLoading(false));
+
+      navigate("/home");
     } catch (err) {
       console.log(err.data.message);
       dispatch(setError(err.data.message));
@@ -46,7 +46,7 @@ const Register = () => {
       <div className="bg-white rounded-xl shadow-lg p-8 w-96">
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold mb-6">Create Account</h1>
-          
+
           <span>
             Already have an account? <Link to="/login" className="text-blue-500">Sign In</Link>
           </span>
@@ -124,25 +124,25 @@ const Register = () => {
                   <span className="ml-2">Female</span>
                 </label>
               </div>
-              </div>
-              
-              {error && <div className="text-red-500">Error: {error.data.message}</div>}
+            </div>
+
+            {error && <div className="text-red-500">Error: {error.data.message}</div>}
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold p-3 rounded-xl mt-4"
             >
-            { isLoading ? "Loading..." : "Get In" }
+              {isLoading ? "Loading..." : "Get In"}
             </button>
           </form>
         </div>
         <div className="flex items-center mt-4 mx-auto">
-        
+
           <div className="ml-2 text-sm">
             Need Help? Someone Already Signed Up with My Account?{' '}
             <Link to="/report">
-            <span className="text-blue-500 cursor-pointer text-sm">Tell Your Admission Number here</span>
+              <span className="text-blue-500 cursor-pointer text-sm">Tell Your Admission Number here</span>
             </Link>
-            </div>
+          </div>
         </div>
       </div>
     </div>
