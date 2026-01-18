@@ -7,7 +7,7 @@ const Front = lazy(() => import("./pages/Front"));
 const Home = lazy(() => import("./pages/Home"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Login = lazy(() => import("./pages/Login"));
-const CampusAi = lazy(() => import("./pages/CampusAi"));
+const CampusAi = lazy(() => import("./pages/CampusChat"));
 const Profile = lazy(() => import("./pages/Profile"));
 const AddPost = lazy(() => import("./pages/AddPost"));
 const PostPage = lazy(() => import("./pages/PostPage"));
