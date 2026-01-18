@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import Chatbox from '../components/Chatbox';
 
-function CampusAi() {
+function CampusChat() {
   return (
     <div className='flex flex-col h-screen bg-[#FAF4FE] pb-20'>
     <div className="sticky top-0 z-200">
@@ -28,4 +28,4 @@ function CampusAi() {
   );
 }
 
-export default CampusAi;
+export default CampusChat;
