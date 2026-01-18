@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PostCard from '../../components/PostCard';
-import Navbar from '../../components/Navbar';
-import BottomBar from '../../components/Bottombar';
+import Navbar from '../../components/constants/Navbar';
+import BottomBar from '../../components/constants/Bottombar';
 // import Comment from '../components/Comment';
 import CommentSection from '../../components/CommentSection';
 import { useGetSinglePostQuery } from '../../redux/posts/postApi';

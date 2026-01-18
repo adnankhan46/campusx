@@ -1,5 +1,5 @@
-import Navbar from '../../components/Navbar';
-import BottomBar from '../../components/Bottombar';
+import Navbar from '../../components/constants/Navbar';
+import BottomBar from '../../components/constants/Bottombar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles } from '@fortawesome/free-solid-svg-icons';
 import Chatbox from '../../components/ChatComp';

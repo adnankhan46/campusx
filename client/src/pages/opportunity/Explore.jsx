@@ -1,5 +1,5 @@
-import Navbar from '../../components/Navbar'
-import BottomBar from '../../components/Bottombar'
+import Navbar from '../../components/constants/Navbar'
+import BottomBar from '../../components/constants/Bottombar'
 function Explore() {
   return (
     <div className='overflow-x-hidden flex flex-col items-center h-fit bg-white mb-[120px] font-inter'>

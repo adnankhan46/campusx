@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import BottomBar from '../../components/Bottombar';
-import Navbar from '../../components/Navbar';
+import BottomBar from '../../components/constants/Bottombar';
+import Navbar from '../../components/constants/Navbar';
 import { useSelector } from 'react-redux';
 import PostCard from '../../components/PostCard';
 import { useNavigate } from 'react-router-dom';

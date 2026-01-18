@@ -1,7 +1,7 @@
 // src/pages/Notification.js
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import BottomBar from '../../components/Bottombar';
+import Navbar from '../../components/constants/Navbar';
+import BottomBar from '../../components/constants/Bottombar';
 import { useSelector } from 'react-redux';
 import { useFetchNotificationsQuery, useClearNotificationsMutation } from '../../redux/notification/notifApi';
 import { io } from 'socket.io-client';

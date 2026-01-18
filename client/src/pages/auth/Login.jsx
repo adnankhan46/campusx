@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/constants/Navbar';
 import { useDispatch } from 'react-redux';
 import { useSignInMutation } from '../../redux/apiSlice';
 import { setCurrentUser, setLoading, setError } from '../../redux/user/userSlice';

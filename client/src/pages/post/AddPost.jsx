@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faTimes } from "@fortawesome/free-solid-svg-icons";
-import BottomBar from "../../components/Bottombar";
-import Navbar from "../../components/Navbar";
+import BottomBar from "../../components/constants/Bottombar";
+import Navbar from "../../components/constants/Navbar";
 import app from "../../firebase";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useAddPostsMutation } from "../../redux/posts/postApi";

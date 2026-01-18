@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../../components/PostCard';
-import BottomBar from '../../components/Bottombar';
-import Navbar from '../../components/Navbar';
+import BottomBar from '../../components/constants/Bottombar';
+import Navbar from '../../components/constants/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useGetPostsByUserQuery } from '../../redux/posts/postApi';
 import { useUpdatePasswordMutation, useLogoutMutation } from '../../redux/apiSlice';

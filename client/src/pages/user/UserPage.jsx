@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
 import PostCard from "../../components/PostCard";
-import Navbar from "../../components/Navbar";
-import BottomBar from '../../components/Bottombar';
+import Navbar from "../../components/constants/Navbar";
+import BottomBar from '../../components/constants/Bottombar';
 import { useGetPostsByUserQuery } from '../../redux/posts/postApi';
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';

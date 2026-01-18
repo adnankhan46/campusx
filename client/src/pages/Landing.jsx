@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import Typed from 'typed.js';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/constants/Navbar';
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
+import Footer from '../components/constants/Footer';
 import OpportunityCardMinimal, { mockOpportunities } from '../components/ui/OpportunityCardMinimal';
 
 const Front = () => {
