@@ -16,19 +16,24 @@ import config from "./utils/config.js";
 // DODO webhook
 import { dodoWebhook } from "./webhook/dodo.webhook.js";
 
+/* old routes
+ * import authRoutes from "./route/auth.route.js";
+ * import PostRoutes from "./route/post.route.js";
+ * import CommentRoutes from "./route/comment.route.js";
+ import NotificationRoutes from "./route/notification.route.js";
+*/
+
 // import routes
-import opportunityRoutes from "./route/company.route.js";
-// OLD AUTH ROUTE - Replaced with new modular version
-// import authRoutes from "./route/auth.route.js";
-// NEW AUTH ROUTE from src/modules
 import authRoutes from "../src/modules/auth/auth.routes.js";
-// import PostRoutes from "./route/post.route.js";
 import PostRoutes from "../src/modules/post/post.route.js";
-import CommentRoutes from "./route/comment.route.js";
-import NotificationRoutes from "./route/notification.route.js";
+import CommentRoutes from "../src/modules/comment/comment.route.js";
+import NotificationRoutes from "../src/modules/notification/notification.route.js";
+
+import opportunityRoutes from "./route/company.route.js";
 import applicantRouter from "./route/applicant.route.js"
 import companyRoutes from "./route/company.route.js";
 import adminRoutes from "./route/admin.route.js";
+import { NODE_ENV } from "../src/shared/utils/constants.js";
 
 dotenv.config();
 
@@ -111,6 +116,11 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Silence logs for Test env
+if (process.env.NODE_ENV === NODE_ENV.TEST) {
+  logger.silent = true;
+}
+
 // ######################################### MongoDB Connection
 const dbURI = config.MONGO;
 if (!dbURI) {
@@ -164,7 +174,9 @@ if (process.env.NODE_ENV !== 'production') {
   logger.info(`[MEMORY]: ${JSON.stringify(memoryUsage)}`);
 }
 
-httpserver.listen(port, () => {
-  // console.log(`Server is running on port ${port}`);
-  logger.info(`[CONNECTION]: Server Connected at PORT ${port}`)
-});
+if (process.env.NODE_ENV !== NODE_ENV.TEST) {
+  httpserver.listen(port, () => {
+    // console.log(`Server is running on port ${port}`);
+    logger.info(`[CONNECTION]: Server Connected at PORT ${port}`)
+  });
+}
