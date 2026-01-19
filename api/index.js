@@ -33,6 +33,7 @@ import opportunityRoutes from "./route/company.route.js";
 import applicantRouter from "./route/applicant.route.js"
 import companyRoutes from "./route/company.route.js";
 import adminRoutes from "./route/admin.route.js";
+import { NODE_ENV } from "../src/shared/utils/constants.js";
 
 dotenv.config();
 
@@ -115,6 +116,11 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Silence logs for Test env
+if (process.env.NODE_ENV === NODE_ENV.TEST) {
+  logger.silent = true;
+}
+
 // ######################################### MongoDB Connection
 const dbURI = config.MONGO;
 if (!dbURI) {
@@ -168,7 +174,9 @@ if (process.env.NODE_ENV !== 'production') {
   logger.info(`[MEMORY]: ${JSON.stringify(memoryUsage)}`);
 }
 
-httpserver.listen(port, () => {
-  // console.log(`Server is running on port ${port}`);
-  logger.info(`[CONNECTION]: Server Connected at PORT ${port}`)
-});
+if (process.env.NODE_ENV !== NODE_ENV.TEST) {
+  httpserver.listen(port, () => {
+    // console.log(`Server is running on port ${port}`);
+    logger.info(`[CONNECTION]: Server Connected at PORT ${port}`)
+  });
+}

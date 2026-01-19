@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit";
-import { RATE_LIMIT } from "../../src/shared/utils/constants.js";
+import { NODE_ENV, RATE_LIMIT } from "../../src/shared/utils/constants.js";
 
 // IP-based rate limiter
 export const ipLimiter = rateLimit({
@@ -8,6 +8,7 @@ export const ipLimiter = rateLimit({
     message: { message: "Too many requests in a minute, wait for a minute and retry." },
     standardHeaders: true,
     legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === NODE_ENV.TEST, // skip in test env
 });
 
 export const postLimiter = rateLimit({
@@ -16,4 +17,5 @@ export const postLimiter = rateLimit({
     message: { message: "Too many requests in a minute, wait for a minute and retry." },
     standardHeaders: true,
     legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === NODE_ENV.TEST,
 });
