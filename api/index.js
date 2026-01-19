@@ -20,15 +20,16 @@ import { dodoWebhook } from "./webhook/dodo.webhook.js";
  * import authRoutes from "./route/auth.route.js";
  * import PostRoutes from "./route/post.route.js";
  * import CommentRoutes from "./route/comment.route.js";
+ import NotificationRoutes from "./route/notification.route.js";
 */
 
 // import routes
 import authRoutes from "../src/modules/auth/auth.routes.js";
 import PostRoutes from "../src/modules/post/post.route.js";
 import CommentRoutes from "../src/modules/comment/comment.route.js";
+import NotificationRoutes from "../src/modules/notification/notification.route.js";
 
 import opportunityRoutes from "./route/company.route.js";
-import NotificationRoutes from "./route/notification.route.js";
 import applicantRouter from "./route/applicant.route.js"
 import companyRoutes from "./route/company.route.js";
 import adminRoutes from "./route/admin.route.js";
