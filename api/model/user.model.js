@@ -71,6 +71,7 @@ const userSchema  = new mongoose.Schema({
     },
 }, {timestamps: true});
 
-const User = mongoose.model("User", userSchema);
+// This prevents "Cannot overwrite model" error when other modules still use old path
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;

@@ -48,11 +48,11 @@ const Login = () => {
     dispatch(setLoading(true));
     try {
       const userCredentials = await signIn(credentials).unwrap();
-      console.log("User credentials: ", userCredentials);
-      dispatch(setCurrentUser(userCredentials));
+      console.log("User credentials: ", userCredentials.data);
+      dispatch(setCurrentUser(userCredentials.data));
       dispatch(setLoading(false));
 
-      if (userCredentials) {
+      if (userCredentials.statusCode === 200) {
          navigate("/home");
 
       }
