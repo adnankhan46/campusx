@@ -16,15 +16,18 @@ import config from "./utils/config.js";
 // DODO webhook
 import { dodoWebhook } from "./webhook/dodo.webhook.js";
 
+/* old routes
+ * import authRoutes from "./route/auth.route.js";
+ * import PostRoutes from "./route/post.route.js";
+ * import CommentRoutes from "./route/comment.route.js";
+*/
+
 // import routes
-import opportunityRoutes from "./route/company.route.js";
-// OLD AUTH ROUTE - Replaced with new modular version
-// import authRoutes from "./route/auth.route.js";
-// NEW AUTH ROUTE from src/modules
 import authRoutes from "../src/modules/auth/auth.routes.js";
-// import PostRoutes from "./route/post.route.js";
 import PostRoutes from "../src/modules/post/post.route.js";
-import CommentRoutes from "./route/comment.route.js";
+import CommentRoutes from "../src/modules/comment/comment.route.js";
+
+import opportunityRoutes from "./route/company.route.js";
 import NotificationRoutes from "./route/notification.route.js";
 import applicantRouter from "./route/applicant.route.js"
 import companyRoutes from "./route/company.route.js";
