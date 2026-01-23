@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        'main': '#6a7cff',
+        'secondary-bg': '#FAF4FE',
+      },
       backgroundImage: {
         'custom-gradient': 'linear-gradient(90deg, #f6a1fff5, #e886edf6, #AC9DFB, #7685FD, #4b6cfcec)',
         'box1-gradient': 'linear-gradient(105deg, rgb(216, 158, 255),#955cff)',
