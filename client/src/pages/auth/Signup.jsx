@@ -58,10 +58,11 @@ const Register = () => {
               name="admissionNumber"
               value={formData.admissionNumber}
               onChange={handleChange}
-              placeholder="Starting year of graduation (ex: 2026)"
+              maxLength={4}
+              placeholder="Starting year of graduation"
               className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl"
             />
-            <div className=' mb-2 text-gray-400'>4 digit </div>
+            <div className=' mb-2 text-gray-400'>{`4 digit (Example: 2026)`}</div>
             <input
               type="email"
               name="email"
