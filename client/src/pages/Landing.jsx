@@ -48,7 +48,13 @@ const Front = () => {
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row md:justify-between md:items-center p-3 md:px-64 gap-12 md:gap-10">
         <div className="flex flex-col">
-          <div className="bg-box1-gradient md:min-w-[400px] flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
+          <div 
+          style={{
+          backgroundImage: `url("/backgrounds/bg-social-1.jpeg")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+          className="bg-box1-gradient md:min-w-[400px] flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
             <div className="font-poppins font-light text-white text-sm">
               <p className="text-base font-inter">
                 Found my first paid gig here <br />
@@ -63,7 +69,14 @@ const Front = () => {
               <span className='font-inter'>Female From CSE</span>
             </div>
           </div>
-          <div className="bg-box2-gradient flex flex-col h-[135px] w-50 rounded-[23px] p-3 relative mt-4 mx-12 right-8 transition-all duration-1000 md:hover:translate-x-10">
+          {/* Box 2 */}
+          <div
+          style={{
+          backgroundImage: `url("/backgrounds/bg-social-2.jpeg")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+          className="bg-box2-gradient flex flex-col h-[135px] w-50 rounded-[23px] p-3 relative mt-4 mx-12 right-8 transition-all duration-1000 md:hover:translate-x-10">
             <div className="font-poppins font-light text-white text-sm">
               <span className="text-base font-inter" ref={typedTextRef}></span>
             </div>
@@ -105,7 +118,7 @@ const Front = () => {
       </section>
 
       {/* Opportunities Section */}
-      <section className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-6 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
+      <section className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-2 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#6a7cff]/5 blur-[100px] rounded-full pointer-events-none" />
 
@@ -122,7 +135,7 @@ const Front = () => {
               </p>
             </div>
 
-            <Link to="/opportunities" className="group flex items-center gap-2 text-[#6a7cff] font-medium hover:text-[#5a6be0] transition-colors px-6 py-3 rounded-sm border border-[#6a7cff]/50">
+            <Link to="/signup" className="group flex items-center gap-2 text-[#6a7cff] font-medium hover:text-[#5a6be0] transition-colors px-6 py-3 rounded-sm border border-[#6a7cff]/50">
               View All
             </Link>
           </div>
