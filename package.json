@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
-    "test": "vitest --run --reporter=verbose"
+    "test": "vitest --run --reporter=verbose",
     "lint": "eslint ."
   },
   "keywords": [],
