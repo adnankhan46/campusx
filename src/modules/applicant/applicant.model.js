@@ -69,6 +69,6 @@ applicantSchema.index({ userId: 1, opportunityId: 1 }, { unique: true });
 applicantSchema.index({ opportunityId: 1, status: 1 });
 applicantSchema.index({ userId: 1, status: 1 });
 
-const Applicant = mongoose.models.Applicant || mongoose.model("Applicant", applicantSchema);
+const Applicant = mongoose.model("Applicant", applicantSchema);
 
 export default Applicant;

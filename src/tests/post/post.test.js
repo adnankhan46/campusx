@@ -6,18 +6,21 @@ import mongoose from 'mongoose';
 const mockUserId = new mongoose.Types.ObjectId();
 
 // Mock the isAuthenticated middleware BEFORE importing the app
-vi.mock('../../../api/middlewares/isAuthenticated.js', () => ({
-  isAuthenticated: (req, res, next) => {
-    // Inject the mock user into the request
-    req.user = { id: mockUserId.toString() };
-    next();
-  },
-}));
+vi.mock('../../shared/middleware/index.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    isAuthenticated: (req, res, next) => {
+      // Inject the mock user into the request
+      req.user = { id: mockUserId.toString() };
+      next();
+    },
+  };
+});
 
 import { app } from '../../../api/index.js';
-// old model path, needed to change, --refactor needed
-import Post from '../../../api/model/post.model.js';
-import User from '../../../api/model/user.model.js';
+import Post from '../../modules/post/post.model.js';
+import User from '../../modules/auth/user.model.js';
 
 beforeEach(async () => {
   await User.create({
