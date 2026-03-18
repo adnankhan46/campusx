@@ -1,0 +1,5 @@
+{
+  "signal": "SIGTERM",
+  "delay": 0,
+  "killingDelay": 10000
+}
