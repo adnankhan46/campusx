@@ -1,5 +1,5 @@
 import { ApiError } from '../utils/apiError.js';
-import logger from '../../../api/utils/logger.js';
+import logger from '../utils/logger.js';
 
 /**
  * Global error handler middleware

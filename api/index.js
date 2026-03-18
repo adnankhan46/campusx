@@ -14,24 +14,28 @@ import { v4 as uuidv4 } from 'uuid';
 import logger from "./utils/logger.js";
 import config from "./utils/config.js";
 // DODO webhook
-import { dodoWebhook } from "./webhook/dodo.webhook.js";
+// old import { dodoWebhook } from "./webhook/dodo.webhook.js";
+import { dodoWebhook } from "../src/modules/payments/webhook.controller.js";
 
 /* old routes
  * import authRoutes from "./route/auth.route.js";
  * import PostRoutes from "./route/post.route.js";
  * import CommentRoutes from "./route/comment.route.js";
  import NotificationRoutes from "./route/notification.route.js";
+ // import opportunityRoutes from "./route/company.route.js";
+ // import applicantRouter from "./route/applicant.route.js"
+ // import companyRoutes from "./route/company.route.js";
 */
 
-// import routes
+// import routes (migrated modules)
 import authRoutes from "../src/modules/auth/auth.routes.js";
 import PostRoutes from "../src/modules/post/post.route.js";
 import CommentRoutes from "../src/modules/comment/comment.route.js";
 import NotificationRoutes from "../src/modules/notification/notification.route.js";
+import companyRoutes from "../src/modules/company/company.routes.js";
+import applicantRouter from "../src/modules/applicant/applicant.routes.js";
+import opportunityRoutes from "../src/modules/opportunity/opportunity.routes.js";
 
-import opportunityRoutes from "./route/company.route.js";
-import applicantRouter from "./route/applicant.route.js"
-import companyRoutes from "./route/company.route.js";
 import adminRoutes from "./route/admin.route.js";
 import { NODE_ENV } from "../src/shared/utils/constants.js";
 
@@ -100,9 +104,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", PostRoutes);
 app.use("/api/comment", CommentRoutes);
 app.use("/api/notification", NotificationRoutes);
-app.use("/api/company", companyRoutes); 
-app.use("/api/opportunities", opportunityRoutes);
+app.use("/api/company", companyRoutes);
 app.use("/api/applicants", applicantRouter);
+app.use("/api/opportunities", opportunityRoutes);
+// old routes (not yet migrated)
 app.use("/api/admin", adminRoutes);
 
 // Error handling middleware

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Post from "../post/post.model.js";
 
 // Import old middleware temporarily (will be migrated later)
-import Comment from "../../../api/model/comment.model.js"
+import Comment from "../comment/comment.model.js"
 
 export const checkHi = async (req, res) => {
     res.json({message: "Cookie hai"});

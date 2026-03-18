@@ -1,5 +1,5 @@
 import express from 'express';
-import { validate } from '../../shared/middleware/index.js';
+import { validate, isAuthenticated, ipLimiter } from '../../shared/middleware/index.js';
 import {
   handleSignUp,
   handleSignIn,
@@ -14,9 +14,6 @@ import {
   updateAuthStatusSchema,
 } from './auth.validation.js';
 
-// Import old middleware temporarily (will be migrated later)
-import { isAuthenticated } from '../../../api/middlewares/isAuthenticated.js';
-import { ipLimiter } from '../../../api/middlewares/rate-limiter.js';
 
 const router = express.Router();
 

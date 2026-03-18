@@ -1,8 +1,7 @@
 import express from "express";
 import { addComment, deleteComment, getAllCommentByPost } from "../comment/comment.controller.js";
 
-// Import old middleware temporarily (will be migrated later)
-import { isAuthenticated } from "../../../api/middlewares/isAuthenticated.js";
+import { isAuthenticated } from "../../shared/middleware/index.js";
 
 const router = express.Router();
 
