@@ -50,7 +50,7 @@ export const authService = {
     // Generate JWT token
     const token = jwt.sign(
       { id: savedUser._id, isAdmin: savedUser.isAdmin },
-      config.jwtSecret
+      config.JWT_SECRET
     );
 
     const { password: _, ...userWithoutPassword } = savedUser._doc;
@@ -81,7 +81,7 @@ export const authService = {
     // Generate JWT token
     const token = jwt.sign(
       { id: user._id, isAdmin: user.isAdmin },
-      config.jwtSecret,
+      config.JWT_SECRET,
       { expiresIn: '30d' }
     );
 
@@ -140,7 +140,7 @@ export const authService = {
    */
   verifyToken(token) {
     try {
-      const decoded = jwt.verify(token, config.jwtSecret);
+      const decoded = jwt.verify(token, config.JWT_SECRET);
       return decoded;
     } catch (error) {
       throw ApiErrors.unauthorized('Invalid token');

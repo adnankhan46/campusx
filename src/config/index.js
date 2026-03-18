@@ -25,18 +25,18 @@ const config = {
   nodeEnv: currentEnv,
   
   // Database
-  mongoUri: process.env.MONGO,
+  MONGO: process.env.MONGO,
   
   // Authentication
-  jwtSecret: process.env.JWT_SECRET,
+  JWT_SECRET: process.env.JWT_SECRET,
   
   // Payment (Dodo)
-  dodoToken: process.env.DODO_TOKEN,
-  dodoWebhookToken: process.env.DODO_WEBHOOK_TOKEN,
-  productId: process.env.PRODUCT_ID,
+  DODO_TOKEN: process.env.DODO_TOKEN,
+  DODO_WEBHOOK_TOKEN: process.env.DODO_WEBHOOK_TOKEN,
+  PRODUCT_ID: process.env.PRODUCT_ID,
   
   // Frontend
-  frontendOrigin: process.env.FRONTEND_ORIGIN,
+  FRONTEND_ORIGIN: process.env.FRONTEND_ORIGIN,
 };
 
 /**

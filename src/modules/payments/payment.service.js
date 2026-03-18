@@ -1,4 +1,4 @@
-import Opportunity from '../company/opportunity.model.js';
+import Opportunity from '../opportunity/opportunity.model.js';
 import { ApiErrors } from '../../shared/utils/index.js';
 import { client } from '../../shared/utils/paymentConfig.js';
 import config from '../../config/index.js';
@@ -48,7 +48,7 @@ export const paymentService = {
     // Treat This Specific Opportunity as the 'Product'
     const productCart = [
       {
-        product_id: config.productId,
+        product_id: config.PRODUCT_ID,
         product_name: 'Cx_op',
         quantity: 1,
         amount: paymentAmount * 0.5 * 100, // 50% upfront

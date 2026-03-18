@@ -5,7 +5,7 @@ import config from '../../config/index.js';
 dotenv.config();
 
 export const client = new DodoPayments({
-  bearerToken: config.dodoToken,
+  bearerToken: config.DODO_TOKEN,
   environment: 'test_mode' // or 'test_mode'
 });
 

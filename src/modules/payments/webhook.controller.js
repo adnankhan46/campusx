@@ -1,9 +1,9 @@
 import { Webhook } from 'standardwebhooks';
 import logger from '../../shared/utils/logger.js';
 import config from '../../config/index.js';
-import Opportunity from '../company/opportunity.model.js';
+import Opportunity from '../opportunity/opportunity.model.js';
 
-const webhook = new Webhook(config.dodoWebhookToken); // Ensure this matches config/index.js
+const webhook = new Webhook(config.DODO_WEBHOOK_TOKEN); // Ensure this matches config/index.js
 
 /**
  *  WEBHOOK ------- Implementation --- 15 sec window limit

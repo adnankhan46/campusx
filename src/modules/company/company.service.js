@@ -52,7 +52,7 @@ export const companyService = {
     // JWT token
     const token = jwt.sign(
       { id: savedCompany._id, isCompany: true },
-      config.jwtSecret
+      config.JWT_SECRET
     );
 
     return { company: rest, token };
@@ -86,7 +86,7 @@ export const companyService = {
 
     const token = jwt.sign(
       { id: company._id, isCompany: true, isAdmin: false },
-      config.jwtSecret,
+      config.JWT_SECRET,
       { expiresIn: '3d' }
     );
 

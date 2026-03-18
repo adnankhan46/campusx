@@ -8,10 +8,10 @@ let mongoServer;
 beforeAll(async () => {
   // Start in-memory MongoDB instance
   mongoServer = await MongoMemoryServer.create();
-  const mongoUri = mongoServer.getUri();
+  const MONGO = mongoServer.getUri();
 
   // Connect mongoose to the in-memory database
-  await mongoose.connect(mongoUri);
+  await mongoose.connect(MONGO);
 });
 
 // Cleanup after each test
