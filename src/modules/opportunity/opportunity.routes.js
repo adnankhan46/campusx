@@ -9,6 +9,7 @@ const router = express.Router();
  */
 
 // COMMON GET ROUTE
+router.get('/getAllOpp', getAllOpportunities);
 router.get('/:id', getOpportunityById); // when click on an Opportunity, For User/Admin/Company : [COMMON]
 
 export default router;

@@ -5,12 +5,12 @@ export const postsApi = authApi.injectEndpoints({
   tagTypes: ['AllOpps'],
   endpoints: (builder) => ({
     getAllOpportunities: builder.query({
-      query: ({ page = 1, limit = 6 }) => `/applicants/getAllOpp`, // Temporarily created
+      query: ({ page = 1, limit = 6 }) => `/opportunities/getAllOpp`, // Temporarily created
       providesTags: ['AllOpps'],
       transformResponse: (response) => {
         return {
-          opportunities: response.opportunities,
-          hasMore: response.currentPage < response.totalPages // Handle pagination
+          opportunities: response.data.opportunities,
+          hasMore: response.data.currentPage < response.data.totalPages // Handle pagination
         };
       },
     }),
