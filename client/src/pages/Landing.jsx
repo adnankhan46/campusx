@@ -41,6 +41,33 @@ const Front = () => {
 
   return (
     <div className="overflow-x-hidden bg-[#FAF4FE] h-screen scroll-smooth font-inter">
+
+       {/* Marquee Banner */}
+<div className="w-full bg-[#f2ddff] py-2 overflow-hidden">
+  <style>{`
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 45s linear infinite;
+    }
+  `}</style>
+  <div className="marquee-track">
+    {Array.from({ length: 6 }).map((_, i) => (
+      <span key={i} className="flex items-center text-gray-500 text-sm font-inter font-medium whitespace-nowrap">
+        <span className="mx-8">BeCampusX is redefining student opportunities</span>
+        <span className="opacity-40 mx-2">|</span>
+        <span className="mx-8">Real tasks. Real money. Real growth</span>
+        <span className="opacity-40 mx-2">|</span>
+        <span className="mx-8">Join the students already earning</span>
+        <span className="opacity-40 mx-2">|</span>
+      </span>
+    ))}
+  </div>
+</div>
       <nav>
         <Navbar />
       </nav>
@@ -55,11 +82,12 @@ const Front = () => {
           backgroundPosition: "center",
         }}
           className="bg-box1-gradient md:min-w-[400px] flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
-            <div className="font-poppins font-light text-white text-sm">
+            <div className="flex justify-between font-poppins font-light text-white text-sm">
               <p className="text-base font-inter">
                 Found my first paid gig here <br />
                 <span className="font-bold text-white font-suse">BeCampusx is real</span>
               </p>
+              <p className='h-fit rotate-6 text-sm mt-1 mr-1 px-2 py-1 bg-white/25 font-suse rounded-sm  backdrop-blur-sm'>+ ₹2500</p>
             </div>
             <div className="flex gap-2 items-center font-poppins font-light text-sm text-white absolute bottom-1.5 left-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
@@ -101,7 +129,7 @@ const Front = () => {
           </Link>
           <Link to="/login">
             <button className="login p-2 mb-2 font-inter font-bold h-12 shadow-none border-0 bg-[#6a7cff] text-white text-lg rounded-xl w-full transition-all duration-300 cursor-pointer hover:bg-white hover:text-[#6a7cff]">
-              LogIN
+              Log In
             </button>
           </Link>
 
@@ -118,7 +146,7 @@ const Front = () => {
       </section>
 
       {/* Opportunities Section */}
-      <section className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-2 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
+      <section id='Opps' className="relative py-16 overflow-hidden mx-4 md:mx-64 rounded-2xl mb-12 mt-2 bg-white/50 border border-white/60 shadow-sm backdrop-blur-sm ring-1 ring-black/10">
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#6a7cff]/5 blur-[100px] rounded-full pointer-events-none" />
 

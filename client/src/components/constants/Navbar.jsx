@@ -1,12 +1,26 @@
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWandSparkles, faBell} from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate()
+
+  const handleOppsClick = () => {
+    if (location.pathname === '/') {
+      document.getElementById('Opps')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById('Opps')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  };
   return (
     <>
     <div className='flex items-center w-full h-16 bg-custom-gradient justify-between'>
+    {/* Main Left */}
+    <div>
     <Link to='/home'>
     <div className='flex items-center h-16'>
     <h1 className="text-4xl font-bold font-outfit text-white ml-4 md:px-12">
@@ -22,13 +36,35 @@ function Navbar() {
     </span>
     </div>
     </Link>
-    <Link to='/notification'>
-      <div className='md:mr-80 mr-6 text-white'>
-        {(location.pathname !== `/`) &&
-        <FontAwesomeIcon icon={faBell} className={`md:h-8 h-6`} />
+    </div>
+
+{/* Secondary Right */}
+    <div className='flex md:gap-16 gap-4'>
+
+    <Link to="#Opps">
+     <div  onClick={handleOppsClick} className='font-inter text-xs md:text-base text-white cursor-pointer'>
+        {(location.pathname == `/`) &&
+        <h1>Opportunities</h1>
+        }
+       </div></Link>
+    <Link to="/explore">
+     <div className='font-inter md:mr-80 mr-4 text-xs md:text-base text-white cursor-pointer'>
+        {(location.pathname == `/`) &&
+        <h1>For Companies</h1>
         }
        </div>
+       </Link>
+    </div>
+
+        {(location.pathname !== `/`) &&
+    <div>
+    <Link to='/notification'>
+      <div className='md:mr-80 mr-6 text-white'>
+        <FontAwesomeIcon icon={faBell} className={`md:h-8 h-6`} />
+       </div>
     </Link>
+    </div>
+        }
     </div>
     </>
   )

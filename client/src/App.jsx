@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import PrivateRoute from "./components/PrivateRoute";
+import FrontSkeleton from "./components/constants/FrontSkeleton";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Home = lazy(() => import("./pages/feed/Home"));
@@ -17,22 +18,11 @@ const ErrorPage = lazy(() => import("./pages/error-page/ErrorPage"));
 const Explore = lazy(() => import("./pages/opportunity/Explore"));
 const UserPage = lazy(() => import("./pages/user/UserPage"));
 
-const LoadingFallback = () => (
-  <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    fontSize: '1.2rem'
-  }}>
-    BeCampusx Loading...
-  </div>
-);
 
 function App() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<FrontSkeleton />}>
         <Routes>
           {/* Public routes */}
           <Route path='/' element={<Landing />} />
