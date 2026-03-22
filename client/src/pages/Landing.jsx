@@ -81,13 +81,13 @@ const Front = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-          className="bg-box1-gradient md:min-w-[400px] flex flex-col h-[135px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
+          className="bg-box1-gradient md:min-w-[400px] flex flex-col h-[140px] rounded-[23px] p-3 relative mt-[26px] mx-12 transition-all duration-1000 md:hover:translate-x-10">
             <div className="flex justify-between font-poppins font-light text-white text-sm">
               <p className="text-base font-inter">
                 Found my first paid gig here <br />
                 <span className="font-bold text-white font-suse">BeCampusx is real</span>
               </p>
-              <p className='h-fit rotate-6 text-sm mt-1 mr-1 px-2 py-1 bg-white/25 font-suse rounded-sm  backdrop-blur-sm'>+ ₹2500</p>
+              <p className='h-fit whitespace-nowrap rotate-6 text-sm mt-1 mr-1 px-2 py-1 bg-white text-blue-600 font-suse rounded-xl backdrop-blur-sm'>+ ₹2500</p>
             </div>
             <div className="flex gap-2 items-center font-poppins font-light text-sm text-white absolute bottom-1.5 left-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
