@@ -31,7 +31,7 @@ const Register = () => {
       dispatch(setCurrentUser(user.data));
       dispatch(setLoading(false));
 
-      navigate("/home");
+      navigate("/explore");
     } catch (err) {
       console.log(err.data.message);
       dispatch(setError(err.data.message));

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getOpportunityById } from './opportunity.controller.js';
+import { getAllOpportunities, getOpportunityById } from './opportunity.controller.js';
 
 const router = express.Router();
 

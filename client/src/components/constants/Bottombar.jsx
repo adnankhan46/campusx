@@ -49,10 +49,11 @@ const BottomBar = () => {
         <p className={`text-sm md:text-xl ${activeTab === 'upload' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>Upload</p>
         </div>
 
-      <div onClick={() => handleTabClick('campusai', '/campusai')} className="flex flex-col text-black  items-center justify-center">
+    {/* Frontend TODO: Agentic Chat -- removed for now */}
+      {/* <div onClick={() => handleTabClick('campusai', '/campusai')} className="flex flex-col text-black  items-center justify-center">
         <FontAwesomeIcon icon={ faWandSparkles} className={`md:h-8 h-6 mb-2  cursor-pointer ${activeTab === 'campusai' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
         <p className={`text-sm md:text-xl ${activeTab === 'campusai' ? 'text-[#6a7cff]' : 'text-gray-500'}`}>TRY AI</p>
-        </div>
+        </div> */}
 
       <div onClick={() => handleTabClick('explore', '/explore')} className="flex flex-col text-black  items-center justify-center">
         <FontAwesomeIcon icon={faExplosion} className={`md:h-8 h-6 mb-2 cursor-pointer ${activeTab === 'explore' ? 'text-[#6a7cff]' : 'text-gray-500'}`} />
