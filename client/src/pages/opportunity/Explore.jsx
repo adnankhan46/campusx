@@ -2,6 +2,7 @@ import Navbar from '../../components/constants/Navbar'
 import BottomBar from '../../components/constants/Bottombar'
 import { useGetAllOpportunitiesQuery } from '../../redux/opportunities/opportunity-api';
 import { OpportunityCard } from '../../components/ui/OpportunityCard';
+import { LoadingOpportunity } from '../../components/constants/LoadingOpportunity';
 
 function Explore() {
 
@@ -14,6 +15,13 @@ function Explore() {
   return (
     <div className='overflow-x-hidden flex flex-col items-center h-fit bg-white mb-[120px] font-inter'>
       <Navbar />
+
+      {
+      isLoading ?
+            <div className='flex flex-col w-full md:w-1/2'>
+      {Array.from({ length: 2 }).map((_, i) => <LoadingOpportunity key={i} />)}
+</div>
+      :
       <div className='flex flex-col w-full md:w-1/2'>
         {data?.opportunities?.length > 0 ? (
           data?.opportunities?.map((opportunity) => (
@@ -23,9 +31,10 @@ function Explore() {
             />
           ))
         ) : (
-          <p>No opportunities found</p>
+          <p className='flex mx-auto'>No opportunities found</p>
         )}
       </div>
+      }
 
       <BottomBar />
     </div>
