@@ -1,7 +1,7 @@
 import { authApi } from "../apiSlice";
 
 
-export const postsApi = authApi.injectEndpoints({
+export const opportunities_api = authApi.injectEndpoints({
   tagTypes: ['AllOpps'],
   endpoints: (builder) => ({
     getAllOpportunities: builder.query({
@@ -77,6 +77,6 @@ export const postsApi = authApi.injectEndpoints({
 export const { 
   useGetAllOpportunitiesQuery,
 //   useAddPostsMutation,
-} = postsApi;
+} = opportunities_api;
 
 // for a reference or recall redux: 'use' + '[Name-of-endpoint]' + 'Query' or 'Mutation'
