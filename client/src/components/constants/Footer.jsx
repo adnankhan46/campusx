@@ -6,16 +6,18 @@ const Footer = () => (
       <div className="flex flex-col md:flex-row w-full justify-between md:px-24 gap-14">
         <div className="booleanai">
           <div className="onlyElement">
-          <h2 className='text-4xl font-extrabold font-outfit hover:text-[#243CB6]'>CampusX</h2>
+          <h2 className='text-4xl font-extrabold font-outfit hover:text-[#243CB6]'>BeCampusX</h2>
             <p className='my-2 text-gray-600'>Build. Share. Collaborate</p>
             <div className="social-list flex gap-4">
             <Instagram size={20} />
             <Linkedin size={20}/>
             </div>
+
             <div className="campusx-branding border-t border-gray-300 flex gap-4 mt-4 pt-2">
             <p className='text-gray-600'>Also Try</p>
-            <a href="https://booleanai.netlify.app/" className="text-gray-500 hover:text-[#243CB6]">BooleanAI</a>
+            <a href="https://booleanai.vercel.app/" className="text-gray-500 hover:text-[#243CB6]">BooleanAI</a>
            </div>
+           
           </div>
         </div>
       <div className='flex flex-col md:flex-row gap-8 md:gap-12'>
@@ -38,7 +40,8 @@ const Footer = () => (
       </div>
       </div>
       <div className="mt-4 pt-6 text-center text-gray-400">
-        <p>&copy; 2024 Adnan Khan. All rights reserved.</p>
+        <p>&copy; 2026 Adnan Khan. All rights reserved.</p>
+        <p className='text-xs mt-4'>Created in 2023</p>
       </div>
     </div>
   </footer>
