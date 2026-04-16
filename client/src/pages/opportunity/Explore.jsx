@@ -10,7 +10,7 @@ function Explore() {
     refetchOnWindowFocus: false,
   });
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className='overflow-x-hidden flex flex-col items-center h-fit bg-white mb-[120px] font-inter'>

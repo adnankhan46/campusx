@@ -77,7 +77,7 @@ const Login = () => {
           <div className="text-center mb-4">
             <h1 className="text-2xl font-bold mb-6">Log In</h1>
             <span>
-              Dont have an account? <Link to="/signup" className="text-blue-500">Create Account</Link>
+              {`Don't have an account?`} <Link to="/signup" className="text-blue-500">Join Now</Link>
             </span>
           </div>
           {error && <div className="text-red-500">Error: {error.data.message}</div>}
@@ -89,7 +89,7 @@ const Login = () => {
                   name="email"
                   value={credentials.email}
                   onChange={handleChange}
-                  placeholder="Valid Email"
+                  placeholder="Your Email"
                   className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl"
                 />
                 {errors.admissionNumber && <p className="text-red-500 text-sm">{errors.admissionNumber}</p>}
@@ -118,7 +118,7 @@ const Login = () => {
           </div>
           <div className="text-center mt-4">
 
-            <Link to="/report" className="text-red-500">Report a Problem</Link>
+            <Link to="/report" className="text-gray-300">We are working happily to give you more</Link>
           </div>
         </div>
       </div>

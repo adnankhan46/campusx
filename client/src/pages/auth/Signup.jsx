@@ -18,23 +18,81 @@ const Register = () => {
     gender: '',
   });
 
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Admission Number validation
+    if (!formData.admissionNumber.trim()) {
+      errors.admissionNumber = 'Admission number is required';
+    } else if (formData.admissionNumber.length !== 4) {
+      errors.admissionNumber = 'Must be exactly 4 digits';
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Please enter a valid email';
+    }
+
+    // Password validation
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    } else if (formData.password.length < 4) {
+      errors.password = 'Password must be at least 4 characters';
+    }
+
+    // Section validation
+    if (!formData.section) {
+      errors.section = 'Please select your branch';
+    }
+
+    // Gender validation
+    if (!formData.gender) {
+      errors.gender = 'Please select your gender';
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
+    const { name, value } = e.target;
+    
+    // Clear error for this field when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors({ ...validationErrors, [name]: '' });
+    }
+    
+    // 4-digit limit for admission number
+    if (name === 'admissionNumber') {
+      if (value === '' || (/^\d+$/.test(value) && value.length <= 4)) {
+        setFormData({ ...formData, [name]: value });
+      }
+      return;
+    }
+    
+    setFormData({ ...formData, [name]: value.trim() });
   };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate form before submission
+    if (!validateForm()) {
+      return;
+    }
+
     dispatch(setLoading(true));
     try {
       const user = await signUp(formData).unwrap();
-      console.log("user", user);
       dispatch(setCurrentUser(user.data));
       dispatch(setLoading(false));
-
       navigate("/explore");
     } catch (err) {
-      console.log(err.data.message);
-      dispatch(setError(err.data.message));
+      console.log(err.data?.message);
       dispatch(setLoading(false));
     }
   }
@@ -53,54 +111,84 @@ const Register = () => {
         </div>
         <div>
           <form onSubmit={handleOnSubmit}>
-            <input
-              type="text"
-              name="admissionNumber"
-              value={formData.admissionNumber}
-              onChange={handleChange}
-              maxLength={4}
-              placeholder="Starting year of graduation"
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl"
-            />
-            <div className=' mb-2 text-gray-400'>{`4 digit (Example: 2026)`}</div>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
-            />
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
-            />
-            <select
-              name="section"
-              value={formData.section}
-              onChange={handleChange}
-              className="w-full bg-gray-200 border-none outline-none p-3 rounded-xl mb-4"
-            >
-              <option value="" disabled>Select your Branch</option>
-              <option value="CSE">CSE</option>
-              <option value="CSE AI">CSE AI</option>
-              <option value="CSE DS">CSE DS</option>
-              <option value="ETC">ETC</option>
-              <option value="IT">IT</option>
-              <option value="ECS">ECS</option>
-              <option value="ITCS">ITCS</option>
-              <option value="EE">EE</option>
-              <option value="EEE">EEE</option>
-              <option value="Mechanical">Mechanical</option>
-              <option value="Civil">Civil</option>
-            </select>
+            <div className="mb-4">
+              <input
+                type="text"
+                name="admissionNumber"
+                value={formData.admissionNumber}
+                onChange={handleChange}
+                placeholder="Starting year of graduation"
+                inputMode="numeric"
+                className={`w-full bg-gray-200 border-2 outline-none p-3 rounded-xl ${
+                  validationErrors.admissionNumber ? 'border-red-500' : 'border-transparent'
+                }`}
+              />
+              <div className={'text-gray-400 text-sm mt-1'}>{`4 digit (Example: 2026)`}</div>
+              {validationErrors.admissionNumber && (
+                <div className="text-red-500 text-sm mt-1">{validationErrors.admissionNumber}</div>
+              )}
+            </div>
 
             <div className="mb-4">
-              <span className="block mb-2 text-gray-600">Gender</span>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email (We will never spam you)"
+                className={`w-full bg-gray-200 border-2 outline-none p-3 rounded-xl ${
+                  validationErrors.email ? 'border-red-500' : 'border-transparent'
+                }`}
+              />
+              {validationErrors.email && (
+                <div className="text-red-500 text-sm mt-1">{validationErrors.email}</div>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className={`w-full bg-gray-200 border-2 outline-none p-3 rounded-xl ${
+                  validationErrors.password ? 'border-red-500' : 'border-transparent'
+                }`}
+              />
+              {validationErrors.password && (
+                <div className="text-red-500 text-sm mt-1">{validationErrors.password}</div>
+              )}
+            </div>
+            <div className="mb-4">
+              <select
+                name="section"
+                value={formData.section}
+                onChange={handleChange}
+                className={`w-full bg-gray-200 border-2 outline-none p-3 rounded-xl ${
+                  validationErrors.section ? 'border-red-500' : 'border-transparent'
+                }`}
+              >
+                <option value="" disabled>Select your Branch</option>
+                <option value="CSE">CSE</option>
+                <option value="CSE AI">CSE AI</option>
+                <option value="CSE DS">CSE DS</option>
+                <option value="ETC">ETC</option>
+                <option value="IT">IT</option>
+                <option value="ECS">ECS</option>
+                <option value="ITCS">ITCS</option>
+                <option value="EE">EE</option>
+                <option value="EEE">EEE</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil">Civil</option>
+              </select>
+              {validationErrors.section && (
+                <div className="text-red-500 text-sm mt-1">{validationErrors.section}</div>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <span className="block mb-2 text-gray-600">Gender <span className="text-red-500">*</span></span>
               <div className="flex justify-around">
                 <label className="inline-flex items-center">
                   <input
@@ -125,25 +213,24 @@ const Register = () => {
                   <span className="ml-2">Female</span>
                 </label>
               </div>
+              {validationErrors.gender && (
+                <div className="text-red-500 text-sm mt-1">{validationErrors.gender}</div>
+              )}
             </div>
 
-            {error && <div className="text-red-500">Error: {error.data.message}</div>}
+            {error && <div className="text-red-500 bg-red-50 p-3 rounded mb-4 text-sm">{error?.data?.message || 'Signup failed'}</div>}
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white font-semibold p-3 rounded-xl mt-4"
+              disabled={isLoading}
+              className={`w-full text-white font-semibold p-3 rounded-xl mt-4 transition ${
+                isLoading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-500 hover:bg-blue-600'
+              }`}
             >
               {isLoading ? "Loading..." : "Get In"}
             </button>
           </form>
-        </div>
-        <div className="flex items-center mt-4 mx-auto">
-
-          <div className="ml-2 text-sm">
-            Need Help? Someone Already Signed Up with My Account?{' '}
-            <Link to="/report">
-              <span className="text-blue-500 cursor-pointer text-sm">Tell Your Admission Number here</span>
-            </Link>
-          </div>
         </div>
       </div>
     </div>
