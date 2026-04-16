@@ -44,7 +44,11 @@ function Navbar() {
     <Link to="#Opps">
      <div  onClick={handleOppsClick} className='font-inter text-xs mr-2 sm:mr-0 md:text-base rotate-3 sm:rotate-0 text-white cursor-pointer'>
         {(location.pathname == `/`) &&
-        <h1>Opportunities</h1>
+        <Link to="/signup">
+            <button className="register px-2 py-1 font-inter font-bold shadow-none border-2 text-xs md:text-base rounded-xl w-full cursor-pointer">
+              Join Now
+            </button>
+          </Link>
         }
        </div></Link>
     <Link className='hidden sm:block' to="/explore">
