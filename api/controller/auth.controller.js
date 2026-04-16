@@ -4,6 +4,7 @@ import { errorHandler } from "../middlewares/error.js";
 import { allowedAdmissionNumbers } from "./allowedAdmissionNum.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { getCookieOptions } from "../../src/shared/utils/cookieConfig.js";
 
 export const handleSignUp = async (req, res, next) => {
   const { admissionNumber, email, password, section, gender } = req.body;
@@ -67,11 +68,7 @@ export const handleSignUp = async (req, res, next) => {
       { id: savedUser._id, isAdmin: savedUser.isAdmin },
       process.env.JWT_SECRET
     );
-    res.cookie("jwt", token, {
-    httpOnly: true,
-    secure: false,
-    sameSite : "Lax",
-    maxAge: 30 * 24 * 60 * 60 * 1000 });
+    res.cookie("jwt", token, getCookieOptions());
 
     res.status(201).json(rest);
   } catch (error) {
@@ -103,11 +100,7 @@ export const handleSignIn = async (req, res, next) => {
       { expiresIn: "3d" }
     );
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: false,
-    sameSite : "Lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000 });
+    res.cookie("jwt", token, getCookieOptions());
 
     const { password: hashedPassword, ...rest } = user._doc;
 
