@@ -3,6 +3,7 @@ import Opportunity from "../../model/opportunity.model.js";
 import { errorHandler } from "../../middlewares/error.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { getCookieOptions } from "../../../src/shared/utils/cookieConfig.js";
 
 export const handleCompanySignUp = async (req, res, next) => {
   const { username, name, email, password, url } = req.body;
@@ -51,12 +52,7 @@ export const handleCompanySignUp = async (req, res, next) => {
       { id: savedCompany._id, isCompany: true },
       process.env.JWT_SECRET
     );
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000
-    });
+    res.cookie("jwt", token, getCookieOptions());
 
     res.status(201).json({...rest,token});
   } catch (error) {
@@ -97,12 +93,7 @@ export const handleCompanySignIn = async (req, res, next) => {
       { expiresIn: "3d" }
     );
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000
-    });
+    res.cookie("jwt", token, getCookieOptions());
 
     const { password: hashedPassword, ...rest } = company._doc;
 
