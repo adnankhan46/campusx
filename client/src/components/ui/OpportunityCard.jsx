@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Calendar, User, ChevronRight } from "lucide-react";
 import { MarkdownRenderer } from "../constants/MarkdownRenderer";
+import { useNavigate } from "react-router-dom";
 
 export function OpportunityCard({ opportunity }) {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
-  
   const formattedDate = new Date(opportunity.deadline).toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
@@ -97,7 +98,7 @@ export function OpportunityCard({ opportunity }) {
         <div className="flex justify-between items-center border-t bg-gray-50 p-4">
           
           <button
-            onClick={handleCardClick}
+            onClick={() => navigate(`/opportunities/${opportunity._id}`)}
             className="inline-flex items-center px-4 py-2 text-sm font-medium text-main bg-white border border-indigo-300 rounded-md hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-500 transition-colors duration-200"
           >
            
