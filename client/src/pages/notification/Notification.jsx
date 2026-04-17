@@ -1,12 +1,12 @@
-// src/pages/Notification.js
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/constants/Navbar';
 import BottomBar from '../../components/constants/Bottombar';
 import { useSelector } from 'react-redux';
 import { useFetchNotificationsQuery, useClearNotificationsMutation } from '../../redux/notification/notifApi';
 import { io } from 'socket.io-client';
+import { API_URL } from '../../utils/apiConfig';
 
-const socket = io('http://localhost:3000', { autoConnect: false });
+const socket = io(API_URL, { autoConnect: false });
 
 function Notification() {
   const { currentUser } = useSelector((state) => state.user);
