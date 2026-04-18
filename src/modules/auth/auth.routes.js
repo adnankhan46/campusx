@@ -5,12 +5,16 @@ import {
   handleSignIn,
   logout,
   updatePassword,
+  updateFullName,
+  updateUPI,
   updateAuthenticationStatus,
 } from './auth.controller.js';
 import {
   signUpSchema,
   signInSchema,
   updatePasswordSchema,
+  updateFullNameSchema,
+  updateUPISchema,
   updateAuthStatusSchema,
 } from './auth.validation.js';
 
@@ -30,6 +34,12 @@ router.post('/signin', ipLimiter, validate(signInSchema), handleSignIn);
 
 // Update password - with validation
 router.post('/updatepassword', validate(updatePasswordSchema), updatePassword);
+
+// Update full name - with validation
+router.post('/updatefullname', validate(updateFullNameSchema), updateFullName);
+
+// Update UPI - with validation
+router.post('/updateupi', validate(updateUPISchema), updateUPI);
 
 // Logout - requires authentication
 router.post('/logout', isAuthenticated, logout);

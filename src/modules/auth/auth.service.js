@@ -111,6 +111,42 @@ export const authService = {
   },
 
   /**
+   * Update user Full Name
+   * @param {string} fullname - New full name
+   * @returns {Promise<Object>} Success message
+   */
+  async updateFullName(fullname) {
+    // Find first user (this seems like a development function)
+    const user = await User.findOne({});
+    if (!user) {
+      throw ApiErrors.notFound('User not found');
+    }
+
+    user.name = fullname;
+    await user.save();
+
+    return { message: 'Full Name updated successfully' };
+  },
+
+  /**
+   * Update user UPI
+   * @param {string} upi - New UPI
+   * @returns {Promise<Object>} Success message
+   */
+  async updateUPI(upi) {
+    // Find first user (this seems like a development function)
+    const user = await User.findOne({});
+    if (!user) {
+      throw ApiErrors.notFound('User not found');
+    }
+
+    user.upi = upi;
+    await user.save();
+
+    return { message: 'UPI updated successfully' };
+  },
+
+  /**
    * Update user authentication status -- @NotUsed
    * @param {string} userId - User ID
    * @param {boolean} isAuthenticated - Authentication status
