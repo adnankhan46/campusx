@@ -6,20 +6,26 @@ import Navbar from '../../components/constants/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useGetPostsByUserQuery } from '../../redux/posts/postApi';
 import { useUpdatePasswordMutation, useLogoutMutation } from '../../redux/apiSlice';
+import { useGetMyApplicationQuery } from '../../redux/opportunities/opportunity-api';
 import { setCurrentUser } from '../../redux/user/userSlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck, Calendar, ChevronRight } from 'lucide-react';
 
 const Profile = () => {
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
+  const [activeTab, setActiveTab] = useState('posts');
   const [updatePassword, { isLoading: isUpdating, error: updateError }] = useUpdatePasswordMutation();
 
   const { currentUser } = useSelector((state) => state.user);
   const [page, setPage] = useState(1);
   const { data: postsData } = useGetPostsByUserQuery({ page, limit: 6, userId: currentUser._id });
+  const { data: myApplications, isLoading: applicationsLoading } = useGetMyApplicationQuery(
+    { userId: currentUser?._id },
+    { skip: !currentUser }
+  );
 
   const userPosts = postsData ? postsData.posts : [];
 
@@ -35,7 +41,6 @@ const Profile = () => {
       alert('Please enter a new password');
       return;
     }
-
     try {
       const result = await updatePassword({ password }).unwrap();
       alert('Password updated successfully:', result);
@@ -58,6 +63,12 @@ const Profile = () => {
       alert('Failed to logout. Please try again.');
     }
   };
+
+  const tabs = [
+    { key: 'posts', label: 'My Posts' },
+    { key: 'applied', label: 'Applied Opps' },
+    { key: 'transactions', label: 'Transactions' },
+  ];
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-white mb-[120px] font-inter">
@@ -82,8 +93,29 @@ const Profile = () => {
           <button className="mt-4 p-3 bg-[#ffffff] border-2 border-[#D9D9D9] text-[#6a7cff] font-bold rounded-xl" onClick={handleLogout}>Logout</button>
         </div>
         {updateError && <div className="text-red-500">Error: {updateError.data?.message || 'Failed to update password.'}</div>}
-        <h1 className="text-2xl md:text-4xl font-bold my-4">My Posts</h1>
-        <div className='flex flex-col w-full'>
+
+        {/* ── Tabs ─────────────────────────────────────────────────────────── */}
+        <div className="flex w-full mt-6 border-b border-[#D9D9D9]">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex-1 py-3 text-sm md:text-base font-semibold font-inter transition-colors duration-200 ${
+                activeTab === tab.key
+                  ? 'text-[#6a7cff] border-b-2 border-[#6a7cff]'
+                  : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Tab Content ───────────────────────────────────────────────────── */}
+        <div className='flex flex-col w-full mt-4'>
+
+          {/* My Posts Tab */}
+          {activeTab === 'posts' && (
           <InfiniteScroll
             dataLength={userPosts.length}
             next={fetchMorePosts}
@@ -107,9 +139,86 @@ const Profile = () => {
                 />
               ))
             ) : (
-              <div>You have no posts yet.</div>
+              <div className="text-center text-gray-400 py-8">You have no posts yet.</div>
             )}
           </InfiniteScroll>
+        )}
+
+          {/* Applied Opps Tab */}
+          {activeTab === 'applied' && (
+            <div className="flex flex-col gap-3">
+              {applicationsLoading ? (
+                <div className="flex justify-center items-center py-8">
+                  <div className="border-t-4 border-[#6a7cff] rounded-full w-10 h-10 animate-spin"></div>
+                </div>
+              ) : Array.isArray(myApplications) && myApplications.length > 0 ? (
+                myApplications.map((opp) => {
+                  const myApp = opp.applicants?.find(
+                    (a) => String(a.userId) === String(currentUser?._id)
+                  );
+                  const statusStyles = {
+                    applied: 'bg-blue-100 text-blue-700',
+                    shortlisted: 'bg-amber-100 text-amber-700',
+                    selected: 'bg-green-100 text-green-700',
+                    rejected: 'bg-red-100 text-red-700',
+                  };
+                  const status = myApp?.status || 'applied';
+                  const formattedDeadline = new Date(opp.deadline).toLocaleDateString('en-US', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                  });
+
+                  return (
+                    <div
+                      key={opp._id}
+                      onClick={() => navigate(`/opportunities/${opp._id}`)}
+                      className="bg-white border border-[#D9D9D9] p-4 rounded-xl cursor-pointer hover:border-[#6a7cff] transition-colors duration-200"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-base font-semibold font-outfit text-gray-800 line-clamp-2 flex-1">
+                          {opp.title}
+                        </h3>
+                        <span className={`text-xs px-2 py-1 rounded-md font-medium whitespace-nowrap ${statusStyles[status] || statusStyles.applied}`}>
+                          {status.charAt(0).toUpperCase() + status.slice(1)}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-4 mt-2 text-gray-500 text-xs">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-600 text-xs font-medium">
+                          {opp.type.charAt(0).toUpperCase() + opp.type.slice(1)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {formattedDeadline}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between mt-3">
+                        <span className="text-sm font-semibold font-outfit text-[#6a7cff]">
+                          {opp.amount === 0 ? '1000 AURA' : `₹ ${opp.amount.toLocaleString()}`}
+                        </span>
+                        <span className="flex items-center text-xs text-[#6a7cff]">
+                          View <ChevronRight className="h-3 w-3 ml-0.5" />
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center text-gray-400 py-8">
+                  You have not applied to any opportunities yet.
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Transaction History Tab */}
+          {activeTab === 'transactions' && (
+            <div className="flex flex-col items-center py-12 gap-2">
+              <h2 className="text-xl md:text-2xl font-bold font-outfit text-gray-800">Transaction History</h2>
+              <p className="text-gray-400 text-sm font-inter">Coming soon</p>
+            </div>
+          )}
+
         </div>
       </div>
       <BottomBar />
