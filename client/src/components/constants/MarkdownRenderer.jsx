@@ -16,7 +16,7 @@ export function MarkdownRenderer({
 }) {
   const variants = {
     card: "overflow-hidden line-clamp-3", // Preview in cards
-    full: "", // Full display on detail pages
+    full: "base", // Full display on detail pages
     preview: "line-clamp-2", // Short preview
   };
 

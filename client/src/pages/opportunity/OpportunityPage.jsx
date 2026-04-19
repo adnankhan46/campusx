@@ -395,7 +395,7 @@ function OpportunityPage() {
               <MarkdownRenderer
                 content={opportunity.description}
                 variant="full"
-                className="font-inter text-gray-600 prose prose-sm max-w-none"
+                className="font-inter text-gray-600 prose prose-base max-w-none"
               />
             </div>
 
