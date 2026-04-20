@@ -2,6 +2,8 @@
 
 CampusX is a modern, real-time platform that bridges the gap between students and companies. It enables seamless job discovery, application management, and networking within the campus ecosystem.
 
+<img width="1584" height="396" alt="WhatsApp Image 2026-04-03 at 19 57 52" src="https://github.com/user-attachments/assets/42416dda-91c5-409f-ba39-8f3cb678a5d6" />
+
 ##  Key Features
 
 - **Real-time Chat & Notifications** - Instant messaging and live updates for users
