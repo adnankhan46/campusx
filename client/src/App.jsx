@@ -17,6 +17,7 @@ const Notification = lazy(() => import("./pages/notification/Notification"));
 const ErrorPage = lazy(() => import("./pages/error-page/ErrorPage"));
 const Explore = lazy(() => import("./pages/opportunity/Explore"));
 const UserPage = lazy(() => import("./pages/user/UserPage"));
+const OpportunityPage = lazy(() => import("./pages/opportunity/OpportunityPage"));
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
             <Route path='/post/:postId' element={<PostPage />} />
             <Route path='/notification' element={<Notification />} />
             <Route path='/user' element={<UserPage />} />
+            <Route path='/opportunities/:id' element={<OpportunityPage />} />
           </Route>
 
           {/* other routees */}

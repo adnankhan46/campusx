@@ -1,5 +1,6 @@
-import { asyncHandler, ApiResponses} from '../../shared/utils/index.js';
+import { asyncHandler, ApiResponses } from '../../shared/utils/index.js';
 import { authService } from './auth.service.js';
+import { getCookieOptions } from '../../shared/utils/cookieConfig.js';
 
 /**
  * Auth Controller - HTTP request handlers
@@ -13,13 +14,8 @@ import { authService } from './auth.service.js';
 export const handleSignUp = asyncHandler(async (req, res) => {
   const { user, token } = await authService.signUp(req.body);
 
-  // Set JWT cookie
-  res.cookie('jwt', token, {
-    httpOnly: true,
-    secure: false, // Set to true in production with HTTPS
-    sameSite: 'Lax',
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  });
+  // Set JWT cookie with environment-aware options
+  res.cookie('jwt', token, getCookieOptions());
 
   res.status(201).json(ApiResponses.created(user, 'Account created successfully'));
 });
@@ -31,13 +27,8 @@ export const handleSignUp = asyncHandler(async (req, res) => {
 export const handleSignIn = asyncHandler(async (req, res) => {
   const { user, token } = await authService.signIn(req.body);
 
-  // Set JWT cookie
-  res.cookie('jwt', token, {
-    httpOnly: true,
-    secure: false, // Set to true in production with HTTPS
-    sameSite: 'Lax',
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  });
+  // Set JWT cookie with environment-aware options
+  res.cookie('jwt', token, getCookieOptions());
 
   res.status(200).json(ApiResponses.success(user, 'Sign in successful'));
 });
@@ -58,6 +49,24 @@ export const logout = asyncHandler(async (req, res) => {
 export const updatePassword = asyncHandler(async (req, res) => {
   const result = await authService.updatePassword(req.body.newPassword);
   res.status(200).json(ApiResponses.success(result, 'Password updated successfully'));
+});
+
+/**
+ * Update user Full Name
+ * POST /api/auth/updatefullname
+ */
+export const updateFullName = asyncHandler(async (req, res) => {
+  const result = await authService.updateFullName(req.body.fullname);
+  res.status(200).json(ApiResponses.success(result, 'Full Name updated successfully'));
+});
+
+/**
+ * Update user UPI
+ * POST /api/auth/updateupi
+ */
+export const updateUPI = asyncHandler(async (req, res) => {
+  const result = await authService.updateUPI(req.body.upi);
+  res.status(200).json(ApiResponses.success(result, 'UPI updated successfully'));
 });
 
 /**

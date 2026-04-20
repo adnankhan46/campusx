@@ -10,44 +10,70 @@ import { useNavigate } from "react-router-dom";
 import * as nsfwjs from "nsfwjs";
 
 let cachedModel = null; // Global variable to store the loaded model
+const MODEL_LOAD_TIMEOUT = 30000; // 30 second timeout
 
 const AddPost = () => {
   const [postContent, setPostContent] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [nsfwAlert, setNsfwAlert] = useState(null); // NSFW alert and result
-  const [modelStatus, setModelStatus] = useState("loading"); // it may loading, loaded, analyzing
+  const [modelStatus, setModelStatus] = useState("idle"); // idle, loading, loaded, error, disabled
+  const [modelError, setModelError] = useState(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
   const [addPost, { isLoading, error }] = useAddPostsMutation();
 
   useEffect(() => {
-    inputRef.current.focus();
-    if (!cachedModel) {
-      loadModel();
-    } else {
-      setModelStatus("loaded");
-    }
+    inputRef.current?.focus();
   }, []);
 
   const loadModel = async () => {
+    // Return early if already loaded or loading
+    if (cachedModel || modelStatus === "loaded" || modelStatus === "loading") {
+      return;
+    }
+
     setModelStatus("loading");
+    setModelError(null);
+
     try {
-      const nsfwModel = await nsfwjs.load("/models/model.json", { size: 299 });
-      cachedModel = nsfwModel; // Store the model in global variable
+      // Set a timeout promise that rejects after 30 seconds
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Model loading timed out")), MODEL_LOAD_TIMEOUT)
+      );
+
+      const nsfwModel = await Promise.race([
+        nsfwjs.load("/models/model.json", { size: 299 }),
+        timeoutPromise,
+      ]);
+
+      cachedModel = nsfwModel;
       setModelStatus("loaded");
       console.log("NSFW Model loaded successfully");
     } catch (err) {
       console.error("Failed to load NSFW Model:", err);
       setModelStatus("error");
+      setModelError(err.message || "Failed to load image recognition model");
+      // Disable NSFW checking but allow posting
+      setModelStatus("disabled");
     }
   };
 
   const checkImageForNSFW = async (imgFile) => {
+    // If model is disabled, skip NSFW check
+    if (modelStatus === "disabled") {
+      return { isNSFW: false, predictions: [], skipped: true };
+    }
+
+    // Load model if not already loaded
+    if (!cachedModel && modelStatus !== "loading") {
+      await loadModel();
+    }
+
+    // If model still not available, skip check
     if (!cachedModel) {
-      console.warn("NSFW Model not loaded yet");
-      return false;
+      return { isNSFW: false, predictions: [], skipped: true };
     }
 
     try {
@@ -56,35 +82,47 @@ const AddPost = () => {
 
       return new Promise((resolve) => {
         imgElement.onload = async () => {
-          setModelStatus("analyzing");
-          const predictions = await cachedModel.classify(imgElement);
-          console.log("Predictions:", predictions);
+          try {
+            setModelStatus("analyzing");
+            const predictions = await cachedModel.classify(imgElement);
+            // console.log("Predictions:", predictions);
 
-          // Process predictions
-          let pornProbability = 0;
-          let hentaiProbability = 0;
-          let sexyProbability = 0;
+            // Process predictions
+            let pornProbability = 0;
+            let hentaiProbability = 0;
+            let sexyProbability = 0;
 
-          predictions.forEach((pred) => {
-            if (pred.className === "Porn") pornProbability = pred.probability;
-            if (pred.className === "Hentai")
-              hentaiProbability = pred.probability;
-            if (pred.className === "Sexy") sexyProbability = pred.probability;
-          });
+            predictions.forEach((pred) => {
+              if (pred.className === "Porn") pornProbability = pred.probability;
+              if (pred.className === "Hentai")
+                hentaiProbability = pred.probability;
+              if (pred.className === "Sexy") sexyProbability = pred.probability;
+            });
 
-          const isNSFW =
-            pornProbability > 0.05 ||
-            hentaiProbability > 0.1 ||
-            sexyProbability > 0.15;
+            const isNSFW =
+              pornProbability > 0.05 ||
+              hentaiProbability > 0.1 ||
+              sexyProbability > 0.15;
 
-          setModelStatus("loaded");
-          resolve({ isNSFW, predictions });
+            setModelStatus("loaded");
+            resolve({ isNSFW, predictions, skipped: false });
+          } catch (err) {
+            console.error("Error classifying image:", err);
+            setModelStatus("disabled");
+            resolve({ isNSFW: false, predictions: [], skipped: true });
+          }
+        };
+
+        imgElement.onerror = () => {
+          console.error("Failed to load image for NSFW check");
+          setModelStatus("disabled");
+          resolve({ isNSFW: false, predictions: [], skipped: true });
         };
       });
     } catch (error) {
       console.error("Error during NSFW classification:", error);
-      setModelStatus("loaded");
-      return { isNSFW: false, predictions: [] };
+      setModelStatus("disabled");
+      return { isNSFW: false, predictions: [], skipped: true };
     }
   };
 
@@ -92,13 +130,13 @@ const AddPost = () => {
     const selectedImage = e.target.files[0];
     if (selectedImage) {
       setNsfwAlert(null); // Clear previous NSFW alert
-      const { isNSFW, predictions } = await checkImageForNSFW(selectedImage);
+      const { isNSFW, predictions, skipped } = await checkImageForNSFW(selectedImage);
 
       if (isNSFW) {
-        setNsfwAlert({ isNSFW: true, predictions });
+        setNsfwAlert({ isNSFW: true, predictions, skipped });
         setImage(null); // Clear image if inappropriate
       } else {
-        setNsfwAlert({ isNSFW: false, predictions });
+        setNsfwAlert({ isNSFW: false, predictions, skipped });
         setImage(selectedImage); // Accept the image if it's safe
       }
     }
@@ -165,19 +203,50 @@ const AddPost = () => {
         </label>
 
         {modelStatus === "loading" && (
-          <p className="text-center">
-            Please wait: Loading Image Recognition Model...
+          <p className="text-center text-blue-500">
+            Loading Image Recognition Model...
           </p>
         )}
         {modelStatus === "analyzing" && (
-          <p className="text-center">Analyzing Image...</p>
+          <p className="text-center text-blue-500">Analyzing Image...</p>
         )}
         {modelStatus === "loaded" && (
-          <p className="text-green-500 text-center">
-            Image Recognition Model Loaded
+          <p className="text-green-500 text-center text-sm">
+            ✓ Image Recognition Model Ready
           </p>
         )}
+        {modelStatus === "disabled" && (
+          <p className="text-orange-500 text-center text-sm">
+            ⚠️ Content moderation unavailable - uploading without check
+          </p>
+        )}
+        {modelStatus === "error" && modelError && (
+          <p className="text-orange-500 text-center text-sm">
+            ⚠️ {modelError} - you can still upload images
+          </p>
+        )}
+
         {modelStatus === "loaded" && image && (
+          <div className="mt-2 flex flex-col items-center">
+            <p className="text-center text-gray-600">
+              Selected file: {image.name}
+            </p>
+            <img
+              src={URL.createObjectURL(image)}
+              alt="Selected"
+              className="mt-2 max-w-full max-h-36 rounded"
+            />
+            <button
+              className="mt-2 p-2 bg-gray-500 text-white hover:bg-red-600 rounded"
+              onClick={handleCancelImage}
+            >
+              <FontAwesomeIcon icon={faTimes} className="mr-2" />
+              Cancel
+            </button>
+          </div>
+        )}
+
+        {image && modelStatus !== "loaded" && (
           <div className="mt-2 flex flex-col items-center">
             <p className="text-center text-gray-600">
               Selected file: {image.name}
@@ -202,17 +271,21 @@ const AddPost = () => {
             Inappropriate content detected. Please upload a different image.
           </div>
         )}
-        {nsfwAlert && !nsfwAlert.isNSFW && (
+        {nsfwAlert && !nsfwAlert.isNSFW && !nsfwAlert.skipped && (
           <div className="text-green-500 text-center mb-2">
-            Image is approved by model for posting.
+            ✓ Image approved for posting.
+          </div>
+        )}
+        {nsfwAlert && nsfwAlert.skipped && (
+          <div className="text-blue-500 text-center mb-2 text-sm">
+            Image uploaded (moderation check skipped)
           </div>
         )}
 
-        {nsfwAlert && (
-          <div className="text-gray-600 text-center">
-            <h3 className="font-bold">Prediction Details:</h3>
+        {nsfwAlert && !nsfwAlert.skipped && nsfwAlert.predictions && nsfwAlert.predictions.length > 0 && (
+          <div className="text-gray-600 text-center text-sm">
+            <h3 className="font-bold">Content Analysis:</h3>
             {nsfwAlert.predictions.map((prediction, index) => {
-              // please dont change next line, if contributing
               const labelMap = {
                 Porn: "Explicit Content",
                 Hentai: "Animated Adult Content",

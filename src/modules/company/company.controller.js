@@ -1,5 +1,6 @@
 import { asyncHandler, ApiResponses } from '../../shared/utils/index.js';
 import { companyService } from './company.service.js';
+import { getCookieOptions } from '../../shared/utils/cookieConfig.js';
 
 /**
  * Company Controller - HTTP request handlers
@@ -13,12 +14,7 @@ import { companyService } from './company.service.js';
 export const handleCompanySignUp = asyncHandler(async (req, res) => {
   const { company, token } = await companyService.signUp(req.body);
 
-  res.cookie('jwt', token, {
-    httpOnly: true,
-    secure: false,
-    sameSite: 'Lax',
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
+  res.cookie('jwt', token, getCookieOptions());
 
   res.status(201).json(ApiResponses.created({ ...company, token }, 'Company account created successfully'));
 });
@@ -30,12 +26,7 @@ export const handleCompanySignUp = asyncHandler(async (req, res) => {
 export const handleCompanySignIn = asyncHandler(async (req, res) => {
   const { company, token } = await companyService.signIn(req.body);
 
-  res.cookie('jwt', token, {
-    httpOnly: true,
-    secure: false,
-    sameSite: 'Lax',
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
+  res.cookie('jwt', token, getCookieOptions());
 
   res.status(200).json(ApiResponses.success({ ...company, token }, 'Sign in successful'));
 });

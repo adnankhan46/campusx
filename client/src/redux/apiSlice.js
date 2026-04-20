@@ -5,6 +5,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
+    credentials: 'include',
   }),
   endpoints: (builder) => ({
     // Sign UP
