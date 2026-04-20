@@ -31,6 +31,22 @@ export const updatePasswordSchema = z.object({
   })
 });
 
+export const updateFullNameSchema = z.object({
+  body: z.object({
+    fullname: z.string()
+      .min(2, 'Full name must be at least 2 characters')
+      .max(100, 'Full name must not exceed 100 characters')
+      .regex(/^[a-zA-Z\s]*$/, 'Full name can only contain letters and spaces'),
+  })
+});
+
+export const updateUPISchema = z.object({
+  body: z.object({
+    upi: z.string()
+      .regex(/^[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9]{2,}$/, 'Invalid UPI format (example: username@bank)'),
+  })
+});
+
 export const updateAuthStatusSchema = z.object({
   body: z.object({
     userId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid user ID'),

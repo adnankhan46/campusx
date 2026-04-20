@@ -52,6 +52,24 @@ export const updatePassword = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Update user Full Name
+ * POST /api/auth/updatefullname
+ */
+export const updateFullName = asyncHandler(async (req, res) => {
+  const result = await authService.updateFullName(req.body.fullname);
+  res.status(200).json(ApiResponses.success(result, 'Full Name updated successfully'));
+});
+
+/**
+ * Update user UPI
+ * POST /api/auth/updateupi
+ */
+export const updateUPI = asyncHandler(async (req, res) => {
+  const result = await authService.updateUPI(req.body.upi);
+  res.status(200).json(ApiResponses.success(result, 'UPI updated successfully'));
+});
+
+/**
  * Update user authentication status
  * POST /api/auth/update-authentication
  */

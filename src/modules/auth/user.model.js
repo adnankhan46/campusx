@@ -47,6 +47,14 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ['Male', 'Female']
   },
+  name: {
+    type: String,
+    default: null,
+  },
+  upi: {
+    type: String,
+    default: null,
+  },
   year: {
     type: String,
     required: false,
