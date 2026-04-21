@@ -51,7 +51,7 @@ function Navbar() {
           </Link>
         }
        </div></Link>
-    <Link className='hidden sm:block' to="/explore">
+    <Link className='hidden sm:block' to="https://provider-becampusx.vercel.app">
      <div className='font-inter md:mr-80 mr-2 text-xs md:text-base text-white cursor-pointer'>
         {(location.pathname == `/`) &&
         <h1>For Companies</h1>

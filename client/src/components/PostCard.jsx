@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDeletePostsMutation } from '../redux/posts/postApi';
 
-// eslint-disable-next-line react/prop-types
 const PostCard = ({ text, gender, section, profilePicture, postImage, time, postId, postUser, commentCount, year, isAuthenticated }) => {
   const navigate = useNavigate(); 
   const {currentUser} = useSelector((state)=> state.user);

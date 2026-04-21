@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faTimes } from "@fortawesome/free-solid-svg-icons";
 import BottomBar from "../../components/constants/Bottombar";
 import Navbar from "../../components/constants/Navbar";
-import app from "../../firebase";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useAddPostsMutation } from "../../redux/posts/postApi";
 import { useNavigate } from "react-router-dom";
 import * as nsfwjs from "nsfwjs";
+
+// -- Not using Firebase for Now
+// import app from "../../firebase";
+// import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 let cachedModel = null; // Global variable to store the loaded model
 const MODEL_LOAD_TIMEOUT = 30000; // 30 second timeout
@@ -15,6 +17,7 @@ const MODEL_LOAD_TIMEOUT = 30000; // 30 second timeout
 const AddPost = () => {
   const [postContent, setPostContent] = useState("");
   const [image, setImage] = useState(null);
+  const [imageMsg, setImageMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [nsfwAlert, setNsfwAlert] = useState(null); // NSFW alert and result
   const [modelStatus, setModelStatus] = useState("idle"); // idle, loading, loaded, error, disabled
@@ -143,6 +146,10 @@ const AddPost = () => {
   };
 
   const handlePost = async () => {
+    if (!postContent) {
+      alert("Please enter some text");
+      return;
+    }
     setLoading(true);
     setNsfwAlert(null); // Clear NSFW alert
 
@@ -150,11 +157,14 @@ const AddPost = () => {
 
     if (image) {
       try {
-        const storage = getStorage(app);
-        const storageRef = ref(storage, "images/" + image.name);
-        await uploadBytes(storageRef, image);
-        imageUrl = await getDownloadURL(storageRef);
-        console.log("Image uploaded to:", imageUrl);
+        // const storage = getStorage(app);
+        // const storageRef = ref(storage, "images/" + image.name);
+        // await uploadBytes(storageRef, image);
+        // imageUrl = await getDownloadURL(storageRef);
+        // console.log("Image uploaded to:", imageUrl);
+
+        console.log("Image uploaded Service is currently not operational");
+        setImageMsg("Image uploaded Service is currently not operational")
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -212,17 +222,17 @@ const AddPost = () => {
         )}
         {modelStatus === "loaded" && (
           <p className="text-green-500 text-center text-sm">
-            ✓ Image Recognition Model Ready
+            Image Recognition Model Ready
           </p>
         )}
         {modelStatus === "disabled" && (
           <p className="text-orange-500 text-center text-sm">
-            ⚠️ Content moderation unavailable - uploading without check
+            Content moderation unavailable - uploading without check
           </p>
         )}
         {modelStatus === "error" && modelError && (
           <p className="text-orange-500 text-center text-sm">
-            ⚠️ {modelError} - you can still upload images
+            {modelError} - you can still upload images
           </p>
         )}
 
@@ -263,24 +273,7 @@ const AddPost = () => {
               <FontAwesomeIcon icon={faTimes} className="mr-2" />
               Cancel
             </button>
-          </div>
-        )}
-
-        {nsfwAlert && nsfwAlert.isNSFW && (
-          <div className="text-red-500 text-center mb-4">
-            Inappropriate content detected. Please upload a different image.
-          </div>
-        )}
-        {nsfwAlert && !nsfwAlert.isNSFW && !nsfwAlert.skipped && (
-          <div className="text-green-500 text-center mb-2">
-            ✓ Image approved for posting.
-          </div>
-        )}
-        {nsfwAlert && nsfwAlert.skipped && (
-          <div className="text-blue-500 text-center mb-2 text-sm">
-            Image uploaded (moderation check skipped)
-          </div>
-        )}
+          </div>)}
 
         {nsfwAlert && !nsfwAlert.skipped && nsfwAlert.predictions && nsfwAlert.predictions.length > 0 && (
           <div className="text-gray-600 text-center text-sm">
@@ -288,7 +281,7 @@ const AddPost = () => {
             {nsfwAlert.predictions.map((prediction, index) => {
               const labelMap = {
                 Porn: "Explicit Content",
-                Hentai: "Animated Adult Content",
+                Hentai: "Animated Explicit Content",
                 Sexy: "Suggestive Content",
                 Neutral: "Safe Content",
                 Drawing: "Illustration",
@@ -304,6 +297,23 @@ const AddPost = () => {
             })}
           </div>
         )}
+
+        {nsfwAlert && nsfwAlert.isNSFW && (
+          <div className="text-red-500 text-center mb-4">
+            Inappropriate content detected. Please upload a different image.
+          </div>
+        )}
+        {nsfwAlert && !nsfwAlert.isNSFW && !nsfwAlert.skipped && (
+          <div className="text-green-500 text-center my-2 text-sm">
+            Image Upload service is currently not operational
+          </div>
+        )}
+        {nsfwAlert && nsfwAlert.skipped && (
+          <div className="text-blue-500 text-center mb-2 text-sm">
+            Image uploaded (moderation check skipped)
+          </div>
+        )}
+
       </div>
 
       <button
@@ -314,7 +324,6 @@ const AddPost = () => {
       >
         {loading || isLoading ? "Posting..." : "Post"}
       </button>
-
       <BottomBar />
     </div>
   );

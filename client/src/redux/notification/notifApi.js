@@ -1,6 +1,4 @@
 import { authApi } from "../apiSlice";
-const BASE_URL = "/api";
-
 
 export const notifApi = authApi.injectEndpoints({
   tagTypes: ['Notification', 'Comments'],
