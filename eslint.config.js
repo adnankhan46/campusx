@@ -22,6 +22,11 @@ export default [
                     extensions: [".js", ".mjs"],
                 },
             },
+            "import/ignore": [
+                "globals",
+                "@eslint/js",
+                "eslint-plugin-import"
+            ]
         },
         rules: {
             "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
