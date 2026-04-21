@@ -1,0 +1,17 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # leaving for later, if we use VPS.
+      - name: Deploy Script
+        run: echo "For Now no VPS, so handled by our PaaS providers. --BeCampusX"
