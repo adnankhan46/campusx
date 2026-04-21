@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 60",
+    "lint": "eslint . --report-unused-disable-directives",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "typed.js": "^2.1.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react-swc": "^3.5.0",
