@@ -15,7 +15,11 @@ module.exports = {
       node: {
         extensions: ['.js', '.jsx']
       }
-    }
+    },
+    'import/ignore': [
+      'node_modules/firebase',
+      'node_modules/@firebase',
+    ]
   },
   plugins: ['react-refresh', 'import'],
   rules: {
