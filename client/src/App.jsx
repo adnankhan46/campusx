@@ -8,7 +8,7 @@ const Landing = lazy(() => import("./pages/Landing"));
 const Home = lazy(() => import("./pages/feed/Home"));
 const Signup = lazy(() => import("./pages/auth/Signup"));
 const Login = lazy(() => import("./pages/auth/Login"));
-const CampusChat = lazy(() => import("./pages/campusx-chat/CampusChat"));
+// const CampusChat = lazy(() => import("./pages/campusx-chat/CampusChat"));
 const Profile = lazy(() => import("./pages/user/Profile"));
 const AddPost = lazy(() => import("./pages/post/AddPost"));
 const PostPage = lazy(() => import("./pages/post/PostPage"));
@@ -30,7 +30,7 @@ function App() {
           <Route path='/signup' element={<Signup />} />
           <Route path='/login' element={<Login />} />
 
-          <Route path='/campusai' element={<CampusChat />} />
+          {/* <Route path='/campusai' element={<CampusChat />} /> */}
           <Route path='/home' element={<Home />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/report' element={<ReportPage />} />

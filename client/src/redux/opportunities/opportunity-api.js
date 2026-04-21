@@ -6,7 +6,7 @@ export const opportunities_api = authApi.injectEndpoints({
 
     // ─── Get All Opportunities ───────────────────────────────────────────────
     getAllOpportunities: builder.query({
-      query: ({ page = 1, limit = 6 }) => `/opportunities/getAllOpp`,
+      query: ({ page = 1, limit = 6 }) => `/opportunities/getAllOpp?page=${page}&limit=${limit}`,
       providesTags: ['AllOpps'],
       transformResponse: (response) => ({
         opportunities: response.data.opportunities,
