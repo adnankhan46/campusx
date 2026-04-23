@@ -5,11 +5,11 @@ import BottomBar from '../../components/constants/Bottombar';
 import Navbar from '../../components/constants/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useGetPostsByUserQuery } from '../../redux/posts/postApi';
-import { useUpdatePasswordMutation, useLogoutMutation } from '../../redux/apiSlice';
+import { useUpdatePasswordMutation, useUpdateFullNameMutation, useLogoutMutation } from '../../redux/apiSlice';
 import { useGetMyApplicationQuery } from '../../redux/opportunities/opportunity-api';
 import { setCurrentUser } from '../../redux/user/userSlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { BadgeCheck, Calendar, ChevronRight } from 'lucide-react';
+import { BadgeCheck, Calendar, ChevronRight, Pencil, Check, X } from 'lucide-react';
 
 const Profile = () => {
   const [logout] = useLogoutMutation();
@@ -18,6 +18,11 @@ const Profile = () => {
   const [password, setPassword] = useState('');
   const [activeTab, setActiveTab] = useState('posts');
   const [updatePassword, { isLoading: isUpdating, error: updateError }] = useUpdatePasswordMutation();
+  const [updateFullName, { isLoading: isUpdatingName }] = useUpdateFullNameMutation();
+
+  // Name editing state
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState('');
 
   const { currentUser } = useSelector((state) => state.user);
   const [page, setPage] = useState(1);
@@ -64,6 +69,28 @@ const Profile = () => {
     }
   };
 
+  const handleNameEdit = () => {
+    setNameInput(currentUser.name || '');
+    setIsEditingName(true);
+  };
+
+  const handleNameSave = async () => {
+    const trimmed = nameInput.trim();
+    if (!trimmed) return;
+    try {
+      await updateFullName(trimmed).unwrap();
+      dispatch(setCurrentUser({ ...currentUser, name: trimmed }));
+      setIsEditingName(false);
+    } catch (error) {
+      console.error('Failed to update name:', error);
+    }
+  };
+
+  const handleNameCancel = () => {
+    setIsEditingName(false);
+    setNameInput('');
+  };
+
   const tabs = [
     { key: 'posts', label: 'My Posts' },
     { key: 'applied', label: 'Applied Opps' },
@@ -75,7 +102,50 @@ const Profile = () => {
       <Navbar />
       <div className='flex flex-col w-full md:w-1/2 items-center'>
         <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />
-        <h1 className="text-2xl md:text-4xl font-bold mb-2">{currentUser.admissionNumber}</h1>
+
+        {/* ── Inline Name Edit ── */}
+        {isEditingName ? (
+          <div className="flex items-center gap-2 mb-1">
+            <input
+              type="text"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleNameSave();
+                if (e.key === 'Escape') handleNameCancel();
+              }}
+              autoFocus
+              maxLength={50}
+              className="text-2xl md:text-4xl font-bold text-center border-b-2 border-[#6a7cff] bg-transparent outline-none w-48 md:w-64"
+            />
+            <button
+              onClick={handleNameSave}
+              disabled={isUpdatingName}
+              className="p-1.5 rounded-full bg-[#6a7cff] text-white hover:bg-[#5a6be0] transition-colors"
+            >
+              <Check className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleNameCancel}
+              className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="relative flex items-center justify-center mb-1 group">
+            <h1 className="text-2xl md:text-4xl font-bold">
+              {currentUser.name || currentUser.admissionNumber}
+            </h1>
+            <button
+              onClick={handleNameEdit}
+              className="absolute left-full ml-1 p-1.5 rounded-full text-gray-400 hover:text-[#6a7cff] hover:bg-[#f0f2ff] transition-colors opacity-0 group-hover:opacity-100"
+            >
+              <Pencil className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         <div className='flex gap-1 items-center'>
           <p className="text-base md:text-lg font-bold text-gray-800 bg-[#FAF4FE] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year)) + 4}</p>
           {(currentUser.isAuthenticated) &&

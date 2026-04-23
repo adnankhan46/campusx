@@ -32,6 +32,14 @@ export const authApi = createApi({
         body: { newPassword }, // Correctly wrapping in an object
       }),
     }),
+    // UpdateFullName
+    updateFullName: builder.mutation({
+      query: (fullname) => ({
+        url: `/auth/updatefullname`,
+        method: 'POST',
+        body: { fullname },
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: '/auth/logout',
@@ -43,4 +51,4 @@ export const authApi = createApi({
 
 });
 
-export const { useSignUpMutation, useSignInMutation, useUpdatePasswordMutation, useLogoutMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation, useUpdatePasswordMutation,useUpdateFullNameMutation, useLogoutMutation } = authApi;
