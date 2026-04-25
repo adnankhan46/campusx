@@ -115,9 +115,9 @@ export const authService = {
    * @param {string} fullname - New full name
    * @returns {Promise<Object>} Success message
    */
-  async updateFullName(fullname) {
+  async updateFullName(fullname, userId) {
     // Find first user (this seems like a development function)
-    const user = await User.findOne({});
+    const user = await User.findById(userId);
     if (!user) {
       throw ApiErrors.notFound('User not found');
     }
