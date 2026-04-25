@@ -33,13 +33,13 @@ router.post('/signup', ipLimiter, validate(signUpSchema), handleSignUp);
 router.post('/signin', ipLimiter, validate(signInSchema), handleSignIn);
 
 // Update password - with validation
-router.post('/updatepassword', validate(updatePasswordSchema), updatePassword);
+router.post('/updatepassword',verifyToken, validate(updatePasswordSchema), updatePassword);
 
 // Update full name - with validation
 router.post('/updatefullname',verifyToken, validate(updateFullNameSchema), updateFullName);
 
 // Update UPI - with validation
-router.post('/updateupi', validate(updateUPISchema), updateUPI);
+router.post('/updateupi',verifyToken, validate(updateUPISchema), updateUPI);
 
 // Logout - requires authentication
 router.post('/logout', isAuthenticated, logout);
