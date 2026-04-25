@@ -47,7 +47,7 @@ export const logout = asyncHandler(async (req, res) => {
  * POST /api/auth/updatepassword
  */
 export const updatePassword = asyncHandler(async (req, res) => {
-  const result = await authService.updatePassword(req.body.newPassword);
+  const result = await authService.updatePassword(req.body.newPassword, req.user.id);
   res.status(200).json(ApiResponses.success(result, 'Password updated successfully'));
 });
 
@@ -65,7 +65,7 @@ export const updateFullName = asyncHandler(async (req, res) => {
  * POST /api/auth/updateupi
  */
 export const updateUPI = asyncHandler(async (req, res) => {
-  const result = await authService.updateUPI(req.body.upi);
+  const result = await authService.updateUPI(req.body.upi , req.user.id);
   res.status(200).json(ApiResponses.success(result, 'UPI updated successfully'));
 });
 
