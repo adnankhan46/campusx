@@ -26,10 +26,10 @@ export const authApi = createApi({
     }),
   // UpdatePassword
   updatePassword: builder.mutation({
-      query: (newPassword) => ({
+      query: ({password}) => ({
         url: `/auth/updatepassword`,
         method: 'POST',
-        body: { newPassword }, // Correctly wrapping in an object
+        body: { newPassword: password }, // Correctly wrapping in an object
       }),
     }),
     // UpdateFullName
@@ -37,7 +37,15 @@ export const authApi = createApi({
       query: (fullname) => ({
         url: `/auth/updatefullname`,
         method: 'POST',
-        body: { fullname },
+        body: { fullname }, // Correctly wrapping in an object
+      }),
+    }),
+    // UpdateUPI
+    updateUPI: builder.mutation({
+      query: ({ upi }) => ({
+        url: `/auth/updateupi`,
+        method: 'POST',
+        body: { upi },
       }),
     }),
     logout: builder.mutation({
@@ -47,8 +55,13 @@ export const authApi = createApi({
       }),
     }),
   }),
-  // Define the middleware to handle the response and set cookies
-
 });
 
-export const { useSignUpMutation, useSignInMutation, useUpdatePasswordMutation,useUpdateFullNameMutation, useLogoutMutation } = authApi;
+export const {
+  useSignUpMutation,
+  useSignInMutation,
+  useUpdatePasswordMutation,
+  useUpdateFullNameMutation,
+  useUpdateUPIMutation,
+  useLogoutMutation,
+} = authApi;

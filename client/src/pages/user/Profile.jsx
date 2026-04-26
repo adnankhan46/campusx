@@ -5,7 +5,7 @@ import BottomBar from '../../components/constants/Bottombar';
 import Navbar from '../../components/constants/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { useGetPostsByUserQuery } from '../../redux/posts/postApi';
-import { useUpdatePasswordMutation, useUpdateFullNameMutation, useLogoutMutation } from '../../redux/apiSlice';
+import { useUpdatePasswordMutation, useUpdateFullNameMutation, useUpdateUPIMutation, useLogoutMutation } from '../../redux/apiSlice';
 import { useGetMyApplicationQuery } from '../../redux/opportunities/opportunity-api';
 import { setCurrentUser } from '../../redux/user/userSlice';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -16,9 +16,11 @@ const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
+  const [upi, setUpi] = useState('');
   const [activeTab, setActiveTab] = useState('posts');
   const [updatePassword, { isLoading: isUpdating, error: updateError }] = useUpdatePasswordMutation();
   const [updateFullName, { isLoading: isUpdatingName }] = useUpdateFullNameMutation();
+  const [updateUPI, { isLoading: isUpdatingUPI }] = useUpdateUPIMutation();
 
   // Name editing state
   const [isEditingName, setIsEditingName] = useState(false);
@@ -51,6 +53,20 @@ const Profile = () => {
       alert('Password updated successfully:', result);
     } catch (error) {
       alert('Failed to update password:', error);
+    }
+  };
+
+  const handleUpdateUPI = async (e) => {
+    e.preventDefault();
+    if (!upi) {
+      alert('Please enter your UPI ID');
+      return;
+    }
+    try {
+      await updateUPI({ upi }).unwrap();
+      alert('UPI updated successfully');
+    } catch (error) {
+      alert('Failed to update UPI:', error);
     }
   };
 
@@ -154,15 +170,24 @@ const Profile = () => {
 
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
+
+        {/* ── Password Section ── */}
         <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <p className='text-xs text-start'>NOTE: Passwords are hashed and then stored. You can change it here.</p>
-        <div className='flex gap-6'>
-          <button className="mt-4 p-3 bg-[#ffffff] border-2 border-[#D9D9D9] font-bold text-[#6a7cff] rounded-xl" onClick={handleUpdate} disabled={isUpdating}>
-            {isUpdating ? 'Updating...' : 'Change Password'}
-          </button>
-          <button className="mt-4 p-3 bg-[#ffffff] border-2 border-[#D9D9D9] text-[#6a7cff] font-bold rounded-xl" onClick={handleLogout}>Logout</button>
-        </div>
-        {updateError && <div className="text-red-500">Error: {updateError.data?.message || 'Failed to update password.'}</div>}
+        <p className='text-xs text-start w-full'>NOTE: Passwords are hashed and then stored. You can change it here.</p>
+        <button className="mt-4 mb-6 w-full p-3 bg-[#ffffff] border-2 border-[#D9D9D9] font-bold text-[#6a7cff] rounded-xl" onClick={handleUpdate} disabled={isUpdating}>
+          {isUpdating ? 'Updating...' : 'Change Password'}
+        </button>
+        {updateError && <div className="text-red-500 mb-4">Error: {updateError.data?.message || 'Failed to update password.'}</div>}
+
+        {/* ── UPI Section ── */}
+        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="UPI ID (e.g. username@bank)" value={upi} onChange={(e) => setUpi(e.target.value)} />
+        <p className='text-xs text-start w-full'>Used for receiving payments for completed opportunities.</p>
+        <button className="mt-4 mb-6 w-full p-3 bg-[#ffffff] border-2 border-[#D9D9D9] font-bold text-[#6a7cff] rounded-xl" onClick={handleUpdateUPI} disabled={isUpdatingUPI}>
+          {isUpdatingUPI ? 'Updating...' : 'Update UPI'}
+        </button>
+
+        {/* ── Logout ── */}
+        <button className="w-full p-3 bg-[#ffffff] border-2 border-red-200 text-red-400 font-bold rounded-xl" onClick={handleLogout}>Logout</button>
 
         {/* ── Tabs ─────────────────────────────────────────────────────────── */}
         <div className="flex w-full mt-6 border-b border-[#D9D9D9]">
