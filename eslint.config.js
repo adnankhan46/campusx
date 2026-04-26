@@ -34,7 +34,7 @@ export default [
         },
         rules: {
             "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-            "import/no-unresolved": "error",
+            "import/no-unresolved": ["error" , {ignore: ["uuid"]}],
             "import/named": "error",
             "import/default": "error",
             "import/namespace": "error",
