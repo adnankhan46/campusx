@@ -21,6 +21,7 @@ const Profile = () => {
   const [updatePassword, { isLoading: isUpdating, error: updateError }] = useUpdatePasswordMutation();
   const [updateFullName, { isLoading: isUpdatingName }] = useUpdateFullNameMutation();
   const [updateUPI, { isLoading: isUpdatingUPI }] = useUpdateUPIMutation();
+  const [settingsTab, setSettingsTab] = useState('security');
 
   // Name editing state
   const [isEditingName, setIsEditingName] = useState(false);
@@ -117,94 +118,178 @@ const Profile = () => {
     <div className="flex flex-col items-center min-h-screen bg-white mb-[120px] font-inter">
       <Navbar />
       <div className='flex flex-col w-full md:w-1/2 items-center'>
-        <img src={currentUser.profilePicture} className='h-50 w-48' alt="Profile" />
+  {/* ── Header Section ── */}
+  <div className="relative flex flex-row items-center gap-5 mt-2 mb-4 w-full p-4 rounded-2xl bg-gray-50/50 border border-gray-100">
+    
+    {/* Edit Button - Top Right */}
+    {!isEditingName && (
+      <button
+        onClick={handleNameEdit}
+        className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-[#6a7cff] text-xs font-bold hover:bg-[#f0f2ff] hover:border-[#6a7cff] transition-all shadow-sm"
+      >
+        <Pencil className="w-3 h-3" />
+        Edit
+      </button>
+    )}
 
-        {/* ── Inline Name Edit ── */}
-        {isEditingName ? (
-          <div className="flex items-center gap-2 mb-1">
-            <input
-              type="text"
-              value={nameInput}
-              onChange={(e) => setNameInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleNameSave();
-                if (e.key === 'Escape') handleNameCancel();
-              }}
-              autoFocus
-              maxLength={50}
-              className="text-2xl md:text-4xl font-bold text-center border-b-2 border-[#6a7cff] bg-transparent outline-none w-48 md:w-64"
-            />
-            <button
-              onClick={handleNameSave}
-              disabled={isUpdatingName}
-              className="p-1.5 rounded-full bg-[#6a7cff] text-white hover:bg-[#5a6be0] transition-colors"
-            >
-              <Check className="w-4 h-4" />
-            </button>
-            <button
-              onClick={handleNameCancel}
-              className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ) : (
-          <div className="relative flex items-center justify-center mb-1 group">
-            <h1 className="text-2xl md:text-4xl font-bold">
-              {currentUser.name || currentUser.admissionNumber}
-            </h1>
-            <button
-              onClick={handleNameEdit}
-              className="absolute left-full ml-1 p-1.5 rounded-full text-gray-400 hover:text-[#6a7cff] hover:bg-[#f0f2ff] transition-colors opacity-0 group-hover:opacity-100"
-            >
-              <Pencil className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+    {/* Profile Pic */}
+    <div className="relative">
+      <img 
+        src={currentUser.profilePicture} 
+        className='h-20 w-20 md:h-24 md:w-24 object-cover rounded-3xl' 
+        alt="Profile" 
+      />
+    </div>
 
-        <div className='flex gap-1 items-center'>
-          <p className="text-base md:text-lg font-bold text-gray-800 bg-[#FAF4FE] p-1 rounded-md">{currentUser?.year}-{parseInt((currentUser?.year)) + 4}</p>
-          {(currentUser.isAuthenticated) &&
-            <span><BadgeCheck className='w-6 text-[#4b6cfcec]' /></span>}
+    {/* User Info */}
+    <div className="flex flex-col flex-1">
+      {isEditingName ? (
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleNameSave();
+              if (e.key === 'Escape') handleNameCancel();
+            }}
+            autoFocus
+            maxLength={50}
+            className="text-lg md:text-xl font-bold border-b-2 border-[#6a7cff] bg-transparent outline-none w-full max-w-[180px]"
+          />
+          <button
+            onClick={handleNameSave}
+            disabled={isUpdatingName}
+            className="p-1 rounded-full bg-[#6a7cff] text-white hover:bg-[#5a6be0]"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleNameCancel}
+            className="p-1 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
+      ) : (
+        <h1 className="text-xl md:text-2xl font-bold text-gray-900 pr-16">
+          {currentUser.name || currentUser.admissionNumber}
+        </h1>
+      )}
+      
+      <div className='flex gap-2 items-center mt-1'>
+        <p className="text-xs font-bold text-[#6a7cff] bg-[#f0f2ff] px-2 py-0.5 rounded-md">
+          {currentUser?.year}-{parseInt((currentUser?.year)) + 4}
+        </p>
+        {(currentUser.isAuthenticated) && <BadgeCheck className='w-4 h-4 text-[#4b6cfc]' />}
 
-        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="Username" value={currentUser.username} readOnly />
-        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="email" placeholder="Email" value={currentUser.email} readOnly />
+      </div>
+        {/* Small Logout - Left Aligned under info */}
+      <button 
+        className="mt-3 w-fit px-3 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded-md border border-red-100 hover:bg-red-100 transition-colors" 
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>
+  </div>
 
-        {/* ── Password Section ── */}
-        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <p className='text-xs text-start w-full'>NOTE: Passwords are hashed and then stored. You can change it here.</p>
-        <button className="mt-4 mb-6 w-full p-3 bg-[#ffffff] border-2 border-[#D9D9D9] font-bold text-[#6a7cff] rounded-xl" onClick={handleUpdate} disabled={isUpdating}>
-          {isUpdating ? 'Updating...' : 'Change Password'}
-        </button>
-        {updateError && <div className="text-red-500 mb-4">Error: {updateError.data?.message || 'Failed to update password.'}</div>}
+  {/* ── Details & Settings Section ── */}
+  <div className="space-y-2 w-full">
+    {/* Read-Only Info */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col gap-1.5">
+        <label className="text-[11px] font-black text-gray-400 ml-1 tracking-wider uppercase">Username</label>
+        <input className="w-full p-3 border border-gray-100 rounded-xl bg-gray-100/50 text-gray-500 focus:outline-none cursor-not-allowed text-sm" type="text" value={currentUser.username} readOnly />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-[11px] font-black text-gray-400 ml-1 tracking-wider uppercase">Email</label>
+        <input className="w-full p-3 border border-gray-100 rounded-xl bg-gray-100/50 text-gray-500 focus:outline-none cursor-not-allowed text-sm" type="email" value={currentUser.email} readOnly />
+      </div>
+    </div>
 
-        {/* ── UPI Section ── */}
-        <input className="w-full p-2 mb-2 border rounded-xl bg-[#eeeeee] focus:outline-none" type="text" placeholder="UPI ID (e.g. username@bank)" value={upi} onChange={(e) => setUpi(e.target.value)} />
-        <p className='text-xs text-start w-full'>Used for receiving payments for completed opportunities.</p>
-        <button className="mt-4 mb-6 w-full p-3 bg-[#ffffff] border-2 border-[#D9D9D9] font-bold text-[#6a7cff] rounded-xl" onClick={handleUpdateUPI} disabled={isUpdatingUPI}>
-          {isUpdatingUPI ? 'Updating...' : 'Update UPI'}
-        </button>
 
-        {/* ── Logout ── */}
-        <button className="w-full p-3 bg-[#ffffff] border-2 border-red-200 text-red-400 font-bold rounded-xl" onClick={handleLogout}>Logout</button>
+{/* ── Settings Sub-Tabs ── */}
+  <div className="w-full bg-gray-50/50 rounded-2xl p-4 border border-gray-100">
+    <div className="flex gap-4 mb-4 border-b border-gray-200">
+      <button 
+        onClick={() => setSettingsTab('security')}
+        className={`pb-2 text-xs font-bold transition-all ${settingsTab === 'security' ? 'text-[#6a7cff] border-b-2 border-[#6a7cff]' : 'text-gray-400'}`}
+      >
+        Security
+      </button>
+      <button 
+        onClick={() => setSettingsTab('payment')}
+        className={`pb-2 text-xs font-bold transition-all ${settingsTab === 'payment' ? 'text-[#6a7cff] border-b-2 border-[#6a7cff]' : 'text-gray-400'}`}
+      >
+        Payment Details
+      </button>
+    </div>
 
-        {/* ── Tabs ─────────────────────────────────────────────────────────── */}
-        <div className="flex w-full mt-6 border-b border-[#D9D9D9]">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 py-3 text-sm md:text-base font-semibold font-inter transition-colors duration-200 ${
-                activeTab === tab.key
-                  ? 'text-[#6a7cff] border-b-2 border-[#6a7cff]'
-                  : 'text-gray-400 hover:text-gray-600'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+    {settingsTab === 'security' ? (
+      <div className="space-y-2 animate-in fade-in duration-300">
+        <p className='text-[10px] text-gray-500 ml-1'>Your passwords are hashed and then stored, we cannot see it.</p>
+
+        <div className="flex gap-2">
+          <input 
+            className="flex-1 p-2.5 border border-gray-200 rounded-xl focus:ring-1 focus:ring-[#6a7cff] focus:outline-none text-xs" 
+            type="password" 
+            placeholder="New password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+          <button 
+            className="px-4 py-2.5 bg-[#6a7cff] text-white text-xs font-bold rounded-xl hover:bg-[#5a6be0] transition-colors disabled:opacity-50" 
+            onClick={handleUpdate} 
+            disabled={isUpdating}
+          >
+            {isUpdating ? '...' : 'Update'}
+          </button>
         </div>
+        {updateError && <p className="text-red-500 text-[10px]">Error updating password.</p>}
+      </div>
+    ) : (
+      <div className="space-y-3 animate-in fade-in duration-300">
+        <p className='text-[10px] text-gray-500 ml-1'>Enter your UPI ID to receive payments for completed tasks.</p>
+        <div className="flex gap-2">
+          <input 
+            className="flex-1 p-2.5 border border-gray-200 rounded-xl focus:ring-1 focus:ring-[#6a7cff] focus:outline-none text-xs" 
+            type="text" 
+            placeholder="username@bank" 
+            value={upi} 
+            onChange={(e) => setUpi(e.target.value)} 
+          />
+          <button 
+            className="px-4 py-2.5 border border-[#6a7cff] text-[#6a7cff] text-xs font-bold rounded-xl hover:bg-[#6a7cff] hover:text-white transition-all disabled:opacity-50" 
+            onClick={handleUpdateUPI} 
+            disabled={isUpdatingUPI}
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+
+  </div>
+
+
+  {/* ── Tabs ── */}
+  <div className="flex w-full mt-4 border-b border-gray-100">
+    {tabs.map((tab) => (
+      <button
+        key={tab.key}
+        onClick={() => setActiveTab(tab.key)}
+        className={`flex-1 py-3 text-sm font-bold transition-all duration-200 ${
+          activeTab === tab.key
+            ? 'text-[#6a7cff] border-b-2 border-[#6a7cff]'
+            : 'text-gray-400 hover:text-gray-600'
+        }`}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
 
         {/* ── Tab Content ───────────────────────────────────────────────────── */}
         <div className='flex flex-col w-full mt-4'>
