@@ -25,7 +25,8 @@ export default [
             "import/ignore": [
                 "globals",
                 "@eslint/js",
-                "eslint-plugin-import"
+                "eslint-plugin-import",
+                "uuid"
             ]
         },
         rules: {
