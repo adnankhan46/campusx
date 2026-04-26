@@ -29,8 +29,8 @@ export function MarkdownRenderer({
     ol: "list-decimal list-inside text-sm",
     li: "text-sm",
     hr: "my-1 border-gray-300",
-    blockquote: "border-l-4 border-indigo-400 pl-3 italic text-sm text-gray-700",
-    code: "bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono text-red-600",
+    blockquote: "border-l-4 border-gray-400 pl-3 text-sm text-gray-400 my-2",
+    code: "bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono text-gray-700",
     pre: "bg-gray-100 p-3 rounded overflow-x-auto text-xs",
   };
 
@@ -49,6 +49,7 @@ export function MarkdownRenderer({
           blockquote: ({ node, ...props }) => <blockquote className={componentStyles.blockquote} {...props} />,
           code: ({ node, ...props }) => <code className={componentStyles.code} {...props} />,
           pre: ({ node, ...props }) => <pre className={componentStyles.pre} {...props} />,
+          a: ({ node, ...props }) => <a className="text-white border bg-blue-600 px-2 p-1 rounded-lg hover: border-blue-600 hover:bg-white hover:text-blue-600" target="_blank" rel="noopener noreferrer" {...props} />,
         }}
       >
         {content}
