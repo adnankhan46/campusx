@@ -1,4 +1,4 @@
-<img width="1584" height="396" alt="BeCampusX" src="https://github.com/user-attachments/assets/a0ea208e-0b4b-41dc-8b45-603ac18f205b" /># BeCampusX
+# BeCampusX
 
 An incentivized opportunity platform for students to discover and complete real, paid micro tasks from startups and individuals.
 
