@@ -26,6 +26,7 @@ import NotificationRoutes from "./modules/notification/notification.route.js";
 import companyRoutes from "./modules/company/company.routes.js";
 import applicantRouter from "./modules/applicant/applicant.routes.js";
 import opportunityRoutes from "./modules/opportunity/opportunity.routes.js";
+import healthRoutes, { readyHealth } from "./modules/health/health.routes.js";
 
 // Old routes (not yet migrated)
 import adminRoutes from "../api/route/admin.route.js";
@@ -68,7 +69,9 @@ app.use(morgan((tokens, req, res) => {
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const TRUSTED_ORIGINS = [
   'http://localhost:5173',
-  ...(process.env.FRONTEND_ORIGIN ? [process.env.FRONTEND_ORIGIN] : [])
+  ...(process.env.FRONTEND_ORIGIN
+    ? process.env.FRONTEND_ORIGIN.split(',').map(origin => origin.trim())
+    : [])
 ];
 
 app.use(cors({
@@ -85,6 +88,10 @@ app.use(cookieParser());
 // Docs Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// ── Health (wake / readiness) ────────────────────────────────────────────────
+app.use("/health", healthRoutes);
+app.get("/api/health", readyHealth);
+
 // ── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
 app.use("/api/post", PostRoutes);
@@ -95,19 +102,7 @@ app.use("/api/applicants", applicantRouter);
 app.use("/api/opportunities", opportunityRoutes);
 app.use("/api/admin", adminRoutes); // old — not yet migrated
 
-// ── Health & Test Endpoints ──────────────────────────────────────────────────
-import mongoose from "mongoose";
-
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-    environment: process.env.NODE_ENV || 'development'
-  });
-});
-
+// ── Test Endpoints ───────────────────────────────────────────────────────────
 app.get('/api/front', (req, res) => res.json('Hello World!'));
 app.get('/', (req, res) => res.json({ message: 'Hello World!' }));
 
