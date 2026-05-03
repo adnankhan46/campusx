@@ -118,8 +118,11 @@ const Front = () => {
           </div>
         </div>
         <div className="flex flex-col relative mx-auto">
-          { import.meta.env.VITE_IS_BACKEND_ACTIVE==="TRUE" &&
-            <p className='text-center whitespace-nowrap text-sm px-2 py-1 bg-blue-400/10 text-blue-400 font-suse rounded-lg'>{import.meta.env.VITE_SHOW_BACKEND_INFO}</p>}
+          
+          { import.meta.env.VITE_IS_BACKEND_ACTIVE==="FALSE" &&
+            <p className='text-center whitespace-nowrap text-sm px-2 py-1 bg-blue-400/10 text-blue-400 font-suse rounded-lg'>      <span className={`inline-block w-2 h-2 ${import.meta.env.VITE_IS_BACKEND_ACTIVE === "TRUE" ? 'bg-green-500' : 'bg-red-400'} rounded-full`}></span>
+ {import.meta.env.VITE_SHOW_BACKEND_INFO}</p>}
+            
           <div className="text-[#505153] text-base md:text-base font-inter font-light">Micro tasks. Big opportunities</div>
           <div className="font-bold font-suse text-[#243CB6] text-3xl tracking-wid md:text-xl mb-4 mx-auto">
             Find Real Opportunities <br /> For Real Growth
