@@ -4,6 +4,30 @@ An incentivized opportunity platform for students to discover and complete real,
 
 <img width="1584" height="396" alt="WhatsApp Image 2026-04-03 at 19 57 52" src="https://github.com/user-attachments/assets/42416dda-91c5-409f-ba39-8f3cb678a5d6" />
 
+## Watch Demo
+
+<p align="center">
+  <a href="https://youtu.be/RAfx9HbV7mI"><img src="https://img.shields.io/badge/YouTube-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch on YouTube" /></a>
+</p>
+
+## Table of contents
+
+- [Demo](#demo)
+- [Overview](#overview)
+- [What is BeCampusX](#what-is-becampusx)
+- [Core Flow](#core-flow)
+- [Current Status](#current-status)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Design Philosophy](#design-philosophy)
+- [Why this exists](#why-this-exists)
+- [Roadmap (Current Focus)](#roadmap-current-focus)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [API documentation (Swagger)](#api-documentation-swagger)
+  - [Meet the Team](#meet-the-team)
+
 ---
 
 ## Overview
