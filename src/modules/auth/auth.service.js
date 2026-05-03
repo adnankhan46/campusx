@@ -95,9 +95,9 @@ export const authService = {
    * @param {string} newPassword - New password
    * @returns {Promise<Object>} Success message
    */
-  async updatePassword(newPassword) {
-    // Find first user (this seems like a development function)
-    const user = await User.findOne({});
+  async updatePassword(newPassword, userId) {
+    // Find user by ID
+    const user = await User.findById(userId);
     if (!user) {
       throw ApiErrors.notFound('User not found');
     }
@@ -115,9 +115,9 @@ export const authService = {
    * @param {string} fullname - New full name
    * @returns {Promise<Object>} Success message
    */
-  async updateFullName(fullname) {
-    // Find first user (this seems like a development function)
-    const user = await User.findOne({});
+  async updateFullName(fullname, userId) {
+    // Find user by ID
+    const user = await User.findById(userId);
     if (!user) {
       throw ApiErrors.notFound('User not found');
     }
@@ -133,9 +133,9 @@ export const authService = {
    * @param {string} upi - New UPI
    * @returns {Promise<Object>} Success message
    */
-  async updateUPI(upi) {
-    // Find first user (this seems like a development function)
-    const user = await User.findOne({});
+  async updateUPI(upi, userId) {
+    // Find user by ID
+    const user = await User.findById(userId);
     if (!user) {
       throw ApiErrors.notFound('User not found');
     }

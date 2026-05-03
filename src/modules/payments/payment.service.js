@@ -35,7 +35,7 @@ export const paymentService = {
 
     let paymentLevel = '1'; // by default level is 1 for 1st payment
 
-    if (Boolean(plainObject.paymentStatus.firstPayment.status)) {
+    if ((plainObject.paymentStatus.firstPayment.status)) {
       paymentLevel = '2'; // if 1st payment true, then it is for second payment
     }
 

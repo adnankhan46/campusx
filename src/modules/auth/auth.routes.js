@@ -1,5 +1,5 @@
 import express from 'express';
-import { validate, isAuthenticated, ipLimiter } from '../../shared/middleware/index.js';
+import { validate, isAuthenticated, ipLimiter, verifyToken } from '../../shared/middleware/index.js';
 import {
   handleSignUp,
   handleSignIn,
@@ -33,13 +33,13 @@ router.post('/signup', ipLimiter, validate(signUpSchema), handleSignUp);
 router.post('/signin', ipLimiter, validate(signInSchema), handleSignIn);
 
 // Update password - with validation
-router.post('/updatepassword', validate(updatePasswordSchema), updatePassword);
+router.post('/updatepassword',verifyToken, validate(updatePasswordSchema), updatePassword);
 
 // Update full name - with validation
-router.post('/updatefullname', validate(updateFullNameSchema), updateFullName);
+router.post('/updatefullname',verifyToken, validate(updateFullNameSchema), updateFullName);
 
 // Update UPI - with validation
-router.post('/updateupi', validate(updateUPISchema), updateUPI);
+router.post('/updateupi',verifyToken, validate(updateUPISchema), updateUPI);
 
 // Logout - requires authentication
 router.post('/logout', isAuthenticated, logout);

@@ -3,6 +3,9 @@ import js from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
 
 export default [
+        {
+  ignores: ["client/**","api/**"]
+},
     js.configs.recommended,
     {
         files: ["**/*.js", "**/*.mjs"],
@@ -26,11 +29,12 @@ export default [
                 "globals",
                 "@eslint/js",
                 "eslint-plugin-import"
+            
             ]
         },
         rules: {
             "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-            "import/no-unresolved": "error",
+            "import/no-unresolved": ["error" , {ignore: ["uuid"]}],
             "import/named": "error",
             "import/default": "error",
             "import/namespace": "error",
@@ -42,5 +46,6 @@ export default [
         rules: {
             "import/no-unresolved": "off",
         },
-    },
+    }
+ 
 ];

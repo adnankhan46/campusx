@@ -1,5 +1,7 @@
 import {Github, Linkedin} from 'lucide-react'
 
+const isBackendActive = import.meta.env.VITE_IS_BACKEND_ACTIVE;
+
 const Footer = () => (
   <footer className="bg-white text-black">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-4">
@@ -55,6 +57,9 @@ const Footer = () => (
           </a>
           </p>
       </div>
+      <div className='flex justify-end items-center gap-2 my-2'>
+      <span className={`inline-block w-2 h-2 ${isBackendActive === "TRUE" ? 'bg-green-500' : 'bg-red-400'} rounded-full`}></span>
+        <p className='text-xs text-gray-400'>Systems {isBackendActive==="TRUE" ? 'Operational' : 'Down'}</p></div>
     </div>
   </footer>
 )

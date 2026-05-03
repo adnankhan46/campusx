@@ -22,3 +22,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run test
+        env:
+          MONGO: ${{ secrets.MONGO }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          DODO_TOKEN: ${{ secrets.DODO_TOKEN }}
+          DODO_WEBHOOK_TOKEN: ${{ secrets.DODO_WEBHOOK_TOKEN }}
+          FRONTEND_ORIGIN: ${{ secrets.FRONTEND_ORIGIN }}
+          PRODUCT_ID: ${{ secrets.PRODUCT_ID }}

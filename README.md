@@ -1,118 +1,166 @@
-# CampusX - Campus Recruitment Platform
+# BeCampusX
 
-CampusX is a modern, real-time platform that bridges the gap between students and companies. It enables seamless job discovery, application management, and networking within the campus ecosystem.
+An incentivized opportunity platform for students to discover and complete real, paid micro tasks from startups and individuals.
 
+`
+Image
+`
 <img width="1584" height="396" alt="WhatsApp Image 2026-04-03 at 19 57 52" src="https://github.com/user-attachments/assets/42416dda-91c5-409f-ba39-8f3cb678a5d6" />
 
-##  Key Features
+---
 
-- **Real-time Chat & Notifications** - Instant messaging and live updates for users
-- **Job Opportunities** - Companies post opportunities, students browse and apply
-- **Application Management** - Track applications and manage hiring pipelines
-- **Discussion Feed** - Post updates, comments, and community engagement
-- **Payment Integration** - Secure payment processing for premium features
-- **Admin Dashboard** - Platform management and user oversight
-- **Rate Limiting & Security** - Protected APIs with authentication and error handling
+## Overview
 
-##  User Roles
+BeCampusX is built to solve a simple but ignored problem:
 
-### Applicant (Students)
-- Browse job opportunities
-- Apply for positions
-- View application status
-- Participate in discussions
-- Connect with other students
-- Receive notifications
+Students want real work.  
+Startups and individuals have small tasks that need execution.  
 
-### Company (Recruiters)
-- Post job opportunities
-- Manage applications
-- Process payments
-- Track hiring pipeline
-- Communicate with applicants
+There is no structured way to connect both.
 
-### Admin (Platform Managers)
-- Oversee all platform activities
-- Manage users and roles
-- Monitor system health
-- Handle disputes and reports
+BeCampusX bridges this gap through clearly defined, short duration, paid opportunities that focus on execution instead of vague “experience”.
 
-##  Tech Stack
+---
 
-**Backend:**
-- Node.js + Express.js
-- Socket.io (Real-time communication)
-- RESTful API architecture
+## What is BeCampusX
 
-**Frontend:**
-- React with Vite
-- Redux (State management)
-- Tailwind CSS (Styling)
-- Firebase integration
+BeCampusX is not:
 
-**Database & Tools:**
-- MongoDB (Data persistence)
-- Payment Gateway Integration
-- Webhook support (Dodo)
+- a job board  
+- a social feed  
+- an internship listing site  
+
+It is a **task execution platform**.
+
+Each opportunity is:
+
+- scoped with a clear outcome  
+- short in duration  
+- paid  
+- designed for fast completion  
+
+---
+
+## Core Flow
+
+1. User discovers an opportunity  
+2. User applies  
+3. Provider selects a candidate  
+4. Task is assigned  
+5. User completes the task  
+6. Completion is verified  
+7. Payment is processed  
+
+---
+
+## Current Status
+
+- Platform is live  
+- Opportunities are being listed manually  
+- Task lifecycle is being tested end to end  
+- Focus is on making one complete loop work reliably  
+
+---
+
+## Features
+
+- Opportunity listing system  
+- Application flow for users  
+- Provider dashboard for managing applicants  
+- Task lifecycle tracking  
+- Payment integration using DodoPayments  
+- NSFW content filtering using TensorFlow.js for social feeds  
+- **Swagger / OpenAPI UI** at **`/api-docs`** — default local: [http://localhost:3000/api-docs](http://localhost:3000/api-docs) (see [API documentation](#api-documentation-swagger) for `PORT` and production)
+
+---
+
+## Tech Stack
+
+Impact-first view of the engineering: **what the system does and why it matters**, not a dependency checklist. Tooling reflects the [BeCampusX](https://github.com/adnankhan46/campusx) monorepo (Express API + React client).
+
+- **End-to-end task economy:** Architected a **MERN** stack (Node.js, Express, MongoDB/Mongoose) that supports the full loop from **discovery -> application -> provider selection -> assignment -> completion -> verification -> payout**, so students and providers interact through execution-bound work instead of vague listings.
+
+- **Production-grade API surface:** Hardened HTTP with **Helmet**, **rate limiting**, **CORS**, **MongoDB sanitization**, and **response compression**, alongside **structured logging (Winston, Morgan)**—raising the bar on abuse resistance and making production behavior observable when the task lifecycle breaks.
+
+- **Explicit contracts and identity:** Enforced request shape with **Zod** and implemented **JWT + bcrypt** flows so auth and sensitive transitions stay predictable as roles (student, provider) and states multiply.
+
+- **Monetization and reconciliation:** Implemented **payment orchestration with Dodo Payments** and **verified webhooks (Standard Webhooks)** so micro-transactions and settlement signals stay aligned with server-side truth instead of drifting on client-only assumptions.
+
+- **Real-time coordination:** Designed an **event-driven update layer with Socket.IO** (server and client) so applicants and providers see status changes—applications, assignments, progress—**without** turning the product into a polling-heavy dashboard.
+
+- **Trust in user-generated surfaces:** Integrated **client-side ML moderation (TensorFlow.js + NSFWJS)** to catch NSFW content early in feeds and uploads, improving safety posture where manual review does not scale.
+
+- **Client delivery and engagement:** Shipped **React 18** on **Vite** with **Redux Toolkit + Redux Persist**, **React Router**, and **Bootstrap/Tailwind**, combining **infinite-scroll** discovery, markdown-rich content, and real-time hooks so high-engagement browsing stays responsive as listings grow.
+
+- **API clarity and regression control:** Shipped **Swagger UI** at **`/api-docs`** (JSDoc-generated spec via **swagger-jsdoc** + **swagger-ui-express**) so the HTTP contract is browsable locally at `http://localhost:<PORT>/api-docs` and on deploy at `https://<api-host>/api-docs`. **Vitest + Supertest** against an **in-memory MongoDB** harness exercise critical paths so apply-to-completion changes are less likely to ship blind.
+
+- **Where it runs:** Can be deployed and iterated **on VPS infrastructure**, prioritizing **one reliable production loop** (manual listings, real users, end-to-end lifecycle testing) over premature automation.
+
+Supporting client capabilities in-repo include **Firebase**, **Google Generative AI**, **Tesseract.js**, and rich UI primitives (e.g. Font Awesome, Lucide, toasts) where specific flows need them; the core story remains **tasks, money, trust, and real-time state**.
+
+*(Early-stage product: optimizing for a single trustworthy apply-to-paid-completion path with real providers—not feature breadth for its own sake.)*
+
+---
+
+## Design Philosophy
+
+- Execution over features  
+- Manual over automated in early stages  
+- Clear tasks over vague opportunities  
+- Small loops over scale  
+
+---
+
+## Why this exists
+
+Most platforms optimize for visibility.
+
+BeCampusX optimizes for completion.
+
+The goal is simple:  
+Make it possible for a student to go from discovering a task to completing it and getting paid without friction.
+
+---
+
+## Roadmap (Current Focus)
+
+- Improve apply to completion flow  
+- Fix production bugs affecting task lifecycle  
+- Onboard early stage providers  
+- Validate real task completion loops  
+- Improve trust and clarity in opportunity listings  
+
+---
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v16+)
-- npm or pnpm
-- MongoDB
-- Firebase account
+
+- Node.js  
+- MongoDB  
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/adnankhan46/campusx
-   cd campusx
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # Backend
-   npm install
-   # or
-   pnpm install
-
-   # Frontend
-   cd client
-   npm install
-   # or
-   pnpm install
-   ```
-
-3. **Setup environment variables**
-   - Create `.env` file in root directory for backend
-   - Create `.env.local` file in `client/` for frontend
-   - Configure: Database URL, Firebase keys, Payment gateway credentials, etc.
-
-4. **Run the application**
-   ```bash
-   # Backend (from root)
-   npm run dev
-
-   # Frontend (from client directory)
-   cd client
-   npm run dev
-   ```
-
-### Quick Start
 ```bash
-# Install all dependencies
-pnpm install && cd client && pnpm install && cd ..
+git clone https://github.com/adnankhan46/campusx
+cd campusx
+pnpm install
+cd client   # client
+pnpm install
 
-# Start development server
-pnpm dev
+# Configure .env file, expected from .env.example
+pnpm run dev
+# or
+pnpm run build
 ```
 
----
+### API documentation (Swagger)
 
-## Our Team
+With the API running, open **Swagger UI** at:
 
-Garv Thakre : https://github.com/garvthakre   Adnan Khan : https://github.com/adnankhan46
+- **Local (default port 3000):** [http://localhost:3000/api-docs](http://localhost:3000/api-docs)  
+- **Custom port:** `http://localhost:<PORT>/api-docs` — `PORT` comes from your `.env` (see `src/server.js` / `src/config`).  
+- **Deployed:** `https://<your-api-host>/api-docs`
 
-**Join us in building the future of campus recruitment!**
+### Meet the Team
+[Adnan Khan]() and [Garv Thakre](), building from first principles systems.
