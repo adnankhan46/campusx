@@ -1,10 +1,7 @@
-# BeCampusX
+<img width="1584" height="396" alt="BeCampusX" src="https://github.com/user-attachments/assets/a0ea208e-0b4b-41dc-8b45-603ac18f205b" /># BeCampusX
 
 An incentivized opportunity platform for students to discover and complete real, paid micro tasks from startups and individuals.
 
-`
-Image
-`
 <img width="1584" height="396" alt="WhatsApp Image 2026-04-03 at 19 57 52" src="https://github.com/user-attachments/assets/42416dda-91c5-409f-ba39-8f3cb678a5d6" />
 
 ---
